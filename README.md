@@ -33,7 +33,7 @@ Install dependencies
 Inside the project folder (after clone)
 
 ```console
-$ pyenv install 3.8.2
+$ pyenv install
 $ pip install pipenv
 $ pipenv install
 $ pipenv shell
