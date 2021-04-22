@@ -17,13 +17,13 @@ before_install:
 install:
 - pipenv install --dev
 script:
-- pytest -v --cov=executor .
+- pytest -v --cov=ensembles --cov=mission_control .
 after_success:
 - pyenv shell
 - codecov
 - pip install codacy-coverage
 - python-codacy-coverage -r coverage.xml
-- py.test --cov-report=xml --cov=executor tests/
+- py.test --cov-report=xml --cov=ensembles --cov=mission_control tests/
 - bash <(curl -s https://codecov.io/bash)
 deploy:
   provider: pypi
