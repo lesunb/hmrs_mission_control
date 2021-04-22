@@ -5,15 +5,15 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setup(
-    name="hmrsexecutor",
+    name="hmrs_mission_control",
     use_scm_version=True,
     setup_requires=['setuptools_scm'],
     author="Gabriel Rodrigues",
     author_email="gabrielsr@gmail.com",
-    description="Mission Executor for Heterogeneous Multi-Robots Systems",
+    description="Mission Control for Heterogeneous Multi-Robots Systems",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/gabrielsr/hmrsexecutor",
+    url="https://github.com/gabrielsr/hmrs_mission_control",
     packages=find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",

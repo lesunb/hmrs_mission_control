@@ -1,5 +1,5 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/b9b2abf80de34584a596147b099f4473)](https://app.codacy.com/gh/gabrielsr/hmrs_mission_control?utm_source=github.com&utm_medium=referral&utm_content=gabrielsr/hmrs_mission_control&utm_campaign=Badge_Grade_Settings)
-[![Build Status](https://travis-ci.org/gabrielsr/hmrssim.svg?branch=master)](https://travis-ci.org/gabrielsr/hmrs_mission_control)
+[![Build Status](https://travis-ci.org/gabrielsr/hmrs_mission_control.svg?branch=master)](https://travis-ci.org/gabrielsr/hmrs_mission_control)
 [![codecov](https://codecov.io/gh/gabrielsr/hmrssim/branch/master/graph/badge.svg)](https://codecov.io/gh/gabrielsr/hmrs_mission_control)
 
 
