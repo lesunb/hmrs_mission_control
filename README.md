@@ -37,7 +37,7 @@ $ pyenv install 3.8.2
 $ pip install pipenv
 $ pipenv install
 $ pipenv shell
-(gmrs env) % pipenv install --dev
+(hmrs_mission_control env) % pipenv install --dev
 ```
 
 
