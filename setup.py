@@ -14,7 +14,9 @@ setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/gabrielsr/hmrs_mission_control",
-    packages=find_packages(),
+    packages=find_packages(
+        include=['mission_control', 'deeco', 'deeco.*', 'experiment', 'experiment.deeco_sim',],
+    ),
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
