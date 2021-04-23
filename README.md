@@ -13,6 +13,9 @@ python 3, pip
 
 Used IDE: vscode, plugin python
 
+macOS aditional dependencies
+brew install libmagic
+
 Instal pipenv
 ------------- 
 

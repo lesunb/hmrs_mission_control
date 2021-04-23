@@ -15,6 +15,11 @@ wheel = "*"
 setuptools-scm = "*"
 
 [packages]
+jsonpickle = "*"
+matplotlib = "*"
+setuptools = "*"
+pyqt5 = "==5.15.2"
+lxml = "*"
 
 [requires]
-python_version = "3.9.4"
+python_version = "3.8.9"
