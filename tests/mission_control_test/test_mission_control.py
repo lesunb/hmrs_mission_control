@@ -10,10 +10,13 @@ from deeco.plugins.ensemblereactor import EnsembleReactor
 from deeco.plugins.snapshoter import Snapshoter
 
 from mission_control.robot import Robot
+from mission_control.coordinator import Coordinator
 from mission_control.mission_ensemble import MissionEnsemble
-
+from mission_control.plugins.workload import WorkloadLoader
+from mission_control.hande_request_service import HandleRequestServer
 
 print("Running simulation")
+
 
 
 def test_sim():
@@ -25,19 +28,30 @@ def test_sim():
     IdentityReplicas(sim)
 
     # Add simple network device
-    SimpleNetwork(sim, range_m=3, delay_ms_mu=20, delay_ms_sigma=5)
-
-    # Add X nodes hosting one component each
+    SimpleNetwork(sim, range_m=3000, delay_ms_mu=20, delay_ms_sigma=5)
 
     # create coordinator
+    coord_node = Node(sim)
+    position = Position(0, 0)
+    Walker(coord_node, position) # TODO remove
+    KnowledgePublisher(coord_node)
+    EnsembleReactor(coord_node, [MissionEnsemble()])
+    coord = Coordinator(coord_node, required_skills = ['secure_transport'] )
+    coord_node.add_component(coord)
+    HandleRequestServer(coord_node)
 
     # get workload
+    client = Node(sim)
+    Walker(client, Position(0, 0)) # TODO remove
+    WorkloadLoader(client, coord_node, [ { 'timestamp': 3000, 'request ': {}}])
+    
 
     # create a workload plugin
 
     # create an inventory 
 
 
+    # Add X nodes hosting one component each
     for i in range(0, 5):
         position = Position(2 * i, 3 * i)
 
@@ -46,7 +60,7 @@ def test_sim():
         KnowledgePublisher(node)
         EnsembleReactor(node, [MissionEnsemble()])
 
-        robot = Robot(node)
+        robot = Robot(node, provided_skills = ['secure_transport'])
 
         node.add_component(robot)
 

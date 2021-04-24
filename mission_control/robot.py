@@ -8,13 +8,17 @@ from deeco.core import process
 from deeco.position import Position
 from deeco.packets import TextPacket
 
-# Role
+# Roles
 class Rover(Role):
 	def __init__(self):
 		super().__init__()
 		self.position = None
 		self.goal = None
 
+class RobotWorker(Role):
+	def __init__(self):
+		super().__init__()
+		self.provided_skills = None
 
 # Component
 class Robot(Component):
@@ -27,19 +31,21 @@ class Robot(Component):
 		return Position(Robot.random.uniform(0, 1), Robot.random.uniform(0, 1))
 
 	# Knowledge definition
-	class Knowledge(BaseKnowledge, Rover):
+	class Knowledge(BaseKnowledge, RobotWorker, Rover):
 		def __init__(self):
 			super().__init__()
 			self.color = None
 
 	# Component initialization
-	def __init__(self, node: Node):
+	def __init__(self, node: Node, provided_skills = []):
 		super().__init__(node)
 
 		# Initialize knowledge
+		self.knowledge.provided_skills = provided_skills
 		self.knowledge.position = node.positionProvider.get()
 		self.knowledge.goal = self.gen_position()
 		self.knowledge.color = self.random.choice(self.COLORS)
+
 
 #		# Register network receive method
 #		node.networkDevice.add_receiver(self.__receive_packet)
