@@ -30,7 +30,7 @@ def get_children_assignment(methods: [ Method ]):
     assingments = set()
     for method in methods:
         for task in method.tasks:
-            if type(task) is ConcreteTask:
+            if isinstance(task, ConcreteTask):
                 if task.assign_to is None:
                     print(f'concrete task {task} has no assignment')
                     continue
