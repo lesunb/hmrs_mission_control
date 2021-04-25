@@ -44,9 +44,6 @@ def test_sim():
     client = Node(sim)
     Walker(client, Position(0, 0)) # TODO remove
     WorkloadLoader(client, coord_node, [ { 'timestamp': 3000, 'request ': {}}])
-    
-
-    # create a workload plugin
 
     # create an inventory 
 
@@ -61,7 +58,6 @@ def test_sim():
         EnsembleReactor(node, [MissionEnsemble()])
 
         robot = Robot(node, provided_skills = ['secure_transport'])
-
         node.add_component(robot)
 
     # Run the simulation

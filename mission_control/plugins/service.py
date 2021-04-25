@@ -19,4 +19,3 @@ class Server(Generic[T], NodePlugin):
     @abstractclassmethod
     def receive(self, request: T):
         pass
-        
