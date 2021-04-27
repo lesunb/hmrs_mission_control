@@ -2,15 +2,18 @@
 from mission_control.mission.ihtn import ElementaryTask, Task
 from mission_control.mission.planning import distribute, flat_plan
 from ..core import MissionContext, Worker
-from ..estimative.core import Bid
+from ..estimate.core import Bid
+
+from ..estimate.estimate import EstimateManager
 
 class CoalitionFormationManager:
     """ Service of creating coalitions. It receives an ihtn with tasks 
     assigned to roles an return a selection of robots to execute the plan """
 
-    def __init__(self, units = [Worker]):
+    def __init__(self, units: [Worker], estimate_manager: EstimateManager):
         self.individual_plans = []
         self.units = units
+        self.estimate_manager: EstimateManager = None
 
     def create_mission_context():
         pass
@@ -65,7 +68,7 @@ class CoalitionFormationManager:
         return
         
     def estimate(self, unit, task_list: [ElementaryTask]) -> Bid: 
-        pass
+        return self.estimate_manager.estimate(unit, task_list)
 
     @staticmethod
     def check_viable(bid):

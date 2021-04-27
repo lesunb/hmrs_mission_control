@@ -1,4 +1,9 @@
 
+
+class TaskStatusUpdate:
+    pass
+
+
 class Supervision:
     def __init__(self, mission_context):
         pass

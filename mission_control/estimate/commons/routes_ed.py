@@ -1,4 +1,5 @@
 from ..core import EnvironmentDescriptor
+from mission_control.core import POI
 
 class Edge:
     pass
@@ -7,9 +8,6 @@ class Segment:
     def __init__(self, label, origin:Edge, dest:Edge, len, **properties):
         pass
 
-class POI:
-    def __init__(self, label, edge: Edge):
-        pass
 
 class Waypoint:
     def __init__(self, x, y):
