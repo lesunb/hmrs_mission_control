@@ -2,6 +2,7 @@
 from mission_control.mission.ihtn import ElementaryTask, Task
 from mission_control.mission.planning import distribute, flat_plan
 from ..core import MissionContext, Worker
+from ..estimative.core import Bid
 
 class CoalitionFormationManager:
     """ Service of creating coalitions. It receives an ihtn with tasks 
@@ -63,7 +64,7 @@ class CoalitionFormationManager:
                 yield unit
         return
         
-    def estimate(self, unit, task_list: [ElementaryTask]): 
+    def estimate(self, unit, task_list: [ElementaryTask]) -> Bid: 
         pass
 
     @staticmethod

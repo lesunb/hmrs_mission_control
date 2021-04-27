@@ -20,3 +20,9 @@ class ConstantPowerConsumptionModel:
 
     def estimate(self, time):
         return consumption_rate * time
+
+class PowerComponent:
+    def __init__(self, power_source: PowerSource, power_consumption_model:PowerConsumptionModel): 
+        self.power_source = power_source
+        self.power_consumption_model = power_consumption_model
+
