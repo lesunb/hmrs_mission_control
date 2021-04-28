@@ -10,7 +10,7 @@ from mission_control.mission.ihtn import ElementaryTask
 from lagom import Container
 
 from enum import Enum
-from mission_control.estimate.commons.routes_ed import RoutesEnvironmentDescriptor
+from mission_control.estimate.commons.routes_ed import RoutesEnvironmentDescriptor, Map
 from mission_control.estimate.commons.navigation_sd import NavigationSkillDescriptor, Move
 
 class task_types(Enum):
@@ -27,6 +27,7 @@ task_list = [task1, task2, task3]
 
 container = Container()
 # env desc
+container[Map] = Map(pois =[], segments=[])
 routes_ed = container[RoutesEnvironmentDescriptor]
 
 # skill desc

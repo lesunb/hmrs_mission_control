@@ -1,8 +1,8 @@
 from typing import Final
 
-from ..core import SkillDescriptor, Estimate, Nonviable
+from ..core import SkillDescriptor
 from .routes_ed import RoutesEnvironmentDescriptor
-from ...core import POI, Capability
+from ...core import POI, Capability, Estimate, ImpossibleToEstimate
 
 class Move(Capability):
     def __init__(self, avg_speed, u):
@@ -25,7 +25,7 @@ class NavigationSkillDescriptor(SkillDescriptor):
 
         route = self.routes_ed.get(origin, dest)
         if not route:
-            return Nonviable(reason=f'No route from {origin} to {dest}')
+            return ImpossibleToEstimate(reason=f'No route from {origin} to {dest}')
         distance = route.get_distance()
         estimate_time = distance / avg_speed
         return Estimate(time = estimate_time)

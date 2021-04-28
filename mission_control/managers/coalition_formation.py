@@ -1,9 +1,7 @@
 
 from mission_control.mission.ihtn import ElementaryTask, Task
 from mission_control.mission.planning import distribute, flat_plan
-from ..core import MissionContext, Worker
-from ..estimate.core import Bid
-
+from ..core import MissionContext, Worker, Bid
 from ..estimate.estimate import EstimateManager
 
 class CoalitionFormationManager:
@@ -71,9 +69,12 @@ class CoalitionFormationManager:
         return self.estimate_manager.estimate(worker, task_list)
 
     @staticmethod
-    def check_viable(bid):
-        pass
-
+    def check_viable(bid: Bid) -> bool:
+        if bid.estimate.is_impossible_to_estimate:
+            return False
+        # TODO check worker resources / battery
+        else:
+            return True
     @staticmethod
     def rank_bids(bids):
         pass

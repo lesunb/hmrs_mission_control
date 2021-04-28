@@ -1,8 +1,8 @@
 from abc import abstractmethod
-import math, copy
+import copy
 
 from mission_control.mission.ihtn import ElementaryTask
-from mission_control.core import Worker
+from mission_control.core import Worker, Estimate
 
 
 class TaskContext:
@@ -53,33 +53,6 @@ def create_context_gen(worker: Worker, task_list: [ElementaryTask]):
         yield new_task_context
         task_context = new_task_context
     return
-
-class Estimate:
-    def __init__(self, task=None, time=math.inf, energy=math.inf):
-        self.is_viable = True
-        self.task = task
-        self.time = time
-        self.energy = energy
-
-class Nonviable(Estimate):
-    def __init__(self, reason:str, ):
-        super(time = math.inf, energy = math.inf)
-        self.reason = reason
-        self.is_viable = False
-
-
-            
-class Bid:
-    def __init__(self, worker, estimate, partials):
-        self.worker = worker
-        self.estimate = estimate
-        self.partials = partials
-
-    def is_power_viable(self):
-        pass
-    
-    def get_time_indivual_tasks(self):
-        pass
 
 
 class EnvironmentDescriptor:

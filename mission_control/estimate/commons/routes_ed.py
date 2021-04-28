@@ -4,13 +4,11 @@ from mission_control.core import POI
 class Edge:
     pass
 
+class Nodes:
+    pass
+
 class Segment:
     def __init__(self, label, origin:Edge, dest:Edge, len, **properties):
-        pass
-
-
-class Waypoint:
-    def __init__(self, x, y):
         pass
 
 class Map:
@@ -18,12 +16,13 @@ class Map:
         pass
 
 class Route:
-    def __init__(self, destination: POI, segments = []):
+    def __init__(self, origin: POI, destination: POI, segments = []):
+        self.origin = origin
         self.destination = destination
         self.total_distance = 100 # calculate from segments
         pass
 
-    def get_way_points(self) -> [Waypoint]:
+    def get_way_points(self) -> [Nodes]:
         # TODO
         pass
 
@@ -37,15 +36,15 @@ class Route:
 
 
 class RoutesEnvironmentDescriptor(EnvironmentDescriptor):
-    def __init__(self):
-        self.map = {}
+    def __init__(self, map:Map):
+        self.map = map
 
     def block_segment(label):
         pass
 
     def get(self, origin: POI, destination: POI) -> Route:
         # TODO calculate route
-        route = Route(destination=destination)
+        route = Route(origin=origin, destination=destination)
         return route
 
     

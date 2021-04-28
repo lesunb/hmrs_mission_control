@@ -2,6 +2,7 @@
 from .collector_world import *
 
 from mission_control.managers.coalition_formation import CoalitionFormationManager
+from mission_control.core import Bid, Estimate
 
 def test_create_mission_context(cf_manager: CoalitionFormationManager, ihtn_collect):
     m_context = cf_manager.create_mission_context(ihtn_collect)
@@ -26,4 +27,8 @@ def test_get_compatible_workers(cf_manager: CoalitionFormationManager, ihtn_coll
     diff =  set(comp_workers) ^ set(collection_robots_a_and_b)
     assert not diff
 
+def test_check_viable(cf_manager: CoalitionFormationManager, collection_robots):
+    worker = collection_robots[0]
+    bid = Bid(worker = worker, estimate = Estimate(time = 3, energy = 5))
+    assert cf_manager.check_viable(bid) == True
 
