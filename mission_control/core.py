@@ -1,7 +1,6 @@
 import math
 
-class MissionContext:
-    pass
+from .mission.ihtn import Task
 
 class POI:
     def __init__(self, label):
@@ -59,7 +58,7 @@ class Estimate:
 
 class ImpossibleToEstimate(Estimate):
     def __init__(self, reason:str, ):
-        super(time = math.inf, energy = math.inf)
+        super().__init__(time = math.inf, energy = math.inf)
         self.reason = reason
         self.is_impossible_to_estimate = True
             
@@ -74,3 +73,8 @@ class Bid:
     
     def get_time_indivual_tasks(self):
         pass
+
+class MissionContext:
+    def __init__(self, task: Task = None):
+        self.plans_and_ranked_bids: map[Task, list[Bid]] = None
+        self.selected_bids: map[Task, Bid] = None

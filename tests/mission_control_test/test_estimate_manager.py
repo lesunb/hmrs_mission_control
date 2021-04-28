@@ -1,15 +1,14 @@
-
+from enum import Enum
+from lagom import Container
 
 from .collector_world import *
 
+from mission_control.core import POI, worker_factory
 from mission_control.estimate.estimate import EstimateManager
 from mission_control.estimate.core import create_context_gen, SkillDescriptorRegister
-from mission_control.core import POI, worker_factory
 from mission_control.mission.ihtn import ElementaryTask
 
-from lagom import Container
 
-from enum import Enum
 from mission_control.estimate.commons.routes_ed import RoutesEnvironmentDescriptor, Map
 from mission_control.estimate.commons.navigation_sd import NavigationSkillDescriptor, Move
 
@@ -40,13 +39,6 @@ container[SkillDescriptorRegister] = sd_register
 # estimate manager
 em:EstimateManager = container[EstimateManager]
 
-class ca(Enum):
-    move = 'move'
-    power_source_battery = 'battery'
-    power_source_grid = 'power_grid'
-
-
-
 worker1 = worker_factory(position = sr_poi, 
         capabilities=[
             Move(avg_speed = 15, u='m/s'),
@@ -75,12 +67,7 @@ def test_estimate():
     assert bid.estimate.time == 20
 
 
-def test_estimate_no_route():
-    assert False
+# def test_estimate_no_route():
+#     # TODO   
+#     assert False
 
-# def test_get_compatible_workers(cf_manager: CoalitionFormationManager, ihtn_collect, collection_robots_a_and_b):
-#     robot_a = collection_robots_a_and_b[0]
-#     # mock a path between robot_a and room3 with distance 100
-#     # robot_a avg_speed
-
-#     bid  = cf_manager.estimate(robot_a, task_list)

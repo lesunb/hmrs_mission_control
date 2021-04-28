@@ -1,4 +1,7 @@
 
+from typing import Generator, Dict
+from typing import List
+
 from mission_control.mission.ihtn import ElementaryTask, Task
 from mission_control.mission.planning import distribute, flat_plan
 from ..core import MissionContext, Worker, Bid
@@ -8,18 +11,17 @@ class CoalitionFormationManager:
     """ Service of creating coalitions. It receives an ihtn with tasks 
     assigned to roles an return a selection of robots to execute the plan """
 
-    def __init__(self, workers: [Worker], estimate_manager: EstimateManager):
+    def __init__(self, workers: List[Worker], estimate_manager: EstimateManager):
         self.individual_plans = []
         self.workers = workers
-        self.estimate_manager: EstimateManager = None
+        self.estimate_manager: EstimateManager = estimate_manager
 
     def create_mission_context():
         pass
 
     def create_coalition(self, global_mission) -> MissionContext:
-        m_context = self.create_mission_context(global_mission)
         individual_plans = self.individualize_plans(global_mission)
-        plan_rank_map = map()
+        plan_rank_map = {}
         for individual_plan in individual_plans:
             task_list = self.flat_plan(individual_plan)
             viable_bids = []
@@ -27,16 +29,17 @@ class CoalitionFormationManager:
             for worker in candidates:
                 bid = self.estimate(worker, task_list)
                 is_viable = self.check_viable(bid)
-                if is_resource_viable:
+                if is_viable:
                     viable_bids.append(bid)
                 else:
                     pass # TODO log
-            ranked_bids = self.rank_bids(bid)
-            plan_rank_map.put(individual_plan, ranked_bids)
-        
-        m_context.bids = plan_rank_map
-        coalition_formation_result =  self.select_bids(m_context)
-        m_context.coalition_formation_result = coalition_formation_result
+            ranked_bids = self.rank_bids(viable_bids)
+            plan_rank_map[individual_plan] = ranked_bids
+
+        selected_bids =  self.select_bids(plan_rank_map)
+        m_context: MissionContext = self.create_mission_context(global_mission)
+        m_context.plans_and_ranked_bids = plan_rank_map
+        m_context.selected_bids = selected_bids
         return m_context
 
     def adapt_coalition():
@@ -44,10 +47,10 @@ class CoalitionFormationManager:
 
     @staticmethod
     def create_mission_context(global_mission: Task) -> MissionContext:
-        return MissionContext()
+        return MissionContext(global_mission)
     
     @staticmethod
-    def individualize_plans(global_mission: Task) -> Task:
+    def individualize_plans(global_mission: Task) -> Generator[Task, None, None]:
         for role in global_mission.assign_to:
             yield distribute(global_mission, role)
         return        
@@ -76,9 +79,13 @@ class CoalitionFormationManager:
         else:
             return True
     @staticmethod
-    def rank_bids(bids):
-        pass
+    def rank_bids(bids: [Bid]) -> [Bid]:
+        return sorted(bids, key=lambda bid: bid.estimate.time, reverse=False)
 
     @staticmethod
-    def select_bids(mission_context):
-        pass
+    def select_bids(plan_rank_map: Dict):
+        selected_bids = {}
+        for task, bid_rank in plan_rank_map.items():
+            #TODO estimate the wait time and verify resources
+            selected_bids[task] = bid_rank[0]
+        return selected_bids

@@ -54,7 +54,6 @@ class lab_samples_ihtn(Enum):
 for enum_item in lab_samples_ihtn:
     setattr(enum_item.value, 'name', enum_item.name)
 
-
 @pytest.fixture
 def ihtn_pickup_sample():
     return lab_samples_ihtn.pickup_sample.value
@@ -70,4 +69,3 @@ def ihtn_navto_room3():
 @pytest.fixture
 def ihtn_deposit():
     return lab_samples_ihtn.deposit.value
-
