@@ -18,25 +18,34 @@ class Map:
         pass
 
 class Route:
-    def __init__(self, segments, destination):
-        self.total_distance = 0 # calculate from segments
+    def __init__(self, destination: POI, segments = []):
+        self.destination = destination
+        self.total_distance = 100 # calculate from segments
         pass
 
     def get_way_points(self) -> [Waypoint]:
+        # TODO
         pass
 
     def get_route_progress(self, next_way_point, curr_position):
+        # TODO
         pass
+
+    def get_distance(self):
+        # TODO
+        return self.total_distance
 
 
 class RoutesEnvironmentDescriptor(EnvironmentDescriptor):
-    def __init__(self, map):
-        self.map = map
+    def __init__(self):
+        self.map = {}
 
     def block_segment(label):
         pass
 
-    def get(self, point_a: POI, point_b: POI) -> Route:
-        return [Waypoint(0, 0), Waypoint(1, 1), Waypoint(2, 2)]
+    def get(self, origin: POI, destination: POI) -> Route:
+        # TODO calculate route
+        route = Route(destination=destination)
+        return route
 
     

@@ -14,7 +14,7 @@ class Supervision:
     def check_mission_restrictions():
         pass
 
-    def check_unit_restrictions():
+    def check_worker_restrictions():
         pass
 
     def update_progress_and_check_mission_restriction(self, task_status_update):
@@ -26,9 +26,9 @@ class Supervision:
         else:
             self.update_progress(checks)
     
-    def update_unit_status_and_check_resources(self, unit_status):
-        self.update_unit_status(unit_status)
-        check = self.check_unit_restrictions()
+    def update_worker_status_and_check_resources(self, worker_status):
+        self.update_worker_status(uworker_status)
+        check = self.check_worker_restrictions()
         
         if has_failure(checks):
             self.try_handle_failure(checks.failure)

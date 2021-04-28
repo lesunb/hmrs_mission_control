@@ -6,15 +6,15 @@ from mission_control.core import Worker
 
 
 class TaskContext:
-    def __init__(self, unit: Worker):
-        self.unit = unit
+    def __init__(self, worker: Worker):
+        self.worker = worker
         self.task = None
         self.factors = None
         self.origin = None
         self.prev_ctx: TaskContext = None
         
     def start(self):
-        self.origin = self.unit.position
+        self.origin = self.worker.position
 
     def unwind(self, next_task: ElementaryTask):
         next_task_ctx = copy.copy(self)
@@ -44,17 +44,36 @@ class TaskContext:
             return None
 
 
-class Estimate:
-    def __init__(self, tasks, time, energy, invalid=False):
-        if invalid:
-            self.time =  math.inf
-            self.energy =  math.inf
-        pass
+def create_context_gen(worker: Worker, task_list: [ElementaryTask]):
+    task_context = TaskContext(worker=worker)
+    task_context.start()
 
+    for task in task_list:
+        new_task_context = task_context.unwind(task)
+        yield new_task_context
+        task_context = new_task_context
+    return
+
+class Estimate:
+    def __init__(self, task=None, time=math.inf, energy=math.inf):
+        self.is_viable = True
+        self.task = task
+        self.time = time
+        self.energy = energy
+
+class Nonviable(Estimate):
+    def __init__(self, reason:str, ):
+        super(time = math.inf, energy = math.inf)
+        self.reason = reason
+        self.is_viable = False
+
+
+            
 class Bid:
-    def __init__(self, unit, estimate, tasks_estimates):
-        self.time_individual_tasks = None
-        self.power_consumption_individual_tasks = None
+    def __init__(self, worker, estimate, partials):
+        self.worker = worker
+        self.estimate = estimate
+        self.partials = partials
 
     def is_power_viable(self):
         pass
@@ -71,25 +90,22 @@ class EnvironmentDescriptor:
     def get(parametes):
         pass
 
-class EnvironmentDescriptorContainer:
-    def __init__(self, descriptors = []):
-        self.env_descs = {}
-        for env_desc in descriptors:
-            env_descs[type(env_desc)] = env_desc
-
-
 class SkillDescriptor:
-    def __init__(self, environment_descriptors: EnvironmentDescriptorContainer):
-        self.ed = environment_descriptors
-
-    def get_env_desc(type_) -> EnvironmentDescriptor :
-        ed = self.ed.get(type_)
-        if ed is None:
-            raise f'ev {type_} not found'
-        else:
-            return ed
+    name = None
+    required_capabilities = None
 
     @abstractmethod
     def estimate(self, task_context: TaskContext) -> Estimate:
         pass
 
+class SkillDescriptorRegister:
+    def __init__(self, *task_type_skill_desc_pairs):
+        self.descs = {}
+        for pair in task_type_skill_desc_pairs:
+            self.descs[pair[0]] = pair[1]
+    
+    def register(self, task_type, descriptor: SkillDescriptor):
+        self.descs[task_type] = descriptor
+
+    def get(self, type):
+        return self.descs[type]

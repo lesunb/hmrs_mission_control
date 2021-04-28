@@ -1,10 +1,10 @@
-from mission_control.estimate.core import TaskContext
+from mission_control.estimate.core import TaskContext, create_context_gen
 from mission_control.core import Worker, POI
 from mission_control.mission.ihtn import ElementaryTask
 
 def test_task_context_start():
-    unit = Worker(position = (3, 4))
-    tsk_ctx = TaskContext(unit)
+    worker = Worker(position = (3, 4))
+    tsk_ctx = TaskContext(worker)
     tsk_ctx.start()
     assert tsk_ctx.origin == (3, 4)
 
@@ -12,8 +12,8 @@ def test_task_context_get_properties():
     sr_poi = POI('storage_room')
     room3_poi = POI('room3')
 
-    unit = Worker(position = sr_poi)
-    tsk_ctx = TaskContext(unit)
+    worker = Worker(position = sr_poi)
+    tsk_ctx = TaskContext(worker)
     tsk_ctx.start()
     task = ElementaryTask(type='navigate', destination=room3_poi)
     tsk_ctx = tsk_ctx.unwind(task)
@@ -21,20 +21,23 @@ def test_task_context_get_properties():
     assert tsk_ctx.get('destination') == room3_poi
 
 
-def test_task_context_position_unwinding():
-    sr_poi = POI('storage_room')
-    room1_poi = POI('room1')
-    room3_poi = POI('room3')
-    task1 = ElementaryTask(type='navigate', destination=room3_poi)
-    task2 = ElementaryTask(type='navigate', destination=room1_poi)
-    task3 = ElementaryTask(type='simple_action')
-    task4 = ElementaryTask(type='navigate', destination=room3_poi)
 
-    unit = Worker(position = sr_poi)
-    tsk_ctx = TaskContext(unit)
+sr_poi = POI('storage_room')
+room1_poi = POI('room1')
+room3_poi = POI('room3')
+task1 = ElementaryTask(type='navigate', destination=room3_poi)
+task2 = ElementaryTask(type='navigate', destination=room1_poi)
+task3 = ElementaryTask(type='simple_action')
+task4 = ElementaryTask(type='navigate', destination=room3_poi)
+
+worker = Worker(position = sr_poi)
+task_list = [task1, task2, task3, task4]
+
+def test_task_context_position_unwinding():
+    tsk_ctx = TaskContext(worker)
     tsk_ctx.start()
     tsk_ctxs = []
-    for task in [task1, task2, task3, task4]:
+    for task in task_list:
         tsk_ctx = tsk_ctx.unwind(task)
         tsk_ctxs.append(tsk_ctx)
 
@@ -45,3 +48,10 @@ def test_task_context_position_unwinding():
     assert tsk_ctxs[3].get('destination') == room3_poi
 
 
+
+def test_create_task_context():
+    task_context_gen = create_context_gen(worker, task_list)
+    estimates = []
+    task_ctxs = list(task_context_gen)
+    last_ctx = task_ctxs[3]
+    assert last_ctx.get('origin') == room1_poi

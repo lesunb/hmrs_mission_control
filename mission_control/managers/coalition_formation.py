@@ -10,9 +10,9 @@ class CoalitionFormationManager:
     """ Service of creating coalitions. It receives an ihtn with tasks 
     assigned to roles an return a selection of robots to execute the plan """
 
-    def __init__(self, units: [Worker], estimate_manager: EstimateManager):
+    def __init__(self, workers: [Worker], estimate_manager: EstimateManager):
         self.individual_plans = []
-        self.units = units
+        self.workers = workers
         self.estimate_manager: EstimateManager = None
 
     def create_mission_context():
@@ -25,9 +25,9 @@ class CoalitionFormationManager:
         for individual_plan in individual_plans:
             task_list = self.flat_plan(individual_plan)
             viable_bids = []
-            candidates = self.get_compatible_units(task_list)
-            for unit in candidates:
-                bid = self.estimate(unit, task_list)
+            candidates = self.get_compatible_workers(task_list)
+            for worker in candidates:
+                bid = self.estimate(worker, task_list)
                 is_viable = self.check_viable(bid)
                 if is_resource_viable:
                     viable_bids.append(bid)
@@ -58,17 +58,17 @@ class CoalitionFormationManager:
     def flat_plan(task) -> [ ElementaryTask ]:
         return flat_plan(task)
 
-    def get_compatible_units(self, task_list: [ElementaryTask]):
-        """  get the units that have the required skills for executing all tasks in 'task_list' """
+    def get_compatible_workers(self, task_list: [ElementaryTask]):
+        """  get the workers that have the required skills for executing all tasks in 'task_list' """
         required_skills = set([ task.type for task in task_list ])
 
-        for unit in self.units:
-            if not required_skills.difference(unit.skills):
-                yield unit
+        for worker in self.workers:
+            if not required_skills.difference(worker.skills):
+                yield worker
         return
         
-    def estimate(self, unit, task_list: [ElementaryTask]) -> Bid: 
-        return self.estimate_manager.estimate(unit, task_list)
+    def estimate(self, worker, task_list: [ElementaryTask]) -> Bid: 
+        return self.estimate_manager.estimate(worker, task_list)
 
     @staticmethod
     def check_viable(bid):

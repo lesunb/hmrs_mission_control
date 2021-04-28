@@ -19,11 +19,11 @@ def test_flat_plan(cf_manager: CoalitionFormationManager, ihtn_collect):
     assert not diff
 
 
-def test_get_compatible_units(cf_manager: CoalitionFormationManager, ihtn_collect, collection_robots_a_and_b):
+def test_get_compatible_workers(cf_manager: CoalitionFormationManager, ihtn_collect, collection_robots_a_and_b):
     task_list = cf_manager.flat_plan(ihtn_collect)
-    comp_units = list(cf_manager.get_compatible_units(task_list))
+    comp_workers = list(cf_manager.get_compatible_workers(task_list))
     # robot_a and robot_b have the skills, robot_c does not
-    diff =  set(comp_units) ^ set(collection_robots_a_and_b)
+    diff =  set(comp_workers) ^ set(collection_robots_a_and_b)
     assert not diff
 
 

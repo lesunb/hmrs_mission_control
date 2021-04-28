@@ -1,39 +1,32 @@
 from mission_control.mission.ihtn import ElementaryTask
 
-from .core import Estimate, TaskContext, SkillDescriptor, Bid
-
+from .core import Estimate, Nonviable, TaskContext, SkillDescriptor, Bid, create_context_gen, SkillDescriptorRegister
+from ..core import Worker
 
 class EstimateManager:
-    def __init__(self):
-        self.skill_descriptors: map[str, SkillDescriptor] = {}
-        # TODO init environment descriptors
-        # TODO init skill descriptors
-        pass
+    def __init__(self, skill_descriptors: SkillDescriptorRegister):
+        self.skill_descriptors = skill_descriptors
 
-    def estimate(self, unit, task_list: [ElementaryTask]) -> Bid: 
-        task_context_gen = self.create_context_gen(task_list)
+    def estimate(self, worker: Worker, task_list: [ElementaryTask]) -> Bid: 
+        task_context_gen = create_context_gen(worker, task_list)
         estimates = []
         for task_context in task_context_gen:
-            estimates.append(self.estimate_task_in_context(task_context))
+            partial = self.estimate_task_in_context(task_context)
+            estimates.append(partial)
+            if not partial.is_viable:
+                return Bid(worker, cost=partial, partials=estimates)
         
-        total_cost = self.aggregate_estimates(estimates)
-        return Bid(unit, cost=total_cost, partials=estimates)
+        aggregated = self.aggregate_estimates(estimates)
+        return Bid(worker, estimate=aggregated, partials=estimates)
 
     def estimate_task_in_context(self, task_context) -> Estimate :
         # look for a skill descriptor
-        sd = self.get_skill_descriptor(task_context.type)
-        sd.estimate(task_context)
+        sd = self.skill_descriptors.get(task_context.task.type)
+        if sd is None:
+            # TODO log error
+            return Nonviable(reason=f'no skill descriptor to estimate {task_context.task.type}')
+        return sd.estimate(task_context)
 
-    @staticmethod
-    def create_context_gen(unit, task_list):
-        task_context = TaskContext(unit=unit)
-        task_context.start()
-
-        for task in task_list:
-            new_task_context = task_context.unwind(task)
-            yield new_task_context
-            task_context = new_task_context
-        return
             
     def get_skill_descriptor(self, task_type) -> SkillDescriptor:
         sd = self.skill_descriptors[task_type]
@@ -41,3 +34,12 @@ class EstimateManager:
 
     def set_skill_descriptor(self, sd, task_type):
         self.skill_descriptors[task_type] = sd
+
+    def aggregate_estimates(self, estimates: [Estimate]) -> Estimate:
+        total_time = 0
+        total_energy = 0
+        is_viable = True
+        for partial in estimates:
+            total_time += partial.time
+            total_energy += partial.energy
+        return Estimate(time=total_time, energy=total_energy)

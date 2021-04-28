@@ -16,12 +16,12 @@ class POI(Enum):
 class Roles(Enum):
     r1 = 'r1'
 
-class collection_units(Enum):
+class collection_workers(Enum):
     robot_a = Worker(skills=[TaskType.NAV_TO, TaskType.PICK_UP])
     robot_b = Worker(skills=[TaskType.NAV_TO, TaskType.PICK_UP])
     robot_c = Worker(skills=[TaskType.NAV_TO])
 
-for enum_item in collection_units:
+for enum_item in collection_workers:
     setattr(enum_item.value, 'name', enum_item.name)
 
 # Defined as Enum so we can reference methods and tasks, and we can have references
@@ -45,8 +45,8 @@ def ihtn_collect():
 
 @pytest.fixture
 def cf_manager():
-    units = [ unit.value for unit in collection_units ]
-    _cf_manager = CoalitionFormationManager(units = units)
+    workers = [ unit.value for unit in collection_workers ]
+    _cf_manager = CoalitionFormationManager(workers = workers, estimate_manager=None)
     return _cf_manager
 
 
@@ -56,10 +56,10 @@ def r1():
 
 @pytest.fixture
 def collection_robots():
-    units = [ unit.value for unit in collection_units ]
-    return units
+    workers = [ unit.value for unit in collection_workers ]
+    return workers
 
 @pytest.fixture
 def collection_robots_a_and_b():
-    units = [ unit.value for unit in [collection_units.robot_a, collection_units.robot_b ]]
-    return units
+    workers = [ unit.value for unit in [collection_workers.robot_a, collection_workers.robot_b ]]
+    return workers
