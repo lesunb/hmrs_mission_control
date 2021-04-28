@@ -20,6 +20,7 @@ matplotlib = "*"
 setuptools = "*"
 pyqt5 = "==5.15.2"
 lxml = "*"
+lagom = "*"
 
 [requires]
 python_version = "3.8.9"
