@@ -1,8 +1,4 @@
-
-#from .lab_samples_exemplar import Roles
-#from .lab_samples_exemplar import ihtn_pickup_sample, ihtn_navto_room3, ihtn_deposit
-
-from .lab_samples_exemplar import *
+from .world_lab_samples import *
 
 from mission_control.mission.planning import distribute, count_elementary_tasks, flat_plan, check_tasks_names
 

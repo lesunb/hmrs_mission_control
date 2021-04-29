@@ -1,5 +1,5 @@
 
-from .collector_world import *
+from .world_collector import *
 
 from mission_control.managers.coalition_formation import CoalitionFormationManager
 from mission_control.core import Bid, Estimate, ImpossibleToEstimate, MissionContext
@@ -14,9 +14,12 @@ def test_create_task_context(cf_manager: CoalitionFormationManager, ihtn_collect
         assert individual_plan is not None
 
 
+nav_to_room3 = collection_ihtn.navto_room3.value
+pick_up_object = collection_ihtn.pick_up_object.value
+
 def test_flat_plan(cf_manager: CoalitionFormationManager, ihtn_collect):
     obtained_task = cf_manager.flat_plan(ihtn_collect)
-    diff =  set(obtained_task) ^ set([ithn_collection_parts.navto_room3.value, ithn_collection_parts.pick_up_object.value])
+    diff =  set(obtained_task) ^ set([nav_to_room3, pick_up_object])
     assert not diff
 
 

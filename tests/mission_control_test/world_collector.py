@@ -15,6 +15,14 @@ from mission_control.estimate.commons.routes_ed import RoutesEnvironmentDescript
 from mission_control.estimate.commons.navigation_sd import NavigationSkillDescriptor, Move
 from mission_control.estimate.commons.generic_constant_cost_sd import generic_skill_descriptor_constant_cost_factory
 
+###
+# Produces:
+#  - a simple mission with two tasks
+#  - three robots
+#  - a EnstimateManager
+#  - 
+
+##
 class task_type(Enum):
     NAV_TO = 'navigation'
     PICK_UP = 'pick_up'
@@ -50,7 +58,7 @@ robots = [ unit.value for unit in robot ]
 
 # Defined as Enum so we can reference methods and tasks, and we can have references
 # to names that we later on set on them with set_name()
-class ithn_collection_parts(Enum):
+class collection_ihtn(Enum):
     # elementary tasks
     navto_room3 = ElementaryTask(task_type.NAV_TO, destination=poi.room3, assign_to=[roles.r1])
     pick_up_object  = ElementaryTask(task_type.PICK_UP, target=roles.r1, assign_to=[roles.r1])
@@ -59,20 +67,13 @@ class ithn_collection_parts(Enum):
     # root task
     collect = AbstractTask(methods=[m_collect])
 
-for enum_item in ithn_collection_parts:
+for enum_item in collection_ihtn:
     setattr(enum_item.value, 'name', enum_item.name)
 
 
 @pytest.fixture
 def ihtn_collect():
-    return ithn_collection_parts.collect.value
-
-# @pytest.fixture
-# def cf_manager():
-#     workers = [ unit.value for unit in collection_workers ]
-#     _cf_manager = CoalitionFormationManager(workers = workers, estimate_manager=None)
-#     return _cf_manager
-
+    return collection_ihtn.collect.value
 
 @pytest.fixture
 def r1():

@@ -1,7 +1,7 @@
 from enum import Enum
 from lagom import Container
 
-from .collector_world import *
+from .world_collector import *
 
 from mission_control.core import POI, worker_factory
 from mission_control.estimate.estimate import EstimateManager
