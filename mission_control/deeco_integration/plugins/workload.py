@@ -1,11 +1,10 @@
+import json
 from abc import abstractclassmethod
 
 from deeco.runnable import NodePlugin
-from mission_control.request import Request
 from deeco.plugins.simplenetwork import SimpleNetwork
 
-import json
-
+from ..request import Request
 
 def read(path):
     data = None
@@ -44,7 +43,8 @@ class WorkloadLoader(NodePlugin):
     def trigger_request(self, time_ms):
         # while didn't get to the end of the gen, and the next is due
         while self.next is not None and self.next.timestamp <= time_ms:
-            self.network.send(self.destination_id, self.next)
+            request = self.next
+            self.network.send(self.destination_id, request)
             self.next = next(self.workload)
         # TODO if self.next is None, remove the timer
 

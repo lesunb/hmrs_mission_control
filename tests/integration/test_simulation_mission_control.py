@@ -9,17 +9,20 @@ from deeco.plugins.ensemblereactor import EnsembleReactor
 
 from deeco.plugins.snapshoter import Snapshoter
 
-from mission_control.robot import Robot
-from mission_control.coordinator import Coordinator
-from mission_control.mission_ensemble import MissionEnsemble
-from mission_control.plugins.workload import WorkloadLoader
-from mission_control.hande_request_service import HandleRequestServer
+from mission_control.deeco_integration.robot import Robot
+from mission_control.deeco_integration.coordinator import Coordinator
+from mission_control.deeco_integration.mission_ensemble import MissionEnsemble
+from mission_control.deeco_integration.plugins.workload import WorkloadLoader
+from mission_control.deeco_integration.hande_request_service import HandleRequestServer
+from mission_control.deeco_integration.request import Request
+
+
 
 print("Running simulation")
 
+from ..world_collector import *
 
-
-def test_sim():
+def test_sim(cf_manager, ihtn_collect):
     sim = Sim()
     # Add snapshoter plugin
     Snapshoter(sim, period_ms=100)
@@ -38,12 +41,12 @@ def test_sim():
     EnsembleReactor(coord_node, [MissionEnsemble()])
     coord = Coordinator(coord_node, required_skills = ['secure_transport'] )
     coord_node.add_component(coord)
-    HandleRequestServer(coord_node)
+    HandleRequestServer(coord_node, cf_manager)
 
     # get workload
     client = Node(sim)
     Walker(client, Position(0, 0)) # TODO remove
-    WorkloadLoader(client, coord_node, [ { 'timestamp': 3000, 'request ': {}}])
+    WorkloadLoader(client, coord_node, [ { 'timestamp': 3000, 'content': ihtn_collect}])
 
     # create an inventory 
 
@@ -61,7 +64,7 @@ def test_sim():
         node.add_component(robot)
 
     # Run the simulation
-    sim.run(60000)
+    sim.run(3100)
 
     # check success / timespan
 

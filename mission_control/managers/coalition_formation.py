@@ -16,9 +16,6 @@ class CoalitionFormationManager:
         self.workers = workers
         self.estimate_manager: EstimateManager = estimate_manager
 
-    def create_mission_context():
-        pass
-
     def create_coalition(self, global_mission) -> MissionContext:
         individual_plans = self.individualize_plans(global_mission)
         plan_rank_map = {}

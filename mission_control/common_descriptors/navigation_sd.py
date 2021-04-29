@@ -1,8 +1,8 @@
 from typing import Final
 
-from ..core import SkillDescriptor
+from ..estimate.core import SkillDescriptor
 from .routes_ed import RoutesEnvironmentDescriptor
-from ...core import POI, Capability, Estimate, ImpossibleToEstimate
+from ..core import POI, Capability, Estimate, ImpossibleToEstimate
 
 class Move(Capability):
     def __init__(self, avg_speed, u):

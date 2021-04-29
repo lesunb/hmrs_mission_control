@@ -1,5 +1,5 @@
 
-from .world_collector import *
+from ..world_collector import *
 
 from mission_control.managers.coalition_formation import CoalitionFormationManager
 from mission_control.core import Bid, Estimate, ImpossibleToEstimate, MissionContext

@@ -1,6 +1,6 @@
 
 
-from .world_collector import *
+from ..world_collector import *
 
 from mission_control.mission.ihtn import Task
 

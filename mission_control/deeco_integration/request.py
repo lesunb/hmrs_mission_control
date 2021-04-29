@@ -1,4 +1,5 @@
 from deeco.packets import Packet, PacketType
+from mission_control.mission.ihtn import Task
 
 class Request(Packet):
     def __init__(self, id, timestamp = None, content=None):
@@ -6,3 +7,4 @@ class Request(Packet):
         self.id = id
         self.timestamp = timestamp
         self.content = content
+

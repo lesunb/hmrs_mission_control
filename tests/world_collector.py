@@ -11,9 +11,9 @@ from mission_control.estimate.estimate import EstimateManager
 from mission_control.managers.coalition_formation import CoalitionFormationManager
 from mission_control.mission.ihtn import Method, MethodOrdering, Task, ElementaryTask, AbstractTask
 
-from mission_control.estimate.commons.routes_ed import RoutesEnvironmentDescriptor, Map
-from mission_control.estimate.commons.navigation_sd import NavigationSkillDescriptor, Move
-from mission_control.estimate.commons.generic_constant_cost_sd import generic_skill_descriptor_constant_cost_factory
+from mission_control.common_descriptors.routes_ed import RoutesEnvironmentDescriptor, Map
+from mission_control.common_descriptors.navigation_sd import NavigationSkillDescriptor, Move
+from mission_control.common_descriptors.generic_constant_cost_sd import generic_skill_descriptor_constant_cost_factory
 
 ###
 # Produces:

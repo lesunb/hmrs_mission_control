@@ -1,7 +1,7 @@
 from enum import Enum
 from lagom import Container
 
-from .world_collector import *
+from ..world_collector import *
 
 from mission_control.core import POI, worker_factory
 from mission_control.estimate.estimate import EstimateManager
@@ -9,8 +9,8 @@ from mission_control.estimate.core import create_context_gen, SkillDescriptorReg
 from mission_control.mission.ihtn import ElementaryTask
 
 
-from mission_control.estimate.commons.routes_ed import RoutesEnvironmentDescriptor, Map
-from mission_control.estimate.commons.navigation_sd import NavigationSkillDescriptor, Move
+from mission_control.common_descriptors.routes_ed import RoutesEnvironmentDescriptor, Map
+from mission_control.common_descriptors.navigation_sd import NavigationSkillDescriptor, Move
 
 class task_types(Enum):
     NAV = 'navigate'

@@ -1,4 +1,4 @@
-from ..core import EnvironmentDescriptor
+from ..estimate.core import EnvironmentDescriptor
 from mission_control.core import POI
 
 class Edge:

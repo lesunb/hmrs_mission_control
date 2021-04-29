@@ -1,4 +1,4 @@
-from .world_lab_samples import *
+from ..world_lab_samples import *
 
 from mission_control.mission.planning import distribute, count_elementary_tasks, flat_plan, check_tasks_names
 
