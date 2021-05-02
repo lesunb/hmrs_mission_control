@@ -1,7 +1,13 @@
 from mission_control.mission.ihtn import ElementaryTask
 
 from .core import TaskContext, SkillDescriptor, create_context_gen, SkillDescriptorRegister
-from ..core import Worker, Bid, Estimate, ImpossibleToEstimate
+from ..core import Worker, Estimate, ImpossibleToEstimate
+
+class Bid:
+    def __init__(self, worker: Worker, estimate: Estimate, partials: [Estimate]= None):
+        self.worker = worker
+        self.estimate = estimate
+        self.partials = partials
 
 class EstimateManager:
     def __init__(self, skill_descriptors: SkillDescriptorRegister):

@@ -36,6 +36,7 @@ class MissionEnsemble(EnsembleDefinition):
 		assert type(a) == Coordinator.Knowledge
 		assert type(b) == Robot.Knowledge
 		return True
+		
 
 	def knowledge(self, a: Robot.Knowledge, b: Robot.Knowledge):
 		knowledge = self.RobotGroupKnowledge()

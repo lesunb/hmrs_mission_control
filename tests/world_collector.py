@@ -8,7 +8,7 @@ from enum import Enum
 from mission_control.core import Worker, worker_factory, POI
 from mission_control.estimate.core import SkillDescriptorRegister
 from mission_control.estimate.estimate import EstimateManager
-from mission_control.managers.coalition_formation import CoalitionFormationManager
+from mission_control.manager.coalition_formation import CoalitionFormationProcess
 from mission_control.mission.ihtn import Method, MethodOrdering, Task, ElementaryTask, AbstractTask
 
 from mission_control.common_descriptors.routes_ed import RoutesEnvironmentDescriptor, Map
@@ -110,7 +110,7 @@ container[SkillDescriptorRegister] = sd_register
 # estimate manager
 container[List[Worker]] = robots
 em:EstimateManager = container[EstimateManager]
-cfm: CoalitionFormationManager = container[CoalitionFormationManager]
+cfm: CoalitionFormationProcess = container[CoalitionFormationProcess]
 ######
 # Robots
 ########

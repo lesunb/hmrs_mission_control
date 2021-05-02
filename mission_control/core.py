@@ -1,4 +1,6 @@
 import math
+from enum import Enum
+from collections.abc import Iterable
 
 from .mission.ihtn import Task
 
@@ -62,19 +64,35 @@ class ImpossibleToEstimate(Estimate):
         self.reason = reason
         self.is_impossible_to_estimate = True
             
-class Bid:
-    def __init__(self, worker: Worker, estimate: Estimate, partials: [Estimate]= None):
-        self.worker = worker
-        self.estimate = estimate
-        self.partials = partials
+class LocalMission:
+    class Status(Enum):
+        PENDING_ASSIGNMENTS = 1
+        PENDING_COMMIT = 2
+        ASSIGNED = 3
+        CONCLUDED = 4
 
-    def is_power_viable(self):
-        pass
-    
-    def get_time_indivual_tasks(self):
-        pass
+    def __init__(self, role, local_plan:Task, worker = None):
+        self.role = role
+        self.plan: Task = local_plan
+        self.worker: Worker = None
+        self.status = LocalMission.Status.PENDING_ASSIGNMENTS
+        
 
 class MissionContext:
-    def __init__(self, task: Task = None):
-        self.plans_and_ranked_bids: map[Task, list[Bid]] = None
-        self.selected_bids: map[Task, Bid] = None
+    class Status(Enum):
+        NEW = 0
+        PENDING_ASSIGNMENTS = 1
+        DISTRIBUTING_TASKS = 2
+        EXECUTING = 3
+        CONCLUDED = 4
+        REPLANNING_PENDING = 5
+
+    def __init__(self, global_plan: Task):
+        self.status = MissionContext.Status.NEW
+        self.global_plan: Task = global_plan
+        self.local_missions: Iterable[LocalMission] = {}
+    
+
+            
+
+    

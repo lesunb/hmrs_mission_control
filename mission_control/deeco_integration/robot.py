@@ -35,6 +35,7 @@ class Robot(Component):
 		def __init__(self):
 			super().__init__()
 			self.color = None
+			self.active_mission  = None
 
 	# Component initialization
 	def __init__(self, node: Node, provided_skills = []):
@@ -45,7 +46,6 @@ class Robot(Component):
 		self.knowledge.position = node.positionProvider.get()
 		self.knowledge.goal = self.gen_position()
 		self.knowledge.color = self.random.choice(self.COLORS)
-
 
 #		# Register network receive method
 #		node.networkDevice.add_receiver(self.__receive_packet)

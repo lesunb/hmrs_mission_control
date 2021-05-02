@@ -9,6 +9,8 @@ from deeco.position import Position
 from deeco.packets import TextPacket
 
 from .request import Request
+from ..core import MissionContext
+from ..manager.integration import MissionHandler
 
 # Role
 class Rover(Role):
@@ -26,16 +28,9 @@ class GlobalMissionManager(Role):
        ctx = MissionContext(request)
        self.mission_contexts.put(request.id, request) 
 
-class MissionContext:
-    def __init__(self, request):
-        self.request = request
-        self.mision_status = 'NOT_STARTED'
-        self.missions_local_plans = map()
-
-
 
 # Component
-class Coordinator(Component):
+class Coordinator(Component, MissionHandler):
     COLORS = ["yellow", "pink"]
     random = Random(0)
 
@@ -48,7 +43,8 @@ class Coordinator(Component):
         def __init__(self):
             super().__init__()
             self.color = None
-            self.required_skills
+            self.required_skills = []
+            self.active_missions: [MissionContext] = []
 
     # Component initialization
     def __init__(self, node: Node, required_skills = []):
@@ -61,6 +57,8 @@ class Coordinator(Component):
         self.knowledge.goal = self.gen_position()
         self.knowledge.color = self.random.choice(self.COLORS)
 
+        self.cf_process = node.get_cf_process(mission_handler=self)
+        self.supervision_process = node.get_supervision_process(mission_handler=self)
 #		# Register network receive method
 #		node.networkDevice.add_receiver(self.__receive_packet)
 
@@ -91,6 +89,56 @@ class Coordinator(Component):
             self.knowledge.goal = self.gen_position()
             node.walker.set_target(self.knowledge.goal)
         node.walker.set_target(self.knowledge.goal)
+
+
+    @process(period_ms=10)
+    def handle_mission_requests(self, node):
+        """ handle quests sequentially from a queue. 
+        Non parallel in order to avoid conflict in the scheduling workers """
+        # TODO guarantee single active 
+        requests_without_plan = []
+        for request in self.knowledge.pending_requests():
+            if request.timmeout > self.current_time():
+                self.handle_expired_request(request)
+                continue
+            
+            mission_context = request.mission_context
+            workers = self.get_available_workers()
+            self.cf_process.run(mission_context, workers)
+        
+    @process(period_ms=1000)
+    def handle_mission_updates(self, node):
+        for active_mission in self.get_active_missions():
+            task_updates = self.get_pending_updates(active_mission)
+            assigned_workers = self.get_assigned_workers(active_mission)
+            supervision_process.run(active_mission, updates)
+    
+    def on_mission_start(mission_context: MissionContext):
+        self.active_missions.add(mission_context)
+        self.node.log_mission_start(mission_context)
+        self.assign_coalition_to_mission(mission_context)
+
+    def on_mission_end(mission_context: MissionContext):
+        self.active_missions.remove(mission_context)
+        self.node.log_mission_end(mission_context)
+
+    def on_no_coalition_available(request: Request):
+        pass
+
+    def assign_coalition_to_mission(mission_context: MissionContext):
+        for assignment in mission_context:
+            self.knowledge.workers_schedule_table[worker_id]= ('assigned')
+            mission_context.assignments = None
+
+    def update_assigment(self, assignment_update):
+        """ free or fail update """
+        # TODO check the assignment to update
+        self.knowledge.workers_schedule_table[assignment_update.target].status = assignment_update.satus
+
+    def report_progress(self, acive_mission):
+        def log():
+            pass
+        return log
 
 #	@process(period_ms=2500)
 #	def send_echo_packet(self, node: Node):

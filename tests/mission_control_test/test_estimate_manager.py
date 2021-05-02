@@ -8,7 +8,6 @@ from mission_control.estimate.estimate import EstimateManager
 from mission_control.estimate.core import create_context_gen, SkillDescriptorRegister
 from mission_control.mission.ihtn import ElementaryTask
 
-
 from mission_control.common_descriptors.routes_ed import RoutesEnvironmentDescriptor, Map
 from mission_control.common_descriptors.navigation_sd import NavigationSkillDescriptor, Move
 
