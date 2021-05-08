@@ -11,41 +11,23 @@ from mission_control.mission.ihtn import ElementaryTask
 from mission_control.common_descriptors.routes_ed import RoutesEnvironmentDescriptor, Map
 from mission_control.common_descriptors.navigation_sd import NavigationSkillDescriptor, Move
 
-class task_types(Enum):
-    NAV = 'navigate'
-    SIMPLE_ACTION = 'simple_action'
+task1 = ElementaryTask(type=task_type.NAV_TO, destination=poi.room3.value)
+task2 = ElementaryTask(type=task_type.NAV_TO, destination=poi.room1.value)
+task3 = ElementaryTask(type=task_type.NAV_TO, destination=poi.room3.value)
 
-sr_poi = POI('storage_room')
-room1_poi = POI('room1')
-room3_poi = POI('room3')
-task1 = ElementaryTask(type=task_types.NAV, destination=room3_poi)
-task2 = ElementaryTask(type=task_types.NAV, destination=room1_poi)
-task3 = ElementaryTask(type=task_types.NAV, destination=room3_poi)
 task_list = [task1, task2, task3]
 
-container = Container()
-# env desc
-container[Map] = Map(pois =[], segments=[])
-routes_ed = container[RoutesEnvironmentDescriptor]
 
-# skill desc
-nav_sd = container[NavigationSkillDescriptor]
+worker1 = robots[1]
 
-# skill desc container singleton
-sd_register = SkillDescriptorRegister( (task_types.NAV, nav_sd))
-container[SkillDescriptorRegister] = sd_register
-
-# estimate manager
-em:EstimateManager = container[EstimateManager]
-
-worker1 = worker_factory(position = sr_poi, 
+worker_factory(position = poi.sr.value, 
         capabilities=[
             Move(avg_speed = 15, u='m/s'),
             # power_source_battery( 
             #     { capacity:1000, u:'Ah'},
             #     { charge:900, u:'Ah'}, ),
         ],
-        skills=[task_types.NAV],
+        skills=[task_type.NAV_TO],
         # models=[
         #     c('constant_power_consumption', rate=300, u='Ah'),
         # ]
@@ -56,14 +38,20 @@ task_ctxs = list(task_context_gen)
 last_ctx = task_ctxs[2]
 
 
-def test_estimate_navigation_task_in_context():
-    estimate = em.estimate_task_in_context(last_ctx)
+def test_estimate_navigation_task_in_context(estimate_manager):
+    estimate = estimate_manager.estimate_task_in_context(last_ctx)
     assert estimate is not None
 
 
-def test_estimate():
-    bid = em.estimate(worker1, task_list)
-    assert bid.estimate.time == 20
+def test_estimate(estimate_manager):
+    bid = estimate_manager.estimate(worker1, task_list)
+    assert bid.estimate.time > 2 and bid.estimate.time < 3
+
+def test_estimate_route(routes_envdesc):
+    route = routes_envdesc.get(poi.room3.value, poi.room1.value)
+    assert route.get_distance() > 3
+
+
 
 
 # def test_estimate_no_route():

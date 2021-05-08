@@ -60,7 +60,7 @@ class EnvironmentDescriptor:
         self.id = id
 
     @abstractmethod
-    def get(parametes):
+    def get(self, parametes):
         pass
 
 class SkillDescriptor:

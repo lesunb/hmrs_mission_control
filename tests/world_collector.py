@@ -11,9 +11,11 @@ from mission_control.estimate.estimate import EstimateManager
 from mission_control.manager.coalition_formation import CoalitionFormationProcess
 from mission_control.mission.ihtn import Method, MethodOrdering, Task, ElementaryTask, AbstractTask
 
-from mission_control.common_descriptors.routes_ed import RoutesEnvironmentDescriptor, Map
+from mission_control.common_descriptors.routes_ed import RoutesEnvironmentDescriptor, Map, Nodes
 from mission_control.common_descriptors.navigation_sd import NavigationSkillDescriptor, Move
 from mission_control.common_descriptors.generic_constant_cost_sd import generic_skill_descriptor_constant_cost_factory
+
+from mission_control.common_descriptors.routes_ed import Map
 
 ###
 # Produces:
@@ -31,6 +33,26 @@ class poi(Enum):
     sr = POI('storage_room')
     room1 = POI('room1')
     room3 = POI('room3')
+
+def create_map() -> Map:
+    map = Map()
+    ic_corridor = Nodes("IC Corridor", [-37, 15])
+
+    sr = Nodes("storage_room", [-37, 35])
+    ic_room_1 = Nodes("room1", [-38, 35])
+    ic_room_2 = Nodes("room2", [-34, 35])
+    ic_room_3 = Nodes("room3", [-38, 23])
+
+    ic_corridor.add_edges([sr, ic_room_1, ic_room_2, ic_room_3])
+    
+    sr.add_edges([ic_corridor])
+    ic_room_1.add_edges([ic_corridor])
+    ic_room_2.add_edges([ic_corridor])
+    ic_room_3.add_edges([ic_corridor])
+
+    map.add_nodes([ic_corridor, sr, ic_room_1, ic_room_2,
+                   ic_room_3])
+    return map
 
 for enum_item in poi:
     setattr(enum_item.value, 'name', enum_item.name)
@@ -98,7 +120,7 @@ def collection_robots_a_and_b():
 
 container = Container()
 # env desc
-container[Map] = Map(pois =[], segments=[])
+container[Map] = create_map()
 routes_ed = container[RoutesEnvironmentDescriptor]
 
 # skill desc
@@ -122,3 +144,10 @@ cfm: CoalitionFormationProcess = container[CoalitionFormationProcess]
 def cf_manager():
     return cfm
 
+@pytest.fixture
+def estimate_manager():
+    return em
+
+@pytest.fixture
+def routes_envdesc():
+    return routes_ed
