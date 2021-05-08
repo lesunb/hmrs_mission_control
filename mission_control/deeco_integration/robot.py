@@ -15,10 +15,11 @@ class Rover(Role):
 		self.position = None
 		self.goal = None
 
-class RobotWorker(Role):
+class Worker(Role):
 	def __init__(self):
 		super().__init__()
 		self.provided_skills = None
+		self.local_mission = None
 
 # Component
 class Robot(Component):
@@ -31,7 +32,7 @@ class Robot(Component):
 		return Position(Robot.random.uniform(0, 1), Robot.random.uniform(0, 1))
 
 	# Knowledge definition
-	class Knowledge(BaseKnowledge, RobotWorker, Rover):
+	class Knowledge(BaseKnowledge, Worker, Rover):
 		def __init__(self):
 			super().__init__()
 			self.color = None

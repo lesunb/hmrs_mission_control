@@ -1,49 +1,42 @@
 from abc import abstractmethod
 
 from deeco.core import EnsembleDefinition, BaseKnowledge
-from deeco.core import Role
+from deeco.core import Role, Group
 from deeco.position import Position
-from .robot import Robot
-from .coordinator import Coordinator
+from .robot import Robot, Worker
+from .coordinator import Coordinator, MissionsServer, MissionCoordinator
 
+from ..core import MissionContext
 
 # Role
-class Group(Role):
+class MissionContextRole(Role, MissionContext):
 	def __init__(self):
 		super().__init__()
-		self.center = None
-		self.members = []
-
 
 class MissionEnsemble(EnsembleDefinition):
-	class RobotGroupKnowledge(BaseKnowledge, Group):
+	class MissionKnowledge(BaseKnowledge, MissionContextRole, Group):
 		def __init__(self):
 			super().__init__()
 
 		def __str__(self):
-			return self.__class__.__name__ + " centered at " + str(self.center) + " with component ids " + str(list(map(lambda x: x.id, self.members)))
+			return self.__class__.__name__ + " with component ids " + str(list(map(lambda x: x.id, self.members)))
 
-	def fitness(self, a: Robot.Knowledge, b: Robot.Knowledge):
-		if type(a) is not Coordinator.Knowledge or type(b) is not Robot.Knowledge:
+	def __init__(self):
+		super().__init__(coordinator=MissionCoordinator, member=Worker)
+
+	def fitness(self, coord: MissionCoordinator, member: Worker):
+		if coord.global_mission is None:
 			return 0
 		else:
-			for skill in a.required_skills:
-				if skill in b.provided_skills:
-					return 1
-			return 0
+			return 1 
 
-	def membership(self, a: Robot, b: Robot):
-		assert type(a) == Coordinator.Knowledge
-		assert type(b) == Robot.Knowledge
-		return True
-		
+	def membership(self, coord: MissionCoordinator, member: Worker):
+		assert isinstance(coord, MissionCoordinator)
+		assert isinstance(member, Worker)
+		return True	
 
-	def knowledge(self, a: Robot.Knowledge, b: Robot.Knowledge):
-		knowledge = self.RobotGroupKnowledge()
-		knowledge.center = Position.average(a.position, b.position)
-		knowledge.members = [a, b]
-
-		return knowledge
+	def knowledge_exchange(self, coord: MissionCoordinator, member: Worker):
+		return coord, None
 
 	def __str__(self):
 		return self.__class__.__name__

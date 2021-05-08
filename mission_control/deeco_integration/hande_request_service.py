@@ -4,13 +4,11 @@ import logging
 
 from .plugins.service import Server
 
-from .request import Request
+from .requests_ensemble import Request
 from mission_control.manager.coalition_formation import CoalitionFormationProcess
 from mission_control.mission.ihtn import Task
 
 
-logging
-logging.basicConfig(filename='xx.logx', filemode='w', encoding='utf-8', level=logging.DEBUG)
 
 class HandleRequestServer(Server[Request]):
     def __init__(self, node, cf_manager: CoalitionFormationProcess):

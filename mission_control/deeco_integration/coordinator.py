@@ -1,4 +1,5 @@
 from random import Random
+from queue import SimpleQueue
 
 from deeco.core import BaseKnowledge
 from deeco.core import Component
@@ -8,28 +9,47 @@ from deeco.core import process
 from deeco.position import Position
 from deeco.packets import TextPacket
 
-from .request import Request
 from ..core import MissionContext
 from ..manager.integration import MissionHandler
 
-# Role
-class Rover(Role):
+# Roles
+class RequestsHandler(Role):
+    __curr_requests_ids = None
+
     def __init__(self):
         super().__init__()
-        self.position = None
-        self.goal = None
+        self.requests = []
+        self.mission_status = []
+        
 
-class GlobalMissionManager(Role):
+    def merge(self, o):
+        n_ids = map(lambda n: n.id, o.requests)
+        if self.curr_ids is None:
+            self.__curr_requests_ids = map(lambda n: n.id, self.requests)
+        
+        diff = set(n_ids) - set(curr_ids)
+        if diff is None:
+            return 
+        __curr_requests_ids = None
+        to_add = filter(lambda n: __curr_requests_ids.contains(n.id), o.requests)
+        self.requests.extends(to_add)
+
+
+class MissionCoordinator(Role):
     def __init__(self):
-        self.mission_contexts = {}
-        self.required_skills = None
-    
-    def handle_request(self, request: Request):
-       ctx = MissionContext(request)
-       self.mission_contexts.put(request.id, request) 
+        self.global_mission = None
 
 
-# Component
+
+# Components
+class MissionsServer(Component, RequestsHandler):
+
+   # Knowledge definition
+    class Knowledge(RequestsHandler, BaseKnowledge):
+        def __init__(self):
+            super().__init__()
+
+
 class Coordinator(Component, MissionHandler):
     COLORS = ["yellow", "pink"]
     random = Random(0)
@@ -39,12 +59,10 @@ class Coordinator(Component, MissionHandler):
         return Position(0, 0)
 
     # Knowledge definition
-    class Knowledge(BaseKnowledge, Rover, GlobalMissionManager):
+    class Knowledge(BaseKnowledge, MissionCoordinator):
         def __init__(self):
             super().__init__()
-            self.color = None
-            self.required_skills = []
-            self.active_missions: [MissionContext] = []
+
 
     # Component initialization
     def __init__(self, node: Node, required_skills = []):
@@ -52,17 +70,13 @@ class Coordinator(Component, MissionHandler):
         
 
         # Initialize knowledge
-        self.knowledge.required_skills = required_skills
-        self.knowledge.position = node.positionProvider.get()
-        self.knowledge.goal = self.gen_position()
-        self.knowledge.color = self.random.choice(self.COLORS)
+        
 
-        self.cf_process = node.get_cf_process(mission_handler=self)
-        self.supervision_process = node.get_supervision_process(mission_handler=self)
+        # self.cf_process = node.get_cf_process(mission_handler=self)
+        #self.supervision_process = node.get_supervision_process(mission_handler=self)
+
 #		# Register network receive method
 #		node.networkDevice.add_receiver(self.__receive_packet)
-
-        node.position = self.knowledge.position
 
         print("Coordinator " + str(self.knowledge.id) + " created")
 
@@ -76,22 +90,22 @@ class Coordinator(Component, MissionHandler):
         self.knowledge.time = node.runtime.scheduler.get_time_ms()
 
     @process(period_ms=1000)
+    def get_mission(self, node: Node):
+        if self.knowledge.global_mission == None and not node.requests_queue.empty():
+            request = node.requests_queue.get()
+            print(f'coordinator {self.id} got a new mission {self.global_mission}')
+            self.knowledge.global_mission = request
+            self.local_missions = divide(request)
+
+    @process(period_ms=1000)
     def status(self, node: Node):
-        print(str(self.knowledge.time) + " ms: " + str(self.knowledge.id) + " at " + str(self.knowledge.position))
+        print(str(self.knowledge.time) + " ms: " + str(self.knowledge.id))
 
     @process(period_ms=100)
     def sense_position(self, node: Node):
         self.knowledge.position = node.positionProvider.get()
 
-    @process(period_ms=1000)
-    def set_goal(self, node: Node):
-        if self.knowledge.position == self.knowledge.goal:
-            self.knowledge.goal = self.gen_position()
-            node.walker.set_target(self.knowledge.goal)
-        node.walker.set_target(self.knowledge.goal)
-
-
-    @process(period_ms=10)
+    # @process(period_ms=10)
     def handle_mission_requests(self, node):
         """ handle quests sequentially from a queue. 
         Non parallel in order to avoid conflict in the scheduling workers """
@@ -106,7 +120,7 @@ class Coordinator(Component, MissionHandler):
             workers = self.get_available_workers()
             self.cf_process.run(mission_context, workers)
         
-    @process(period_ms=1000)
+    # @process(period_ms=1000)
     def handle_mission_updates(self, node):
         for active_mission in self.get_active_missions():
             task_updates = self.get_pending_updates(active_mission)
@@ -121,9 +135,6 @@ class Coordinator(Component, MissionHandler):
     def on_mission_end(mission_context: MissionContext):
         self.active_missions.remove(mission_context)
         self.node.log_mission_end(mission_context)
-
-    def on_no_coalition_available(request: Request):
-        pass
 
     def assign_coalition_to_mission(mission_context: MissionContext):
         for assignment in mission_context:

@@ -32,21 +32,24 @@ class poi(Enum):
     room1 = POI('room1')
     room3 = POI('room3')
 
+for enum_item in poi:
+    setattr(enum_item.value, 'name', enum_item.name)
+
 class roles(Enum):
     r1 = 'r1'
 
 class robot(Enum):
-    a = worker_factory(position = poi.sr, 
+    a = worker_factory(position = poi.sr.value, 
         capabilities=[
             Move(avg_speed = 10, u='m/s')
         ],
         skills=[task_type.NAV_TO, task_type.PICK_UP])
-    b = worker_factory(position = poi.room1, 
+    b = worker_factory(position = poi.room1.value, 
         capabilities=[
             Move(avg_speed = 15, u='m/s')
         ],
         skills=[task_type.NAV_TO, task_type.PICK_UP])
-    c = worker_factory(position = poi.room1, 
+    c = worker_factory(position = poi.room1.value, 
         capabilities=[
             Move(avg_speed = 20, u='m/s')
         ],
@@ -60,7 +63,7 @@ robots = [ unit.value for unit in robot ]
 # to names that we later on set on them with set_name()
 class collection_ihtn(Enum):
     # elementary tasks
-    navto_room3 = ElementaryTask(task_type.NAV_TO, destination=poi.room3, assign_to=[roles.r1])
+    navto_room3 = ElementaryTask(task_type.NAV_TO, destination=poi.room3.value, assign_to=[roles.r1])
     pick_up_object  = ElementaryTask(task_type.PICK_UP, target=roles.r1, assign_to=[roles.r1])
     m_collect = Method(subtasks=[navto_room3, pick_up_object])
 

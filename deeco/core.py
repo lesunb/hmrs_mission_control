@@ -1,6 +1,5 @@
 from abc import abstractmethod
 from copy import deepcopy
-from dictdiffer import diff
 
 from deeco.runnable import *
 from deeco.packets import KnowledgePacket

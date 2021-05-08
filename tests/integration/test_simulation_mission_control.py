@@ -13,10 +13,12 @@ from mission_control.deeco_integration.robot import Robot
 from mission_control.deeco_integration.coordinator import Coordinator
 from mission_control.deeco_integration.mission_ensemble import MissionEnsemble
 from mission_control.deeco_integration.plugins.workload import WorkloadLoader
+from mission_control.deeco_integration.plugins.requests_queue import RequestsQueue
 from mission_control.deeco_integration.hande_request_service import HandleRequestServer
-from mission_control.deeco_integration.request import Request
 
-
+from mission_control.deeco_integration.mission_ensemble import MissionEnsemble
+from mission_control.deeco_integration.requests_ensemble import MissionRequestsEnsemble, Request
+from mission_control.deeco_integration.client import Client
 
 print("Running simulation")
 
@@ -38,28 +40,31 @@ def test_sim(cf_manager, ihtn_collect):
     position = Position(0, 0)
     Walker(coord_node, position) # TODO remove
     KnowledgePublisher(coord_node)
-    EnsembleReactor(coord_node, [MissionEnsemble()])
-    coord = Coordinator(coord_node, required_skills = ['secure_transport'] )
+    RequestsQueue(coord_node)
+    EnsembleReactor(coord_node, [MissionRequestsEnsemble(), MissionEnsemble()])
+
+    coord = Coordinator(coord_node)
     coord_node.add_component(coord)
     HandleRequestServer(coord_node, cf_manager)
 
     # get workload
-    client = Node(sim)
-    Walker(client, Position(0, 0)) # TODO remove
-    WorkloadLoader(client, coord_node, [ { 'timestamp': 3000, 'content': ihtn_collect}])
+    client_node = Node(sim)
+    Walker(client_node, Position(0, 0)) # TODO remove
+    WorkloadLoader(client_node, [ { 'timestamp': 3000, 'content': ihtn_collect}])
+    EnsembleReactor(coord_node, [MissionRequestsEnsemble()])
+    client = Client(client_node)
 
     # create an inventory 
 
 
     # Add X nodes hosting one component each
-    for i in range(0, 5):
+    for i in range(0, 1):
         position = Position(2 * i, 3 * i)
 
         node = Node(sim)
         Walker(node, position)
         KnowledgePublisher(node)
         EnsembleReactor(node, [MissionEnsemble()])
-
         robot = Robot(node, provided_skills = ['secure_transport'])
         node.add_component(robot)
 
@@ -69,6 +74,4 @@ def test_sim(cf_manager, ihtn_collect):
     # check success / timespan
 
     # check failure
-
-
 

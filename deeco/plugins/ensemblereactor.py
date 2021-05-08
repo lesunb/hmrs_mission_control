@@ -8,8 +8,6 @@ from deeco.packets import PacketType
 from deeco.packets import DemandPacket
 from deeco.mapping import Mapping
 
-from dictdiffer import patch
-
 class DemandRecord:
 	def __init__(self, component_id: int, fitness_difference: float, target_ensemble: EnsembleInstance):
 		self.component_id = component_id
