@@ -30,7 +30,7 @@ class RobotGroup(EnsembleDefinition):
 		assert type(b) == Robot.Knowledge
 		return True
 
-	def knowledge(self, a: Robot.Knowledge, b: Robot.Knowledge):
+	def knowledge_exchange(self, a: Robot.Knowledge, b: Robot.Knowledge):
 		knowledge = self.RobotGroupKnowledge()
 		knowledge.center = Position.average(a.position, b.position)
 		knowledge.members = [a, b]

@@ -29,6 +29,9 @@ class Walker(NodePlugin, PositionProvider):
 
 	def move(self, time_ms):
 		step = self.speed_m_s / (1000 / self.DEFAULT_STEP_MS)
+		
+		if self.position is None or self.target is None:
+			return 
 
 		if self.position.dist_to(self.target) < step:
 			self.position = self.target

@@ -87,7 +87,7 @@ class MissionContext:
         CONCLUDED = 4
         REPLANNING_PENDING = 5
 
-    def __init__(self, global_plan: Task):
+    def __init__(self, global_plan: Task = None):
         self.status = MissionContext.Status.NEW
         self.global_plan: Task = global_plan
         self.local_missions: Iterable[LocalMission] = {}

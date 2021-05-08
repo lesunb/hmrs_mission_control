@@ -5,6 +5,20 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "MC Runner",
+            "type": "python",
+            "request": "launch",
+            "program": "tests/runner.py",
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Deeco Runner",
+            "type": "python",
+            "request": "launch",
+            "program": "experiment/deeco_sim/runner.py",
+            "console": "integratedTerminal"
+        },
+        {
             "name": "Python: Current File",
             "type": "python",
             "request": "launch",

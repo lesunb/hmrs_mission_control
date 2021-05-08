@@ -8,7 +8,7 @@ class PacketType(Enum):
 	TEXT = 2
 	DEMAND = 3
 	ASSIGNMENT = 4
-
+	PATCH = 5
 
 class Packet:
 	def __init__(self):
@@ -28,11 +28,18 @@ class TimestampedPacket(Packet):
 
 
 class KnowledgePacket(TimestampedPacket):
-	def __init__(self, id: int, knowledge, time_ms: int):
+	def __init__(self, id: int, knowledge, time_ms: int, from_node_id:int = None):
 		super().__init__(PacketType.KNOWLEDGE, time_ms)
 		self.id = id
 		self.knowledge = deepcopy(knowledge)
+		if from_node_id:
+			setattr(self.knowledge, 'node_id', from_node_id)
 
+class PatchPacket(TimestampedPacket):
+	def __init__(self, id: int, patch, time_ms: int):
+		super().__init__(PacketType.PATCH, time_ms)
+		self.id = id
+		self.patch = patch
 
 class TextPacket(Packet):
 	def __init__(self, text: str):

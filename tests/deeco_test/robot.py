@@ -23,7 +23,7 @@ class Robot(Component):
 	random = Random(0)
 
 	@staticmethod
-	def gen_position():
+	def gen_random_position():
 		return Position(Robot.random.uniform(0, 1), Robot.random.uniform(0, 1))
 
 	# Knowledge definition
@@ -38,13 +38,13 @@ class Robot(Component):
 
 		# Initialize knowledge
 		self.knowledge.position = node.positionProvider.get()
-		self.knowledge.goal = self.gen_position()
+		self.knowledge.goal = self.gen_random_position()
 		self.knowledge.color = self.random.choice(self.COLORS)
 
 #		# Register network receive method
 #		node.networkDevice.add_receiver(self.__receive_packet)
 
-		node.position = self.knowledge.position
+#		node.position = self.knowledge.position
 
 		print("Robot " + str(self.knowledge.id) + " created")
 
@@ -69,7 +69,7 @@ class Robot(Component):
 	@process(period_ms=1000)
 	def set_goal(self, node: Node):
 		if self.knowledge.position == self.knowledge.goal:
-			self.knowledge.goal = self.gen_position()
+			self.knowledge.goal = self.gen_random_position()
 			node.walker.set_target(self.knowledge.goal)
 		node.walker.set_target(self.knowledge.goal)
 
