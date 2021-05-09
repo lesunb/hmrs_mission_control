@@ -47,7 +47,7 @@ class Route:
         self.origin = origin
         self.destination = destination
         self.total_distance = None
-        self.nodes = nodes
+        self.nodes = [origin] + nodes
 
     def get_all_waypoints(self) -> [POI]:
         pois = []
