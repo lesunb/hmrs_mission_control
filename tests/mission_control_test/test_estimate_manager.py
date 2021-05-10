@@ -45,7 +45,7 @@ def test_estimate_navigation_task_in_context(estimate_manager):
 
 def test_estimate(estimate_manager):
     bid = estimate_manager.estimate(worker1, task_list)
-    assert bid.estimate.time > 2 and bid.estimate.time < 3
+    assert bid.estimate.time > 5 and bid.estimate.time < 6
 
 def test_estimate_route(routes_envdesc):
     route = routes_envdesc.get(poi.room3.value, poi.room1.value)

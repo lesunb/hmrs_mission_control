@@ -70,20 +70,11 @@ class Coordinator(Component, MissionHandler):
         
 
         # Initialize knowledge
-        
 
         # self.cf_process = node.get_cf_process(mission_handler=self)
         #self.supervision_process = node.get_supervision_process(mission_handler=self)
 
-#		# Register network receive method
-#		node.networkDevice.add_receiver(self.__receive_packet)
-
         print("Coordinator " + str(self.knowledge.id) + " created")
-
-#	def __receive_packet(self, packet):
-#		print((str(self.knowledge.time) + " ms: " + str(self.knowledge.id) + " Received packet: " + str(packet)))
-
-    # Processes follow
 
     @process(period_ms=10)
     def update_time(self, node: Node):
@@ -101,9 +92,6 @@ class Coordinator(Component, MissionHandler):
     def status(self, node: Node):
         print(str(self.knowledge.time) + " ms: " + str(self.knowledge.id))
 
-    @process(period_ms=100)
-    def sense_position(self, node: Node):
-        self.knowledge.position = node.positionProvider.get()
 
     # @process(period_ms=10)
     def handle_mission_requests(self, node):
@@ -150,8 +138,3 @@ class Coordinator(Component, MissionHandler):
         def log():
             pass
         return log
-
-#	@process(period_ms=2500)
-#	def send_echo_packet(self, node: Node):
-#		node.networkDevice.send(node.id, TextPacket("Echo packet payload from: " + str(self.knowledge.id)))
-#		node.networkDevice.broadcast(TextPacket("Broadcast echo packet payload from: " + str(self.knowledge.id)))
