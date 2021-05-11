@@ -1,6 +1,5 @@
 from deeco.core import EnsembleDefinition, BaseKnowledge, Role
 from deeco.packets import Packet, PacketType
-from mission_control.mission.ihtn import Task
 
 from .client import MissionClient
 from .requests_server_component import RequestsHandler

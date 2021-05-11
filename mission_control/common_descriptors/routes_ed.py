@@ -1,3 +1,4 @@
+from typing import List
 from ..estimate.core import EnvironmentDescriptor
 from mission_control.core import POI
 
@@ -14,7 +15,7 @@ class Nodes:
         self.edges = []
         self.coords = coords
 
-    def add_edges(self, edges: [Edge]):
+    def add_edges(self, edges: List[Edge]):
         for edge in edges:
             self.edges.append(Edge(self, edge))
 
@@ -23,7 +24,7 @@ class Map:
     def __init__(self):
         self.nodes = []
 
-    def add_nodes(self, nodes: [Nodes]):
+    def add_nodes(self, nodes: List[Nodes]):
         for node in nodes:
             self.nodes.append(node)
 

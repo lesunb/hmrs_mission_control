@@ -8,7 +8,7 @@ from ..estimate.estimate import EstimateManager, Bid
 from .integration import MissionHandler, MissionUnnexpectedError
 
 def coalitionFormationError(e, mission_context):
-    message = f'Unexpected error forming coalition for {mission}'
+    message = f'Unexpected error forming coalition for {mission_context}'
     return MissionUnnexpectedError(e, message)
 
 
@@ -21,13 +21,13 @@ class CoalitionFormationProcess:
         self.estimate_manager: EstimateManager = estimate_manager
         
 
-    def run(self, mission_context: MissionContext, workers: [Worker], mission_handler: MissionHandler):
+    def run(self, mission_context: MissionContext, workers: List[Worker], mission_handler: MissionHandler):
         try:
             self.do_run(mission_context, workers, mission_handler)
-        except e:
+        except Exception as e:
             self.mission_handler.handle_unnexpected_error(coalitionFormationError(e, mission_context))
 
-    def do_run(self, mission_context: MissionContext, workers: [Worker], mission_handler: MissionHandler):
+    def do_run(self, mission_context: MissionContext, workers: List[Worker], mission_handler: MissionHandler):
         if mission_context.status == MissionContext.Status.NEW:
             mission_context.local_missions = list(self.initialize_local_missions(mission_context))
             mission_context.state = MissionContext.Status.PENDING_ASSIGNMENTS
@@ -55,7 +55,7 @@ class CoalitionFormationProcess:
                 else:
                     pass # TODO log
             if not bids: # empty list of viable bids
-                mission_context.occurances.push(f'no viable assignment for {assignment.role}')
+                mission_context.occurances.push(f'no viable assignment for {local_mission.role}')
                 return False
             bids = self.rank_bids(bids)
             plan_rank_map[local_mission] = bids
@@ -77,10 +77,10 @@ class CoalitionFormationProcess:
         return
 
     @staticmethod
-    def flat_plan(task) -> [ ElementaryTask ]:
+    def flat_plan(task) -> List[ ElementaryTask ]:
         return flat_plan(task)
 
-    def get_compatible_workers(self, task_list: [ElementaryTask], workers: [Worker]):
+    def get_compatible_workers(self, task_list: List[ElementaryTask], workers: List[Worker]):
         """  get the workers that have the required skills for executing all tasks in 'task_list' """
         required_skills = set([ task.type for task in task_list ])
 
@@ -89,7 +89,7 @@ class CoalitionFormationProcess:
                 yield worker
         return
         
-    def estimate(self, worker, task_list: [ElementaryTask]) -> Bid: 
+    def estimate(self, worker, task_list: List[ElementaryTask]) -> Bid: 
         return self.estimate_manager.estimate(worker, task_list)
 
     @staticmethod
@@ -100,7 +100,7 @@ class CoalitionFormationProcess:
         else:
             return True
     @staticmethod
-    def rank_bids(bids: [Bid]) -> [Bid]:
+    def rank_bids(bids: List[Bid]) -> List[Bid]:
         return sorted(bids, key=lambda bid: bid.estimate.time, reverse=False)
 
     @staticmethod

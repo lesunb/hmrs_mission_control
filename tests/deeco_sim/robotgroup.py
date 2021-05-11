@@ -3,7 +3,7 @@ from abc import abstractmethod
 from deeco.core import EnsembleDefinition, BaseKnowledge
 from deeco.core import Role
 from deeco.position import Position
-from robot import Robot
+from .robot import Robot
 
 
 # Role

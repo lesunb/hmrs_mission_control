@@ -1,10 +1,11 @@
+from typing import List
 from mission_control.mission.ihtn import ElementaryTask
 
-from .core import TaskContext, SkillDescriptor, create_context_gen, SkillDescriptorRegister
+from .core import SkillDescriptor, create_context_gen, SkillDescriptorRegister
 from ..core import Worker, Estimate, ImpossibleToEstimate
 
 class Bid:
-    def __init__(self, worker: Worker, estimate: Estimate, partials: [Estimate]= None):
+    def __init__(self, worker: Worker, estimate: Estimate, partials: List[Estimate]= None):
         self.worker = worker
         self.estimate = estimate
         self.partials = partials
@@ -13,7 +14,7 @@ class EstimateManager:
     def __init__(self, skill_descriptors: SkillDescriptorRegister):
         self.skill_descriptors = skill_descriptors
 
-    def estimate(self, worker: Worker, task_list: [ElementaryTask]) -> Bid: 
+    def estimate(self, worker: Worker, task_list: List[ElementaryTask]) -> Bid: 
         task_context_gen = create_context_gen(worker, task_list)
         estimates = []
         for task_context in task_context_gen:

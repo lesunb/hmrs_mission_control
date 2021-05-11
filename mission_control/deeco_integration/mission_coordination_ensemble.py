@@ -1,5 +1,3 @@
-from abc import abstractmethod
-
 from deeco.core import EnsembleDefinition, BaseKnowledge
 from deeco.core import Role, Group
 from deeco.mapping import SetValue

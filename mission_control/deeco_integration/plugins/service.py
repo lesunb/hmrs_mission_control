@@ -1,10 +1,9 @@
 import logging
-import sys
 
 from abc import abstractclassmethod
 from deeco.runnable import NodePlugin
 
-from typing import TypeVar, Generic, List
+from typing import TypeVar, Generic
 
 logger = logging.getLogger('service')
 

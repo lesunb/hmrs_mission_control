@@ -1,10 +1,6 @@
 
 from mission_control.mission.ihtn import Task, ElementaryTask, AbstractTask, SyncTask, MethodOrdering
 
-import copy
-
-
-
 
 def is_assigned(task: Task, role):
     return True if role in task.assign_to else False

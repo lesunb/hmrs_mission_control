@@ -6,7 +6,6 @@ from deeco.core import Node
 from deeco.core import Role
 from deeco.core import process
 from deeco.position import Position
-from deeco.packets import TextPacket
 
 from mission_control.core import LocalMission
 

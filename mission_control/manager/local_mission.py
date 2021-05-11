@@ -6,7 +6,7 @@ class LocalMissionManager():
         pass
 
 
-    def run():
+    def run(self):
         next_plan = self.queue()
         
             

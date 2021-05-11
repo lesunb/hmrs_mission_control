@@ -102,7 +102,7 @@ def ihtn_collect():
 
 @pytest.fixture
 def r1():
-    return Roles.r1
+    return roles.r1
 
 @pytest.fixture
 def collection_robots():

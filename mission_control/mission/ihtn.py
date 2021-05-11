@@ -1,7 +1,8 @@
 from abc import abstractmethod
 from enum import Enum
 from copy import copy
-from collections.abc import Sequence 
+from collections.abc import Sequence
+from typing import List 
 
 class MethodOrdering(Enum):
     SEQUENTIAL= 0
@@ -41,7 +42,7 @@ class SyncTask(Task):
         return copy(self)
 
 class Method:
-    def __init__(self, subtasks: [Task] =[], order = MethodOrdering.SEQUENTIAL):
+    def __init__(self, subtasks: List[Task] =[], order = MethodOrdering.SEQUENTIAL):
         self.order: MethodOrdering = order
         self.subtasks = subtasks
     
@@ -51,7 +52,7 @@ class Method:
         return new_
 
 
-def get_children_assignment(methods: [ Method ]):
+def get_children_assignment(methods: List[ Method ]):
 
     def _seq_but_not_str(obj):
         return isinstance(obj, Sequence) and not isinstance(obj, (str, bytes, bytearray))
@@ -73,7 +74,7 @@ def get_children_assignment(methods: [ Method ]):
 
 
 class AbstractTask(Task):
-    def __init__(self, methods: [Method] =[], **kwargs):
+    def __init__(self, methods: List[Method] =[], **kwargs):
         super().__init__(**kwargs)
         self.methods = methods
         self.selected_method: Method = methods[0]

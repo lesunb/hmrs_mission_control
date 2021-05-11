@@ -13,8 +13,8 @@ from deeco.plugins.walker import Walker
 from deeco.plugins.knowledgepublisher import KnowledgePublisher
 from deeco.plugins.ensemblereactor import EnsembleReactor
 
-from robot import Robot
-from robotgroup import RobotGroup
+from .robot import Robot
+from .robotgroup import RobotGroup
 from deeco.plugins.snapshoter import Snapshoter
 
 print("Running simulation")
