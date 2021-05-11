@@ -50,6 +50,10 @@ def worker_factory(position, capabilities, skills):
     unit = Worker(position=position, capabilities=capabilities, skills=skills)
     return unit
 
+class Request:
+    def __init__(self, task: Task, timestamp: int):
+        self.task, self.timestamp = task, timestamp
+
 
 class Estimate:
     def __init__(self, task=None, time=math.inf, energy=math.inf):
@@ -71,10 +75,11 @@ class LocalMission:
         ASSIGNED = 3
         CONCLUDED = 4
 
-    def __init__(self, role, local_plan:Task, worker = None):
-        self.role = role
+    def __init__(self, local_plan:Task, role, global_mission, worker = None):
         self.plan: Task = local_plan
-        self.worker: Worker = None
+        self.role = role
+        self.global_mission = global_mission
+        self.worker: Worker = worker
         self.status = LocalMission.Status.PENDING_ASSIGNMENTS
         
 

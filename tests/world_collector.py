@@ -135,14 +135,14 @@ container[SkillDescriptorRegister] = sd_register
 # estimate manager
 container[List[Worker]] = robots
 em:EstimateManager = container[EstimateManager]
-cfm: CoalitionFormationProcess = container[CoalitionFormationProcess]
+cfp: CoalitionFormationProcess = container[CoalitionFormationProcess]
 ######
 # Robots
 ########
 
 @pytest.fixture
-def cf_manager():
-    return cfm
+def cf_process():
+    return cfp
 
 @pytest.fixture
 def estimate_manager():

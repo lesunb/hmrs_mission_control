@@ -1,29 +1,28 @@
 
 
-from ..core import MissionContext
+from typing import List
+
+from ..core import MissionContext, Worker
 from .integration import MissionHandler, MissionUnnexpectedError
 
-def createError(acitve_mission, assigned_workers, updates):
-    self.message = f'Unexpected error updating {acitve_mission} with {updates}'
+def createError(e, acitve_mission, updates):
+    message = f'Unexpected error updating {acitve_mission} with {updates}'
     return MissionUnnexpectedError(e, message)
 
 class SupervisionProcess:
     def __init__(self, mission_handle: MissionHandler):
         self.m_handler:MissionHandler = mission_handle
 
-    def run(active_mission: MissionContext, assigned_workers: [Worker], updates):
+    def run(self, active_mission: MissionContext, assigned_workers: List[Worker], updates):
         try:
             self.do_run(active_mission, assigned_workers, updates)
-        except e:
+        except Exception as e:
             self.m_handler.handle_unnexpected_error(createError(e, active_mission, updates))
 
-    def do_run(active_mission: MissionContext, assigned_workers: [Worker], updates):
+    def do_run(self, active_mission: MissionContext, assigned_workers: List[Worker], updates):
         (robot_statuses, mission_status) = self.update_mission()
                     
-        if mission_status.is_complete_with_success or mission_status.is_permanent:
-            self.finish_mission(active_mission)
-
-        for robot_status in status.robot_statuses:
+        for robot_status in robot_statuses:
             if robot_status.is_completed_with_success:
                 self.assignment_complete(robot_status.robot)
             elif robot_status.is_fatal_failure:
@@ -31,6 +30,9 @@ class SupervisionProcess:
             elif mission_status.is_fatal_failure and robot_status.is_ok \
                                                  and robot_status.task_can_be_canceled:
                 self.assignment_cancel(robot_status.robot)
+
+        if mission_status.is_complete_with_success or mission_status.is_permanent:
+            self.finish_mission(active_mission)
 
         self.report_progress(active_mission)
 

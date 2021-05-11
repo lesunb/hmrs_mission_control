@@ -19,13 +19,8 @@ class MissionHandler:
     Interface provided by the Ensemble Layer for the Mission Management 
     Processses of the Coordinator 
     """
-
     @abstractmethod
     def start_mission(self, mission_context):
-        pass
-    
-    @abstractmethod
-    def end_mission():
         pass
 
     @abstractmethod
@@ -34,6 +29,10 @@ class MissionHandler:
     
     @abstractmethod
     def update_assigments(self, mission_context: MissionContext):
+        pass
+        
+    @abstractmethod
+    def end_mission():
         pass
     
     @abstractmethod

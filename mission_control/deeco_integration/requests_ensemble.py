@@ -3,9 +3,9 @@ from deeco.packets import Packet, PacketType
 from mission_control.mission.ihtn import Task
 
 from .client import MissionClient
-from .coordinator import RequestsHandler
+from .requests_server_component import RequestsHandler
 
-class Request(Packet):
+class RequestPacket(Packet):
     def __init__(self, id, timestamp = None, content=None):
         super().__init__(PacketType.RAW)
         self.id = id

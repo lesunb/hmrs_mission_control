@@ -1,4 +1,4 @@
-from deeco.core import Node
+from deeco.core import Component, Node
 from deeco.sim import Sim
 from deeco.position import Position
 from deeco.plugins.identity_replicas import IdentityReplicas
@@ -9,22 +9,27 @@ from deeco.plugins.ensemblereactor import EnsembleReactor
 
 from deeco.plugins.snapshoter import Snapshoter
 
+from mission_control.deeco_integration.mission_coordination_ensemble import MissionCoordinationEnsemble
 from mission_control.deeco_integration.robot import Robot
 from mission_control.deeco_integration.coordinator import Coordinator
-from mission_control.deeco_integration.mission_ensemble import MissionEnsemble
 from mission_control.deeco_integration.plugins.workload import WorkloadLoader
 from mission_control.deeco_integration.plugins.requests_queue import RequestsQueue
-from mission_control.deeco_integration.hande_request_service import HandleRequestServer
+from mission_control.deeco_integration.plugins.hande_request_service import HandleRequestServer
 
-from mission_control.deeco_integration.mission_ensemble import MissionEnsemble
-from mission_control.deeco_integration.requests_ensemble import MissionRequestsEnsemble, Request
+from mission_control.deeco_integration.mission_coordination_ensemble import MissionCoordinationEnsemble
+from mission_control.deeco_integration.requests_ensemble import MissionRequestsEnsemble, RequestPacket
 from mission_control.deeco_integration.client import Client
 
 print("Running simulation")
 
 from ..world_collector import *
 
-def test_sim(cf_manager, ihtn_collect):
+def get_coordinator(node, cf_process: CoalitionFormationProcess):
+    # todo get a coordinator with injected cf_process
+    coord = Coordinator(node, required_skills=[], cf_process=cf_process)
+    return coord
+
+def test_plan_distribution(cf_process, ihtn_collect):
     sim = Sim()
     # Add snapshoter plugin
     Snapshoter(sim, period_ms=100)
@@ -40,31 +45,24 @@ def test_sim(cf_manager, ihtn_collect):
     position = Position(0, 0)
     Walker(coord_node, position) # TODO remove
     KnowledgePublisher(coord_node)
-    RequestsQueue(coord_node)
-    EnsembleReactor(coord_node, [MissionRequestsEnsemble(), MissionEnsemble()])
+    
+    # request handler component
+    RequestsQueue(coord_node, [ { 'timestamp': 3000, 'content': ihtn_collect}] )
+    EnsembleReactor(coord_node, [MissionCoordinationEnsemble()])
 
-    coord = Coordinator(coord_node)
+    # mission coordinator component
+    coord = Component(coord_node)
     coord_node.add_component(coord)
-    HandleRequestServer(coord_node, cf_manager)
+    HandleRequestServer(coord_node, )
 
-    # get workload
-    client_node = Node(sim)
-    Walker(client_node, Position(0, 0)) # TODO remove
-    WorkloadLoader(client_node, [ { 'timestamp': 3000, 'content': ihtn_collect}])
-    EnsembleReactor(coord_node, [MissionRequestsEnsemble()])
-    client = Client(client_node)
-
-    # create an inventory 
-
-
-    # Add X nodes hosting one component each
+    # instantiate workers
     for i in range(0, 1):
-        position = Position(2 * i, 3 * i)
+        position = Position(2 * i, 3 * i) 
 
         node = Node(sim)
         Walker(node, position)
         KnowledgePublisher(node)
-        EnsembleReactor(node, [MissionEnsemble()])
+        EnsembleReactor(node, [MissionCoordinationEnsemble()])
         robot = Robot(node, provided_skills = ['secure_transport'])
         node.add_component(robot)
 

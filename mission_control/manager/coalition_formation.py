@@ -16,30 +16,30 @@ class CoalitionFormationProcess:
     """ Service of creating coalitions. It receives an ihtn with tasks 
     assigned to roles an return a selection of robots to execute the plan """
 
-    def __init__(self, estimate_manager: EstimateManager, mission_handler: MissionHandler):
+    def __init__(self, estimate_manager: EstimateManager):
         self.individual_plans = []
         self.estimate_manager: EstimateManager = estimate_manager
-        self.mission_handler: MissionHandler = mission_handler
+        
 
-    def run(self, mission_context: MissionContext, workers: [Worker]):
+    def run(self, mission_context: MissionContext, workers: [Worker], mission_handler: MissionHandler):
         try:
-            self.do_run(mission_context, workers)
+            self.do_run(mission_context, workers, mission_handler)
         except e:
             self.mission_handler.handle_unnexpected_error(coalitionFormationError(e, mission_context))
 
-    def do_run(self, mission_context: MissionContext, workers: [Worker]):
+    def do_run(self, mission_context: MissionContext, workers: [Worker], mission_handler: MissionHandler):
         if mission_context.status == MissionContext.Status.NEW:
             mission_context.local_missions = list(self.initialize_local_missions(mission_context))
-            self.mission_handler.start_mission(mission_context)
+            mission_context.state = MissionContext.Status.PENDING_ASSIGNMENTS
+            mission_handler.start_mission(mission_context)
 
         is_success = self.create_coalition(mission_context, workers)
-        if not is_success:
-            # its all or northing - or assign all pending tasks or none
-            mission_context.state = MissionContext.Status.PENDING_ASSIGNMENTS
-            self.mission_handler.no_coalition_available(mission_context)
-        else:
+        if is_success:
             mission_context.status = MissionContext.Status.DISTRIBUTING_TASKS
-            self.mission_handler.update_assigments(mission_context)
+            mission_handler.update_assigments(mission_context)
+        else:
+            # its all or northing - or assign all pending tasks or none
+            mission_handler.no_coalition_available(mission_context)
 
     def create_coalition(self, mission_context, workers) -> bool:
         plan_rank_map = {}
@@ -64,28 +64,16 @@ class CoalitionFormationProcess:
         self.set_assignment_from_selected_bids(selected_bids)
         return True
 
-    def adapt_coalition():
-        pass
-
-
-    def create_assignments(self, selected_bids):
-        pass
-
     @staticmethod    
     def get_pending_assignments(mission_context: MissionContext) -> Sequence[LocalMission]:
         return filter(lambda lm: lm.status == LocalMission.Status.PENDING_ASSIGNMENTS, 
                         mission_context.local_missions)
 
     @staticmethod
-    def create_mission_context(global_mission: Task) -> MissionContext:
-        return MissionContext(global_mission)
-    
-
-    @staticmethod
     def initialize_local_missions(mission_context: MissionContext) -> Generator[LocalMission, None, None]:
         for role in mission_context.global_plan.assign_to:
-            local_plan = distribute(mission_context.global_plan, role)
-            yield LocalMission(role=role, local_plan=local_plan)
+            local_mission = distribute(mission_context.global_plan, role)
+            yield LocalMission(local_plan=local_mission, role=role, global_mission = mission_context)
         return
 
     @staticmethod

@@ -11,20 +11,20 @@ from deeco.plugins.snapshoter import Snapshoter
 
 from mission_control.deeco_integration.robot import Robot
 from mission_control.deeco_integration.coordinator import Coordinator
-from mission_control.deeco_integration.mission_ensemble import MissionEnsemble
+from mission_control.deeco_integration.mission_coordination_ensemble import MissionCoordinationEnsemble
 from mission_control.deeco_integration.plugins.workload import WorkloadLoader
 from mission_control.deeco_integration.plugins.requests_queue import RequestsQueue
-from mission_control.deeco_integration.hande_request_service import HandleRequestServer
+from mission_control.deeco_integration.plugins.hande_request_service import HandleRequestServer
 
-from mission_control.deeco_integration.mission_ensemble import MissionEnsemble
+from mission_control.deeco_integration.mission_coordination_ensemble import MissionCoordinationEnsemble
 from mission_control.deeco_integration.requests_ensemble import MissionRequestsEnsemble, Request
 from mission_control.deeco_integration.client import Client
 
 print("Running simulation")
 
-from ..world_collector import *
+from tests.world_collector import *
 
-def main(cf_manager, ihtn_collect):
+def main(cf_process, ihtn_collect):
     sim = Sim()
     # Add snapshoter plugin
     Snapshoter(sim, period_ms=100)
@@ -41,11 +41,11 @@ def main(cf_manager, ihtn_collect):
     Walker(coord_node, position) # TODO remove
     KnowledgePublisher(coord_node)
     RequestsQueue(coord_node)
-    EnsembleReactor(coord_node, [MissionRequestsEnsemble(), MissionEnsemble()])
+    EnsembleReactor(coord_node, [MissionRequestsEnsemble(), MissionCoordinationEnsemble()])
 
     coord = Coordinator(coord_node)
     coord_node.add_component(coord)
-    HandleRequestServer(coord_node, cf_manager)
+    HandleRequestServer(coord_node)
 
     # get workload
     client_node = Node(sim)
@@ -64,7 +64,7 @@ def main(cf_manager, ihtn_collect):
         node = Node(sim)
         Walker(node, position)
         KnowledgePublisher(node)
-        EnsembleReactor(node, [MissionEnsemble()])
+        EnsembleReactor(node, [MissionCoordinationEnsemble()])
         robot = Robot(node, provided_skills = ['secure_transport'])
         node.add_component(robot)
 

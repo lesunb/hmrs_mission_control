@@ -8,6 +8,8 @@ from deeco.core import process
 from deeco.position import Position
 from deeco.packets import TextPacket
 
+from mission_control.core import LocalMission
+
 # Roles
 class Rover(Role):
 	def __init__(self):
@@ -19,7 +21,7 @@ class Worker(Role):
 	def __init__(self):
 		super().__init__()
 		self.provided_skills = None
-		self.local_mission = None
+		self.local_mission: LocalMission = None
 
 # Component
 class Robot(Component):

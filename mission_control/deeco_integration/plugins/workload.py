@@ -1,10 +1,10 @@
 import json
-from abc import abstractclassmethod
+from typing import List
 
 from deeco.runnable import NodePlugin
 from deeco.plugins.simplenetwork import SimpleNetwork
 
-from ..requests_ensemble import Request
+from .hande_request_service import RequestPacket
 
 def read(path):
     data = None
@@ -18,7 +18,7 @@ def workload_gen(workload):
     id_count = 0
     for req in workload:
         id_count += 1
-        request = Request(id = id_count)
+        request = RequestPacket(id = id_count)
         for key in req:
             setattr(request, key, req[key])
         yield request
@@ -27,9 +27,9 @@ def workload_gen(workload):
 class WorkloadLoader(NodePlugin):
     DEFAULT_STEP_MS = 100
 
-    def __init__(self, node, workload: [Request] = None, file_paht:str = None):
+    def __init__(self, node, workload: List[RequestPacket] = None, file_paht:str = None):
         super().__init__(node)
-        workload_raw: [Request] = workload if workload is not None else read(file_paht)
+        workload_raw: List[RequestPacket] = workload if workload is not None else read(file_paht)
         
         if workload_raw is None:
             return
