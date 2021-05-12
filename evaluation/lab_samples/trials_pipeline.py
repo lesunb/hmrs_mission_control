@@ -19,7 +19,7 @@ def main():
     number_of_robots = 5
     
     # times in which a new request will appear in the trial
-    request_times = [ 0 ] # only at the start
+    request_times = [ 2000 ] # single request
 
     # selected levels
     #################
@@ -95,6 +95,7 @@ def main():
         sim_exec = get_sim_exec()
         final_state = sim_exec.run(trial)
         # inspect end state
+        print(final_state)
 
     
     # dump trials

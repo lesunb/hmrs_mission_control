@@ -51,8 +51,16 @@ def worker_factory(position, capabilities, skills):
     return unit
 
 class Request:
+    counter = 0
+    @staticmethod
+    def __gen_id():
+        identifier = Request.counter
+        Request.counter += 1
+        return identifier
+
     def __init__(self, task: Task, timestamp: int):
         self.task, self.timestamp = task, timestamp
+        self.id = Request.__gen_id()
 
 class Estimate:
     def __init__(self, task=None, time=math.inf, energy=math.inf):

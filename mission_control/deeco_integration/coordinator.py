@@ -13,7 +13,7 @@ from ..manager.supervision import SupervisionProcess
 
 class MissionCoordinator(Role):
     def __init__(self):
-        self.missions = []
+        self.missions: List[MissionContext] = []
         self.active_workers: List[Worker] = None
 
 
@@ -42,7 +42,7 @@ class Coordinator(Component, MissionHandler):
 
     @process(period_ms=1000)
     def coalition_formation(self, node: Node):
-        for mission_context in self.get_missions_with_pending_assignments():        
+        for mission_context in list(self.get_missions_with_pending_assignments()):
             workers = self.get_free_workers()
             self.cf_process.run(mission_context, workers, self)
 
@@ -63,7 +63,8 @@ class Coordinator(Component, MissionHandler):
                             MissionContext.Status.PENDING_ASSIGNMENTS]
 
     def handle_requests(self):
-        for request in self.node.requests_queue:
+        while self.node.requests_queue:
+            request = self.node.requests_queue.pop()
             mission_context = MissionContext(request.task)
             print(f'coordinator {self.id} got has a new mission {mission_context}')
             self.knowledge.missions.append(mission_context)
@@ -71,7 +72,6 @@ class Coordinator(Component, MissionHandler):
         return
 
     def start_mission(self, mission_context):
-        self.knowledge.missions.append(mission_context)
         print(f'mission started {mission_context}')
     
     def update_assigments(self, mission_context: MissionContext):
