@@ -5,11 +5,11 @@ from collections.abc import Iterable
 from .mission.ihtn import Task
 
 class Role:
-    class RoleType(Enum):
-        managed=0
-        not_managed=1
+    class Type(Enum):
+        MANAGED=0
+        NOT_MANAGED=1
 
-    def __init__(self, label, type = RoleType.managed):
+    def __init__(self, label, type = Type.MANAGED):
         self.lable, self.type = label, type
 
 class POI:
@@ -89,6 +89,7 @@ class LocalMission:
         PENDING_COMMIT = 2
         ASSIGNED = 3
         CONCLUDED = 4
+        NOT_MANAGED = 5
 
     def __init__(self, local_plan:Task, role, global_mission, worker = None):
         self.plan: Task = local_plan

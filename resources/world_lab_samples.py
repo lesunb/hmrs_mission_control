@@ -57,8 +57,8 @@ all_rooms = [ poi_.value for poi_ in [ poi.ic_room_1, poi.ic_room_2, poi.ic_room
               poi.pc_room_7, poi.pc_room_8, poi.pc_room_9, poi.pc_room_10 ]]
 
 class Roles(Enum):
-    nurse =  Role('nurse', type=Role.RoleType.not_managed)
-    lab_arm = Role('lab_arm', type=Role.RoleType.not_managed)
+    nurse =  Role('nurse', type=Role.Type.NOT_MANAGED)
+    lab_arm = Role('lab_arm', type=Role.Type.NOT_MANAGED)
     r1 = Role('r1')
 
 # Defined as Enum so we can reference methods and tasks, and we can have references

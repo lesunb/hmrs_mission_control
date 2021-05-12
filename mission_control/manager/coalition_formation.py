@@ -4,7 +4,7 @@ from typing import Generator, Dict, List, Sequence
 from mission_control.mission.ihtn import ElementaryTask, Task
 from mission_control.mission.planning import distribute, flat_plan
 from .integration import MissionHandler, MissionUnnexpectedError
-from ..core import MissionContext, Worker, LocalMission
+from ..core import MissionContext, Worker, LocalMission, Role
 from ..estimate.estimate import EstimateManager, Bid
 
 def coalitionFormationError(e, mission_context):
@@ -73,7 +73,10 @@ class CoalitionFormationProcess:
     def initialize_local_missions(mission_context: MissionContext) -> Generator[LocalMission, None, None]:
         for role in mission_context.global_plan.assign_to:
             local_mission = distribute(mission_context.global_plan, role)
-            yield LocalMission(local_plan=local_mission, role=role, global_mission = mission_context)
+            lm = LocalMission(local_plan=local_mission, role=role, global_mission = mission_context)
+            if role.type == Role.Type.NOT_MANAGED:
+                lm.status = LocalMission.Status.NOT_MANAGED
+            yield lm
         return
 
     @staticmethod
