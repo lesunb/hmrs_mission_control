@@ -3,7 +3,7 @@ from random import Random
 from deeco.core import BaseKnowledge
 from deeco.core import Component
 from deeco.core import Node
-from deeco.core import Role
+from deeco.core import ComponentRole
 from deeco.core import process
 from deeco.position import Position
 from deeco.packets import TextPacket
@@ -12,13 +12,13 @@ from deeco.core import EnsembleDefinition, BaseKnowledge
 from deeco.mapping import SetValue
 
 # Role
-class Rover(Role):
+class Rover(ComponentRole):
     def __init__(self):
         super().__init__()
         self.position = None
         self.goal = None
 
-class LeaderRole(Role):
+class LeaderRole(ComponentRole):
     pass
 
 # Component
@@ -62,7 +62,7 @@ class Leader(Component):
         node.walker.set_target(self.knowledge.goal)
 
 
-class FollowerRole(Role):
+class FollowerRole(ComponentRole):
     pass
 
 class Follower(Component):
@@ -97,7 +97,7 @@ class Follower(Component):
 
 
 # Role
-class Group(Role):
+class Group(ComponentRole):
     def __init__(self):
         super().__init__()
         self.center = None

@@ -1,8 +1,6 @@
 from abc import abstractmethod
-from copy import deepcopy
 
 from deeco.runnable import *
-from deeco.packets import KnowledgePacket
 
 class Node(Runnable):
     counter = 0
@@ -61,22 +59,22 @@ class Node(Runnable):
                     scheduler.set_periodic_timer(method, entry.period_ms)
 
 
-class Role:
+class ComponentRole:
     pass
 
-class Group(Role):
+class Group(ComponentRole):
     def __init__(self):
         super().__init__()
         self.members = []
 
-class Identifiable(Role):
+class Identifiable(ComponentRole):
     def __init__(self):
         super().__init__()
         self.node_id = None
         self.id = None
 
 
-class TimeStamped(Role):
+class TimeStamped(ComponentRole):
     def __init__(self):
         super().__init__()
         self.time = None
@@ -131,7 +129,7 @@ class EnsembleDefinition:
     class Knowledge:
         pass
     
-    def __init__(self, coordinator: Role, member: Role):
+    def __init__(self, coordinator: ComponentRole, member: ComponentRole):
         self.coordinator = coordinator
         self.member = member
 

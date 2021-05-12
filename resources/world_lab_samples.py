@@ -13,7 +13,7 @@ from mission_control.common_descriptors.routes_ed import Map, RoutesEnvironmentD
 from resources.hospital_map import create_hospial_scenario_map
 
 from mission_control.mission.ihtn import Method, MethodOrdering, Task, ElementaryTask, AbstractTask
-from mission_control.core import POI, Worker
+from mission_control.core import POI, Worker, Role
 from mission_control.manager.coalition_formation import CoalitionFormationProcess
 
 class task_type(Enum):
@@ -57,9 +57,9 @@ all_rooms = [ poi_.value for poi_ in [ poi.ic_room_1, poi.ic_room_2, poi.ic_room
               poi.pc_room_7, poi.pc_room_8, poi.pc_room_9, poi.pc_room_10 ]]
 
 class Roles(Enum):
-    nurse =  'nurse'
-    lab_arm = 'lab_arm'
-    r1 = 'r1'
+    nurse =  Role('nurse', type=Role.RoleType.not_managed)
+    lab_arm = Role('lab_arm', type=Role.RoleType.not_managed)
+    r1 = Role('r1')
 
 # Defined as Enum so we can reference methods and tasks, and we can have references
 # to names that we later on set on them with set_name()
@@ -79,7 +79,6 @@ def pickup_ihtn(pickup_location):
         open_drawer_lab = ElementaryTask(task_type.OPERATE_DRAWER, action='open', assign_to=[Roles.r1])
         pick_up_sample  = ElementaryTask(task_type.PICK_UP, target=Roles.r1, assign_to=[Roles.lab_arm])
         close_drawer_lab = ElementaryTask(task_type.OPERATE_DRAWER, action='close', assign_to=[Roles.r1])
-
 
         # methods and abstract tasks
         m_deposit = Method(subtasks = [open_drawer, deposit, close_drawer])

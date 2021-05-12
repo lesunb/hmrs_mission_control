@@ -1,7 +1,7 @@
 from random import Random
 from typing import List
 
-from deeco.core import BaseKnowledge, Component, Role, Node
+from deeco.core import BaseKnowledge, Component, ComponentRole, Node
 from deeco.core import process
 from deeco.position import Position
 
@@ -11,7 +11,7 @@ from ..manager.coalition_formation import CoalitionFormationProcess
 from ..manager.supervision import SupervisionProcess
 
 
-class MissionCoordinator(Role):
+class MissionCoordinator(ComponentRole):
     def __init__(self):
         self.missions: List[MissionContext] = []
         self.active_workers: List[Worker] = None

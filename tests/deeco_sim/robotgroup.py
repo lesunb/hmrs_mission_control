@@ -1,13 +1,13 @@
 from abc import abstractmethod
 
 from deeco.core import EnsembleDefinition, BaseKnowledge
-from deeco.core import Role
+from deeco.core import ComponentRole
 from deeco.position import Position
 from .robot import Robot
 
 
 # Role
-class Group(Role):
+class Group(ComponentRole):
 	def __init__(self):
 		super().__init__()
 		self.center = None

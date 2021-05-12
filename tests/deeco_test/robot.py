@@ -3,13 +3,13 @@ from random import Random
 from deeco.core import BaseKnowledge
 from deeco.core import Component
 from deeco.core import Node
-from deeco.core import Role
+from deeco.core import ComponentRole
 from deeco.core import process
 from deeco.position import Position
 from deeco.packets import TextPacket
 
 # Role
-class Rover(Role):
+class Rover(ComponentRole):
 	def __init__(self):
 		super().__init__()
 		self.position = None

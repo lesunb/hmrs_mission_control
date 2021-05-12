@@ -4,6 +4,14 @@ from collections.abc import Iterable
 
 from .mission.ihtn import Task
 
+class Role:
+    class RoleType(Enum):
+        managed=0
+        not_managed=1
+
+    def __init__(self, label, type = RoleType.managed):
+        self.lable, self.type = label, type
+
 class POI:
     def __init__(self, label):
         self.label = label

@@ -1,5 +1,5 @@
 from deeco.core import EnsembleDefinition, BaseKnowledge
-from deeco.core import Role, Group
+from deeco.core import ComponentRole, Group
 from deeco.mapping import SetValue
 from .robot import Worker
 from .coordinator import MissionCoordinator
@@ -7,7 +7,7 @@ from .coordinator import MissionCoordinator
 from ..core import MissionContext, LocalMission
 
 # Role
-class MissionContextRole(Role, MissionContext):
+class MissionContextRole(ComponentRole, MissionContext):
 	def __init__(self):
 		super().__init__()
 

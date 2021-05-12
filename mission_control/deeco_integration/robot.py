@@ -4,14 +4,14 @@ from typing import List
 from deeco.core import BaseKnowledge
 from deeco.core import Component
 from deeco.core import Node
-from deeco.core import Role
+from deeco.core import ComponentRole
 from deeco.core import process
 from deeco.position import Position
 
 from mission_control.core import LocalMission, POI
 
 # Roles
-class Worker(Role):
+class Worker(ComponentRole):
 	def __init__(self):
 		super().__init__()
 		self.skills = None
