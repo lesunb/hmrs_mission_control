@@ -54,7 +54,6 @@ class Request:
     def __init__(self, task: Task, timestamp: int):
         self.task, self.timestamp = task, timestamp
 
-
 class Estimate:
     def __init__(self, task=None, time=math.inf, energy=math.inf):
         self.is_impossible_to_estimate = False

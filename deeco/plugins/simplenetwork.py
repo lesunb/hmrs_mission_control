@@ -35,17 +35,14 @@ class SimpleNetworkDevice(NodePlugin):
 
 
 class SimpleNetwork(SimPlugin):
-	def __init__(self, sim, range_m=250, delay_ms_mu=0, delay_ms_sigma=0):
+	def __init__(self, sim, delay_ms_mu=0, delay_ms_sigma=0):
 		super().__init__(sim)
-
-		self.devices = {}
-
-		self.random = Random()
-		self.random.seed(42)
-
-		self.range_m = range_m
 		self.delay_ms_mu = delay_ms_mu
 		self.delay_ms_sigma = delay_ms_sigma
+
+		self.devices = {}
+		self.random = Random()
+		self.random.seed(42)
 
 	def attach_to(self, node: Node):
 		super().attach_to(node)
@@ -60,10 +57,21 @@ class SimpleNetwork(SimPlugin):
 
 	def broadcast(self, packet: Packet, source: SimpleNetworkDevice):
 		for address, device in self.devices.items():
-			src_pos = source.node.positionProvider.get()
-			dst_pos = device.node.positionProvider.get()
-			if src_pos.dist_to(dst_pos) < self.range_m and device is not source:
+			if device is not source:
 				self.deliver(device, packet)
 
 	def __get_delivery_time_ms(self):
 		return self.sim.scheduler.get_time_ms() + self.random.normalvariate(self.delay_ms_mu, self.delay_ms_sigma)
+
+
+class SimpleRangeLimitedNetwork(SimpleNetwork):
+	def __init__(self, sim, delay_ms_mu=0, delay_ms_sigma=0, range_m=250):
+		super().__init__(sim, delay_ms_mu=delay_ms_mu, delay_ms_sigma=delay_ms_sigma)
+		self.range_m = range_m
+	
+	def broadcast(self, packet: Packet, source: SimpleNetworkDevice):
+		for address, device in self.devices.items():
+			src_pos = source.node.positionProvider.get()
+			dst_pos = device.node.positionProvider.get()
+			if src_pos.dist_to(dst_pos) < self.range_m and device is not source:
+				self.deliver(device, packet)

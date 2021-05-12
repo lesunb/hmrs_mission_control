@@ -1,4 +1,5 @@
 from random import Random
+from typing import List
 
 from deeco.core import BaseKnowledge
 from deeco.core import Component
@@ -7,81 +8,59 @@ from deeco.core import Role
 from deeco.core import process
 from deeco.position import Position
 
-from mission_control.core import LocalMission
+from mission_control.core import LocalMission, POI
 
 # Roles
-class Rover(Role):
-	def __init__(self):
-		super().__init__()
-		self.position = None
-		self.goal = None
-
 class Worker(Role):
 	def __init__(self):
 		super().__init__()
-		self.provided_skills = None
+		self.skills = None
 		self.local_mission: LocalMission = None
+		self.location: POI = None
+		self.battery_level: float = None
+		self.battery_consumption_rate: float = None
 
 # Component
 class Robot(Component):
-	SPEED = 0.01
-	COLORS = ["red", "blue", "green"]
-	random = Random(0)
-
 	@staticmethod
 	def gen_position():
 		return Position(Robot.random.uniform(0, 1), Robot.random.uniform(0, 1))
 
 	# Knowledge definition
-	class Knowledge(BaseKnowledge, Worker, Rover):
+	class Knowledge(Worker, BaseKnowledge):
 		def __init__(self):
 			super().__init__()
-			self.color = None
-			self.active_mission  = None
 
 	# Component initialization
-	def __init__(self, node: Node, provided_skills = []):
+	def __init__(self, node: Node,
+				skills: List[str],
+				location: POI,
+				battery_level: float,
+				battery_consumption_rate: float,
+				local_mission: LocalMission=None):
+
 		super().__init__(node)
 
 		# Initialize knowledge
-		self.knowledge.provided_skills = provided_skills
-		self.knowledge.position = node.positionProvider.get()
-		self.knowledge.goal = self.gen_position()
-		self.knowledge.color = self.random.choice(self.COLORS)
-
-#		# Register network receive method
-#		node.networkDevice.add_receiver(self.__receive_packet)
-
-		node.position = self.knowledge.position
+		self.knowledge.node_id = node.id
+		self.knowledge.skills = skills
+		self.knowledge.location = location
+		self.knowledge.battery_level = battery_level
+		self.knowledge.battery_consumption_rate = battery_consumption_rate
+		self.knowledge.local_mission = local_mission
 
 		print("Robot " + str(self.knowledge.id) + " created")
-
-#	def __receive_packet(self, packet):
-#		print((str(self.knowledge.time) + " ms: " + str(self.knowledge.id) + " Received packet: " + str(packet)))
-
+	
 	# Processes follow
-
 	@process(period_ms=10)
 	def update_time(self, node: Node):
 		self.knowledge.time = node.runtime.scheduler.get_time_ms()
 
-	@process(period_ms=1000)
-	def status(self, node: Node):
-		print(str(self.knowledge.time) + " ms: " + str(self.knowledge.id) + " at " + str(self.knowledge.position) + " goal " + str(
-			self.knowledge.goal) + " dist: " + str(self.knowledge.position.dist_to(self.knowledge.goal)))
+	@process(period_ms=10)
+	def sense_task_execution_status(self, node: Node):
+		pass
+		# TODO 
 
-	@process(period_ms=100)
-	def sense_position(self, node: Node):
-		self.knowledge.position = node.positionProvider.get()
-
-	@process(period_ms=1000)
-	def set_goal(self, node: Node):
-		if self.knowledge.position == self.knowledge.goal:
-			self.knowledge.goal = self.gen_position()
-			node.walker.set_target(self.knowledge.goal)
-		node.walker.set_target(self.knowledge.goal)
-
-#	@process(period_ms=2500)
-#	def send_echo_packet(self, node: Node):
-#		node.networkDevice.send(node.id, TextPacket("Echo packet payload from: " + str(self.knowledge.id)))
-#		node.networkDevice.broadcast(TextPacket("Broadcast echo packet payload from: " + str(self.knowledge.id)))
+	# @process(period_ms=100)
+	# def sense_position(self, node: Node):
+	# 	self.knowledge.position = node.positionProvider.get()

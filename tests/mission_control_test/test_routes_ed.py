@@ -1,7 +1,7 @@
 from mission_control.common_descriptors.routes_ed import RoutesEnvironmentDescriptor
 from mission_control.core import POI
 
-from ..hospital_map import create_hospial_scenario_map
+from resources.hospital_map import create_hospial_scenario_map
 
 def test_routes():
     map = create_hospial_scenario_map()

@@ -12,10 +12,10 @@
             "console": "integratedTerminal"
         },
         {
-            "name": "Deeco Runner",
+            "name": "Trials Runner",
             "type": "python",
             "request": "launch",
-            "program": "experiment/deeco_sim/runner.py",
+            "program": "evaluation/lab_samples/trials_pipeline.py",
             "console": "integratedTerminal"
         },
         {

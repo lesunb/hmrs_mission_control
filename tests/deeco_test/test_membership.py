@@ -2,7 +2,7 @@ from deeco.core import Node, Component
 from deeco.sim import Sim
 from deeco.position import Position
 from deeco.plugins.identity_replicas import IdentityReplicas
-from deeco.plugins.simplenetwork import SimpleNetwork
+from deeco.plugins.simplenetwork import SimpleRangeLimitedNetwork
 from deeco.plugins.walker import Walker
 from deeco.plugins.knowledgepublisher import KnowledgePublisher
 from deeco.plugins.ensemblereactor import EnsembleReactor
@@ -25,7 +25,7 @@ def test_multiple_nodes():
     IdentityReplicas(sim)
 
     # Add simple network device
-    SimpleNetwork(sim, range_m=3, delay_ms_mu=20, delay_ms_sigma=5)
+    SimpleRangeLimitedNetwork(sim, range_m=3, delay_ms_mu=20, delay_ms_sigma=5)
 
     for i in range(0, 5):
         position = Position(2 * i, 3 * i)
@@ -58,7 +58,7 @@ def test_join_ensemble_and_update_ensemble_knowledge():
     sim = Sim()
 
     # Add simple network device
-    SimpleNetwork(sim, range_m=3, delay_ms_mu=20, delay_ms_sigma=5)
+    SimpleRangeLimitedNetwork(sim, range_m=3, delay_ms_mu=20, delay_ms_sigma=5)
 
     position0 = Position(0.5, 0.5)
     node0 = Node(sim)
