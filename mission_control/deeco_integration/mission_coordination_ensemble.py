@@ -23,10 +23,7 @@ class MissionCoordinationEnsemble(EnsembleDefinition):
 		super().__init__(coordinator=MissionCoordinator, member=Worker)
 
 	def fitness(self, coord: MissionCoordinator, member: Worker):
-		if coord.global_mission is None:
-			return 0
-		else:
-			return 1 
+		return 1 if member else 0
 
 	def membership(self, coord: MissionCoordinator, member: Worker):
 		assert isinstance(coord, MissionCoordinator)
@@ -41,13 +38,14 @@ class MissionCoordinationEnsemble(EnsembleDefinition):
 			self.update_mission_progress(mission_assigned, member.local_mission)
 
 		# coordinator to member
-		assigned_local_mision = self.get_local_mission_member_should_be_assigned(coord, member)		
+		exchanges_coord_member = []
+		assigned_local_mision, assigned_mission = self.get_local_mission_member_should_be_assigned(coord, member)		
 		if member.local_mission is not assigned_local_mision:
 			# plan distribuition
 			print(f'assigning mission {assigned_local_mision}')
 			set_local_mission = SetValue('local_mission', assigned_local_mision)
-
-		return (coord, [set_local_mission])
+			exchanges_coord_member.append(set_local_mission)
+		return (coord, exchanges_coord_member)
 
 
 	def get_mission_member_is_assigned(self, coord: MissionCoordinator, member: Worker):
@@ -65,9 +63,9 @@ class MissionCoordinationEnsemble(EnsembleDefinition):
 	def get_local_mission_member_should_be_assigned(self, coord: MissionCoordinator, member: Worker):
 		for mission in coord.missions:
 			for local_mission in mission.local_missions:
-				if member is mission.worker:
-					return local_mission
-		return None
+				if member is local_mission.worker:
+					return (local_mission, mission)
+		return None, None
 
 
 	def is_active(self, coord: MissionCoordinator, member: Worker):

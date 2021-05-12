@@ -136,15 +136,15 @@ class EnsembleDefinition:
         self.member = member
 
     @abstractmethod
-    def fitness(self, candidate, *members):
+    def fitness(self, coordinator, candidate):
         pass
 
     @abstractmethod
-    def membership(self, *knowledge):
+    def membership(self, coordinator, candidate):
         pass
 
     @abstractmethod
-    def knowledge_exchange(self, *knowledge):
+    def knowledge_exchange(self, coordinator, candidate):
         pass
 
     def instantiate(self, coordinator):
@@ -169,11 +169,11 @@ class EnsembleInstance:
         self.memberKnowledge.append(knowledge)
 
     def fitness(self):
-        return self.fitness_of(None, *self.memberKnowledge)
+        return self.fitness_of(None)
 
-    def fitness_of(self, candidate, *members_knowledge):
+    def fitness_of(self, candidate):
         try:
-            return self.definition.fitness(self.coordinator.knowledge, candidate, *members_knowledge)
+            return self.definition.fitness(self.coordinator.knowledge, candidate)
         except (TypeError, AttributeError) as e:
             print(e)
             return 0
@@ -210,7 +210,7 @@ class EnsembleInstance:
         if not self.membership_of(knowledge): # cordinator and new one
             return  float('-inf')
         else:
-            new_fitness = self.fitness_of(knowledge, self.memberKnowledge)
+            new_fitness = self.fitness_of(knowledge)
             old_fitness = self.fitness()
             return new_fitness - old_fitness
 

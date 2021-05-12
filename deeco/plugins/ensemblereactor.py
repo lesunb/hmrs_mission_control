@@ -1,3 +1,4 @@
+from typing import List
 from deeco.runnable import NodePlugin
 from deeco.core import EnsembleDefinition
 from deeco.core import EnsembleInstance
@@ -26,12 +27,12 @@ class AssignmentRecord:
 
 
 class EnsembleReactor(NodePlugin):
-	def __init__(self, node: Node, ensemble_definitions: []):
+	def __init__(self, node: Node, ensemble_definitions: List[EnsembleDefinition]):
 		super().__init__(node)
 		self.node.networkDevice.add_receiver(self.receive)
 		
 		self.definitions = ensemble_definitions
-		self.instances: [EnsembleInstance] = []
+		self.instances: List[EnsembleInstance] = []
 		self.demands = {}
 
 		self.membership = []
