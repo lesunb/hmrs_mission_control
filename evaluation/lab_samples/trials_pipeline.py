@@ -5,7 +5,7 @@ from evaluation.framework.exec_sim import SimExec
 from evaluation.framework.trial import Trial
 from evaluation.framework.trial import total_combinations, draw_without_repetition, draw_with_repetition
 
-from resources.world_lab_samples import task_type, all_skills, all_rooms, pickup_ihtn
+from resources.world_lab_samples import task_type, all_skills, all_rooms, pickup_ihtn, cf_process
 
 
 def gen_requests(times, locations):
@@ -19,9 +19,10 @@ def main():
     number_of_robots = 5
     
     # times in which a new request will appear in the trial
-    request_times = [ 0 ]
+    request_times = [ 0 ] # only at the start
 
     # selected levels
+    #################
 
     # robot can have or not a secure drawer
     skills_levels = [
@@ -37,9 +38,11 @@ def main():
     ]
 
     # three selections of positions for each robot
-    locations = [ draw_without_repetition(all_rooms, number_of_robots),
-                  draw_without_repetition(all_rooms, number_of_robots),
-                  draw_without_repetition(all_rooms, number_of_robots)]
+    locations = [ 
+        draw_without_repetition(all_rooms, number_of_robots),
+        draw_without_repetition(all_rooms, number_of_robots),
+        draw_without_repetition(all_rooms, number_of_robots)
+    ]
 
     # three selections of starting battery level for each robot
     # starting from 10 to 90
@@ -55,7 +58,9 @@ def main():
         draw_without_repetition([x * 0.001 for x in range(10, 30)], number_of_robots),
     ]
     
-    # total combination of robot factors
+    # Design - total combination of robot factors
+    ######
+
     robots_factors_combinatios = total_combinations({
         'skills': skills,
         'location': locations,
@@ -76,6 +81,7 @@ def main():
             trial_robots.append(robot_facotrs)
         
         locations_without_robot = list(set(all_rooms) - set(trial_robots_factors['location']))
+        # generate the a request for each time
         requests = list(gen_requests(request_times, locations_without_robot))
 
         trial = Trial(id=trial_id, robots=trial_robots, requests=requests)
@@ -94,7 +100,7 @@ def main():
     # dump trials
 
 def get_sim_exec():
-    return SimExec(None)
+    return SimExec(cf_process)
 
 
 

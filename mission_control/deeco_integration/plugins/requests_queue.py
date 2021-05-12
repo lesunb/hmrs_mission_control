@@ -6,7 +6,7 @@ class RequestsQueue(NodePlugin):
 
     def __init__(self, node, initial_requests = None):
         super().__init__(node)
-        node.requests_queue = SimpleQueue()
+        node.requests_queue = []
         if initial_requests:
             for request in initial_requests:
-                node.requests_queue.put(request)
+                node.requests_queue.append(request)

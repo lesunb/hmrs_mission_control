@@ -119,10 +119,11 @@ class Component:
 
     def __init__(self, node: Node):
         self.id = self.gen_id()
-
+        self.node = node
         self.time = None
         self.knowledge = self.Knowledge()
         self.knowledge.id = self.id
+        self.knowledge.node_id = node.id if node else None
         self.metadata = Metadata()
 
 

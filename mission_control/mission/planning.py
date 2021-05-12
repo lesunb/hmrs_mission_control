@@ -43,8 +43,8 @@ def distribute(task: Task, role):
                     if k + 1 == len(method.subtasks):
                         pass
                     else:
+                        next_task = method.subtasks[k+1]
                         if is_assigned(ktask, role):
-                            next_task = method.subtasks[k+1]
                             if not is_assigned(next_task, role):
                                 # assigned to this, and  not the next
                                 # = notify the next

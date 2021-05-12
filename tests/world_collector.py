@@ -9,7 +9,7 @@ from mission_control.core import Worker, worker_factory, POI
 from mission_control.estimate.core import SkillDescriptorRegister
 from mission_control.estimate.estimate import EstimateManager
 from mission_control.manager.coalition_formation import CoalitionFormationProcess
-from mission_control.mission.ihtn import Method, MethodOrdering, Task, ElementaryTask, AbstractTask
+from mission_control.mission.ihtn import Method, ElementaryTask, AbstractTask
 
 from mission_control.common_descriptors.routes_ed import RoutesEnvironmentDescriptor, Map, Nodes
 from mission_control.common_descriptors.navigation_sd import NavigationSkillDescriptor, Move

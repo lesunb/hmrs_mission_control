@@ -3,9 +3,9 @@ from typing import Generator, Dict, List, Sequence
 
 from mission_control.mission.ihtn import ElementaryTask, Task
 from mission_control.mission.planning import distribute, flat_plan
+from .integration import MissionHandler, MissionUnnexpectedError
 from ..core import MissionContext, Worker, LocalMission
 from ..estimate.estimate import EstimateManager, Bid
-from .integration import MissionHandler, MissionUnnexpectedError
 
 def coalitionFormationError(e, mission_context):
     message = f'Unexpected error forming coalition for {mission_context}'
@@ -22,10 +22,10 @@ class CoalitionFormationProcess:
         
 
     def run(self, mission_context: MissionContext, workers: List[Worker], mission_handler: MissionHandler):
-        try:
-            self.do_run(mission_context, workers, mission_handler)
-        except Exception as e:
-            self.mission_handler.handle_unnexpected_error(coalitionFormationError(e, mission_context))
+        #try:
+        self.do_run(mission_context, workers, mission_handler)
+        # except Exception as e:
+        #     mission_handler.handle_unnexpected_error(coalitionFormationError(e, mission_context))
 
     def do_run(self, mission_context: MissionContext, workers: List[Worker], mission_handler: MissionHandler):
         if mission_context.status == MissionContext.Status.NEW:
@@ -41,7 +41,7 @@ class CoalitionFormationProcess:
             # its all or northing - or assign all pending tasks or none
             mission_handler.no_coalition_available(mission_context)
 
-    def create_coalition(self, mission_context, workers) -> bool:
+    def create_coalition(self, mission_context: MissionContext, workers: List[Worker]) -> bool:
         plan_rank_map = {}
         for local_mission in self.get_pending_assignments(mission_context):
             task_list = self.flat_plan(local_mission.plan)
@@ -55,7 +55,7 @@ class CoalitionFormationProcess:
                 else:
                     pass # TODO log
             if not bids: # empty list of viable bids
-                mission_context.occurances.push(f'no viable assignment for {local_mission.role}')
+                mission_context.occurances.append(f'no viable assignment for {local_mission.role}')
                 return False
             bids = self.rank_bids(bids)
             plan_rank_map[local_mission] = bids

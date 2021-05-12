@@ -95,6 +95,7 @@ class MissionContext:
         self.status = MissionContext.Status.NEW
         self.global_plan: Task = global_plan
         self.local_missions: Iterable[LocalMission] = {}
+        self.occurances = []
     
 
             

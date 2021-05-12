@@ -52,7 +52,7 @@ class MissionHandler:
         pass
 
     @abstractmethod
-    def handle_unnexpected_error(error: MissionUnnexpectedError):
+    def handle_unnexpected_error(self, error: MissionUnnexpectedError):
         """ 
             Should handle internal error in the mission management process
         """

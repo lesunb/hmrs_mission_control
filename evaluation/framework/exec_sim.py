@@ -37,7 +37,7 @@ class SimExec:
     def instantiate_robot_component(node, **initial_knowledge):
          return Robot(node, **initial_knowledge)
 
-    def run(self, trial: Trial):
+    def run(self, trial: Trial, limit_ms=3000):
         requests = trial.requests
         robots_initial_conf = trial.robots
         
@@ -79,7 +79,7 @@ class SimExec:
             robots.append(robot)
 
         # Run the simulation
-        sim.run(3100)
+        sim.run(limit_ms)
 
         return {
             'nodes': {

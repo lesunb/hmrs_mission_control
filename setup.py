@@ -15,7 +15,8 @@ setup(
     long_description_content_type="text/markdown",
     url="https://github.com/gabrielsr/hmrs_mission_control",
     packages=find_packages(
-        include=['mission_control', 'deeco', 'evaluation', 'deeco.*', 'experiment', 'experiment.deeco_sim', 'evaluation.*',] ,
+        include=['deeco', 'deeco.*', 'evaluation', 'evaluation.*',
+                 'mission_control'] ,
     ),
     classifiers=[
         "Programming Language :: Python :: 3",

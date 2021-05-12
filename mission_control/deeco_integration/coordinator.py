@@ -13,18 +13,11 @@ from ..manager.supervision import SupervisionProcess
 
 class MissionCoordinator(Role):
     def __init__(self):
-        self.missions = None
+        self.missions = []
         self.active_workers: List[Worker] = None
 
 
 class Coordinator(Component, MissionHandler):
-    COLORS = ["yellow", "pink"]
-    random = Random(0)
-
-    @staticmethod
-    def gen_position():
-        return Position(0, 0)
-
     # Knowledge definition
     class Knowledge(BaseKnowledge, MissionCoordinator):
         def __init__(self):
@@ -35,7 +28,6 @@ class Coordinator(Component, MissionHandler):
     def __init__(self, node: Node, required_skills = None,
             cf_process: CoalitionFormationProcess = None,
             supervision_proces: SupervisionProcess = None):
-        
         super().__init__(node)
         self.cf_process = cf_process
         self.supervision_process = supervision_proces
@@ -72,7 +64,7 @@ class Coordinator(Component, MissionHandler):
 
     def handle_requests(self):
         for request in self.node.requests_queue:
-            mission_context = MissionContext(request.mission)
+            mission_context = MissionContext(request.task)
             print(f'coordinator {self.id} got has a new mission {mission_context}')
             self.knowledge.missions.append(mission_context)
             yield mission_context
@@ -126,7 +118,7 @@ class Coordinator(Component, MissionHandler):
         print(error.orignal_error)
 
     def get_free_workers(self):
-        workers = self.knowledge.active_workers
+        workers = self.knowledge.active_workers or []
         missions = self.knowledge.missions 
         assigned_workers = []
         

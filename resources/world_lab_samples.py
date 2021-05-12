@@ -1,8 +1,20 @@
 import pytest
-
 from enum import Enum
+from typing import List
+
+from lagom.container import Container
+
+from mission_control.estimate.estimate import EstimateManager
+from mission_control.estimate.core import SkillDescriptorRegister
+from mission_control.common_descriptors.generic_constant_cost_sd import generic_skill_descriptor_constant_cost_factory
+from mission_control.common_descriptors.navigation_sd import NavigationSkillDescriptor
+from mission_control.common_descriptors.routes_ed import Map, RoutesEnvironmentDescriptor
+
+from resources.hospital_map import create_hospial_scenario_map
+
 from mission_control.mission.ihtn import Method, MethodOrdering, Task, ElementaryTask, AbstractTask
-from mission_control.core import POI
+from mission_control.core import POI, Worker
+from mission_control.manager.coalition_formation import CoalitionFormationProcess
 
 class task_type(Enum):
     NAV_TO = 'navigation'
@@ -105,3 +117,25 @@ def ihtn_navto_room3():
 @pytest.fixture
 def ihtn_deposit():
     return lab_samples_ihtn.deposit.value
+
+
+######
+# Container, and processes
+########
+
+container = Container()
+# env desc
+container[Map] = create_hospial_scenario_map()
+routes_ed = container[RoutesEnvironmentDescriptor]
+
+# skill desc
+nav_sd = container[NavigationSkillDescriptor]
+pick_up_sd = generic_skill_descriptor_constant_cost_factory('pick_up', 10)
+
+# skill desc container singleton
+sd_register = SkillDescriptorRegister( (task_type.NAV_TO, nav_sd), (task_type.PICK_UP, pick_up_sd))
+container[SkillDescriptorRegister] = sd_register
+
+# estimate manager
+em: EstimateManager = container[EstimateManager]
+cf_process: CoalitionFormationProcess = container[CoalitionFormationProcess]
