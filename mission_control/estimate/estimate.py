@@ -42,7 +42,7 @@ class EstimateManager:
     def set_skill_descriptor(self, sd, task_type):
         self.skill_descriptors[task_type] = sd
 
-    def aggregate_estimates(self, estimates: [Estimate]) -> Estimate:
+    def aggregate_estimates(self, estimates: List[Estimate]) -> Estimate:
         total_time = 0
         total_energy = 0
         for partial in estimates:

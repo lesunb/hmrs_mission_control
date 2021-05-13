@@ -1,6 +1,6 @@
 from typing import Final
 
-from ..estimate.core import SkillDescriptor
+from ..estimate.core import SkillDescriptor, TaskContext
 from .routes_ed import RoutesEnvironmentDescriptor
 from ..core import POI, Capability, Estimate, ImpossibleToEstimate
 
@@ -18,7 +18,7 @@ class NavigationSkillDescriptor(SkillDescriptor):
     def __init__(self, routes_ed: RoutesEnvironmentDescriptor):
         self.routes_ed: RoutesEnvironmentDescriptor = routes_ed
     
-    def estimate(self, task_context):
+    def estimate(self, task_context: TaskContext):
         origin: POI = task_context.get('origin')
         dest: POI = task_context.get('destination')
         avg_speed = task_context.worker.avg_speed
@@ -28,5 +28,5 @@ class NavigationSkillDescriptor(SkillDescriptor):
             return ImpossibleToEstimate(reason=f'No route from {origin} to {dest}')
         distance = route.get_distance()
         estimate_time = distance / avg_speed
-        return Estimate(time = estimate_time)
+        return Estimate(time = estimate_time, plan=route, task=task_context.task)
 

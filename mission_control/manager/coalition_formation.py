@@ -12,6 +12,7 @@ def coalitionFormationError(e, mission_context):
     return MissionUnnexpectedError(e, message)
 
 
+
 class CoalitionFormationProcess:
     """ Service of creating coalitions. It receives an ihtn with tasks 
     assigned to roles an return a selection of robots to execute the plan """
@@ -114,8 +115,14 @@ class CoalitionFormationProcess:
             selected_bids[local_mission] = bid_rank[0]
         return selected_bids
     
-    def set_assignment_from_selected_bids(mission_context: MissionContext, selected_bids):
+    def set_assignment_from_selected_bids(self, selected_bids):
         for local_mission, bid in selected_bids.items():
             local_mission.worker = bid.worker
             local_mission.status = LocalMission.Status.PENDING_COMMIT
-            
+            self.set_plans_into_tasks(local_mission, bid.partials)
+    
+    @staticmethod
+    def set_plans_into_tasks(local_mission, partials):
+        for partial in partials:
+            if partial.plan is not None:
+                partial.task.plan = partial.plan

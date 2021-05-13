@@ -102,8 +102,6 @@ def main():
         final_state = sim_exec.run(trial)
         # inspect end state
         print(final_state)
-
-    
     # dump trials
 
 def get_sim_exec():

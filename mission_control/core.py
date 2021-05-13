@@ -10,7 +10,7 @@ class Role:
         NOT_MANAGED=1
 
     def __init__(self, label, type = Type.MANAGED):
-        self.lable, self.type = label, type
+        self.label, self.type = label, type
 
 class POI:
     def __init__(self, label):
@@ -72,11 +72,9 @@ class Request:
         self.id = Request.__gen_id()
 
 class Estimate:
-    def __init__(self, task=None, time=math.inf, energy=math.inf):
+    def __init__(self, task=None, time=math.inf, energy=math.inf, plan=None):
         self.is_impossible_to_estimate = False
-        self.task = task
-        self.time = time
-        self.energy = energy
+        self.task, self.time, self.energy, self.plan = task, time, energy, plan
 
 class ImpossibleToEstimate(Estimate):
     def __init__(self, reason:str, ):

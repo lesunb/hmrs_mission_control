@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Tuple
 from ..estimate.core import EnvironmentDescriptor
 from mission_control.core import POI
 
@@ -28,7 +28,7 @@ class Map:
         for node in nodes:
             self.nodes.append(node)
 
-    def get_all_waypoints(self) -> [POI]:
+    def get_all_waypoints(self) -> List[POI]:
         pois = []
         for node in self.nodes:
             pois.append(POI(node.label))
@@ -50,10 +50,10 @@ class Route:
         self.total_distance = None
         self.nodes = [origin] + nodes
 
-    def get_all_waypoints(self) -> [POI]:
+    def get_all_waypoints(self) -> List[Tuple[float, float]]:
         pois = []
         for node in self.nodes:
-            pois.append(POI(node.label))
+            pois.append(tuple(node.coords))
         return pois
 
     def get_node(self, label) -> Nodes:

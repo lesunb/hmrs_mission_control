@@ -87,7 +87,7 @@ class Coordinator(Component, MissionHandler):
     def update_assigments(self, mission_context: MissionContext):
         print(f'received an update for {mission_context}')
     
-    def no_coalition_available(self, mission_context: MissionContext):
+    def no_coalition_availabel(self, mission_context: MissionContext):
         print(f'no coalition available for {mission_context}')
     
     # @process(period_ms=1000)

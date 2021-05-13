@@ -148,16 +148,20 @@ pick_up_sd = generic_skill_descriptor_constant_cost_factory('pick_up', 10)
 send_message_sd = generic_skill_descriptor_constant_cost_factory('send_message', 0)
 wait_message_sd = generic_skill_descriptor_constant_cost_factory('wait_message', 10)
 
+
+
+sync_type_SEND_MESSAGE = SyncTask.SyncType.SEND_MESSAGE.value
+sync_type_WAIT_MESSAGE = SyncTask.SyncType.WAIT_MESSAGE.value
 # skill desc container singleton
 sd_register = SkillDescriptorRegister( 
-    (task_type.NAV_TO, nav_sd), 
-    (task_type.APPROACH_PERSON, approach_person_sd),
-    (task_type.AUTHENTICATE_PERSON, authenticate_person_sd),
-    (task_type.OPERATE_DRAWER, operate_drawer_sd),
-    (task_type.APPROACH_ROBOT, approach_robot_sd),
-    (task_type.PICK_UP, pick_up_sd),
-    (SyncTask.SyncType.SEND_MESSAGE, send_message_sd),
-    (SyncTask.SyncType.WAIT_MESSAGE, wait_message_sd)
+        (task_type.NAV_TO, nav_sd), 
+        (task_type.APPROACH_PERSON, approach_person_sd),
+        (task_type.AUTHENTICATE_PERSON, authenticate_person_sd),
+        (task_type.OPERATE_DRAWER, operate_drawer_sd),
+        (task_type.APPROACH_ROBOT, approach_robot_sd),
+        (task_type.PICK_UP, pick_up_sd),
+        (sync_type_SEND_MESSAGE, send_message_sd),
+        (sync_type_WAIT_MESSAGE, wait_message_sd)
     )
 
 container[SkillDescriptorRegister] = sd_register

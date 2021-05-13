@@ -6,12 +6,12 @@ def is_assigned(task: Task, role):
     return True if role in task.assign_to else False
 
 def create_send_message(next_task, role):
-    SEND_MESSAGE = SyncTask.SyncType.SEND_MESSAGE
+    SEND_MESSAGE = SyncTask.SyncType.SEND_MESSAGE.value
     smt = SyncTask(type=SEND_MESSAGE, to_=next_task.assign_to, assign_to=role)
     return smt
 
 def create_wait_message(next_task, role):
-    WAIT_MESSAGE = SyncTask.SyncType.WAIT_MESSAGE
+    WAIT_MESSAGE = SyncTask.SyncType.WAIT_MESSAGE.value
     wmt = SyncTask(type=WAIT_MESSAGE, from_=next_task.assign_to, assign_to=role)
     return wmt
 

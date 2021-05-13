@@ -1,22 +1,18 @@
 
 
-from deeco.core import Component, Node
+from deeco.core import Node
 from deeco.sim import Sim
-from deeco.position import Position
 from deeco.plugins.identity_replicas import IdentityReplicas
 from deeco.plugins.simplenetwork import SimpleNetwork
-from deeco.plugins.walker import Walker
 from deeco.plugins.knowledgepublisher import KnowledgePublisher
 from deeco.plugins.ensemblereactor import EnsembleReactor
 
-from deeco.plugins.snapshoter import Snapshoter
 
 
 from mission_control.deeco_integration.mission_coordination_ensemble import MissionCoordinationEnsemble
 from mission_control.deeco_integration.robot import Robot
 from mission_control.deeco_integration.coordinator import Coordinator
 from mission_control.deeco_integration.plugins.requests_queue import RequestsQueue
-from mission_control.deeco_integration.plugins.hande_request_service import HandleRequestServer
 from mission_control.deeco_integration.mission_coordination_ensemble import MissionCoordinationEnsemble
 
 
@@ -24,7 +20,9 @@ from mission_control.manager.coalition_formation import CoalitionFormationProces
 
 from resources.world_lab_samples import *
 
+
 from .trial import Trial
+from .to_executor import prep_plan
 
 
 
@@ -80,15 +78,19 @@ class SimExec:
         # Run the simulation
         sim.run(limit_ms)
 
+
+        local_plans = list(map(prep_plan, robots))
+        print(local_plans)
         return {
             'nodes': {
                 'coord_node': coord_node,
                 'robots': robots_nodes
             },
             'components': {
-                'coordinator': coord,
-                'robots': robots
-            }
+                'coordinator': coord.knowledge,
+                'robots': map(lambda r : r.knowledge, robots)
+            },
+            'local_plans': local_plans
         }
 
 

@@ -34,9 +34,9 @@ class SyncTask(Task):
     def __init__(self, type: SyncType, to = None, from_=None, **kwargs):
         super().__init__(**kwargs)
         self.type = type
+        self.name = type
         self.to = to
         self.from_ = from_
-        self.name = type.value
  
     def clone(self):
         return copy(self)
