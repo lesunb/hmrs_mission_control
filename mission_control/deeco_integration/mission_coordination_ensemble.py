@@ -49,7 +49,8 @@ class MissionCoordinationEnsemble(EnsembleDefinition):
 		return (coord, exchanges_coord_member)
 
 
-	def get_mission_member_is_assigned(self, coord: MissionCoordinator, member: Worker):
+	@staticmethod
+	def get_mission_member_is_assigned(coord: MissionCoordinator, member: Worker):
 		if not member.local_mission:
 			return None
 		else:
@@ -61,20 +62,13 @@ class MissionCoordinationEnsemble(EnsembleDefinition):
 		print('update progress')
 		pass
 	
-	def get_local_mission_member_should_be_assigned(self, coord: MissionCoordinator, member: Worker):
+	@staticmethod
+	def get_local_mission_member_should_be_assigned(coord: MissionCoordinator, member: Worker):
 		for mission in coord.missions:
 			for local_mission in mission.local_missions:
-				if member is local_mission.worker:
+				if local_mission.worker and (member.id is local_mission.worker.id):
 					return (local_mission, mission)
 		return None, None
-
-
-	def is_active(self, coord: MissionCoordinator, member: Worker):
-		pass
-
-	def get_status(member):
-		pass
-
 
 	@staticmethod
 	def is_not_committed(member: Worker):

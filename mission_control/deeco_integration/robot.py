@@ -33,11 +33,11 @@ class Robot(Component):
 			super().__init__()
 
 	# Component initialization
-	def __init__(self, node: Node,
-				skills: List[str],
-				location: POI,
-				battery_level: float,
-				battery_consumption_rate: float,
+	def __init__(self, node: Node = None,
+				skills: List[str] = None,
+				location: POI = None,
+				battery_level: float = None,
+				battery_consumption_rate: float = None,
 				local_mission: LocalMission=None,
 				avg_speed = 0):
 

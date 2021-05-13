@@ -34,7 +34,8 @@ class Coordinator(Component, MissionHandler):
 
 
     # Component initialization
-    def __init__(self, node: Node, required_skills = None,
+    def __init__(self, node: Node= None, 
+            required_skills = None,
             cf_process: CoalitionFormationProcess = None,
             supervision_proces: SupervisionProcess = None):
         super().__init__(node)

@@ -1,6 +1,6 @@
 import math
 from enum import Enum
-from collections.abc import Iterable
+from typing import List
 
 from .mission.ihtn import Task
 
@@ -112,7 +112,7 @@ class MissionContext:
     def __init__(self, global_plan: Task = None):
         self.status = MissionContext.Status.NEW
         self.global_plan: Task = global_plan
-        self.local_missions: Iterable[LocalMission] = {}
+        self.local_missions: List[LocalMission] = []
         self.occurances = []
     
 
