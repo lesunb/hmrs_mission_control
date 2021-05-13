@@ -127,6 +127,11 @@ def ihtn_navto_room3():
 def ihtn_deposit():
     return lab_samples_ihtn.deposit.value
 
+##
+# Map
+hospital_map = create_hospial_scenario_map()
+def get_position_of_poi(poi: POI):
+    return tuple(hospital_map.get_node(poi.label).coords)
 
 ######
 # Container, and processes
@@ -134,7 +139,8 @@ def ihtn_deposit():
 
 container = Container()
 # env desc
-container[Map] = create_hospial_scenario_map()
+container[Map] = hospital_map = create_hospial_scenario_map()
+
 routes_ed = container[RoutesEnvironmentDescriptor]
 
 # skill desc

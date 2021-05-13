@@ -1,9 +1,7 @@
-from random import Random
 from typing import List
 
 from deeco.core import BaseKnowledge, Component, ComponentRole, Node
 from deeco.core import process
-from deeco.position import Position
 
 from ..core import MissionContext, Worker
 from ..manager.integration import MissionHandler, MissionUnnexpectedError

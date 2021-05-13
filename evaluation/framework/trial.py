@@ -41,16 +41,16 @@ def total_combinations(factors):
     return all_combinations
         
 
-def draw_without_repetition(source: List, number_of_draw:int):
-    drawn = [random.choice(source)]
+def draw_without_repetition(source: List, number_of_draw:int, rand):
+    drawn = [rand.choice(source)]
     if number_of_draw > 1:
-        return drawn + draw_without_repetition(list(set(source) - set(drawn)), number_of_draw - 1)
+        return drawn + draw_without_repetition(list(set(source) - set(drawn)), number_of_draw - 1, rand)
     else:
         return drawn
 
-def draw_with_repetition(source: List, number_of_draw:int):
-    drawn = [random.choice(source)]
+def draw_with_repetition(source: List, number_of_draw:int, rand):
+    drawn = [rand.choice(source)]
     if number_of_draw > 1:
-        return drawn + draw_with_repetition(source, number_of_draw - 1)
+        return drawn + draw_with_repetition(source, number_of_draw - 1, rand)
     else:
         return drawn

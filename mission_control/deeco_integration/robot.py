@@ -39,7 +39,8 @@ class Robot(Component):
 				battery_level: float = None,
 				battery_consumption_rate: float = None,
 				local_mission: LocalMission=None,
-				avg_speed = 0):
+				avg_speed = 0, 
+				id = 0):
 
 		super().__init__(node)
 

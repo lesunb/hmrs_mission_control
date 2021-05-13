@@ -17,3 +17,11 @@ def test_routes_going_and_back_should_be_same_distance():
     route2 = routes_ed.get(POI("IC Room 1"), POI("IC Room 3"))
     assert route1.get_distance() == route2.get_distance()
 
+
+def test_routes_going_and_back_should_be_same_distance_2():
+    map = create_hospial_scenario_map()
+    routes_ed: RoutesEnvironmentDescriptor = RoutesEnvironmentDescriptor(map)
+    route1 = routes_ed.get(POI("PC Room 9"), POI("PC Room 10"))
+    route2 = routes_ed.get(POI("PC Room 10"), POI("PC Room 9"))
+    assert route1.get_distance() == route2.get_distance()
+

@@ -61,6 +61,7 @@ class SimExec:
         coord_node.add_component(coord)
 
         robots, robots_nodes = [], []
+        
         # instantiate workers
         for r in robots_initial_conf:
             
@@ -78,9 +79,12 @@ class SimExec:
         # Run the simulation
         sim.run(limit_ms)
 
-
+        # get results
         local_plans = list(map(prep_plan, robots))
-        print(local_plans)
+        
+        for local_plan, robot in zip(local_plans, trial.robots):
+            robot['local_plan'] = local_plan
+        
         return {
             'nodes': {
                 'coord_node': coord_node,
