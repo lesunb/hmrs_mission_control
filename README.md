@@ -44,6 +44,14 @@ $ pipenv shell
 (hmrs_mission_control env) % pipenv install --dev
 ```
 
+Run
+------
+Inside pipenv environment (after pipenv shell)
+
+```console
+ python evaluation/lab_samples/trials_pipeline.py
+```
+
 
 Test
 ----

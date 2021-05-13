@@ -90,9 +90,6 @@ def main():
                 # each factor
                 robot_facotrs[key] = values_set[robot_id]
             
-            
-            # set position of robot from location
-            robot_facotrs
             trial_robots.append(robot_facotrs)
 
         
@@ -124,6 +121,7 @@ def main():
         for robot in trial.robots:
             robot['position'] = get_position_of_poi(robot['location'])
             robot['location'] = robot['location'].label
+            robot['skills'].sort()
         print(robot)
 
         trial.nurses = []
@@ -134,11 +132,10 @@ def main():
         # delete non dict
         delattr(trial, 'requests')
         trials_dicts.append(trial.__dict__)
-        break
     
     # dump trials
-    with open('experiment_trial.json', 'w') as outfile:
-        json.dump(trials_dicts, outfile)
+    with open('experiment_trials.json', 'w') as outfile:
+        json.dump(trials_dicts, outfile, indent=4, sort_keys=True)
     
 
 def get_sim_exec():
