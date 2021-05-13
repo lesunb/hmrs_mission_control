@@ -1,5 +1,6 @@
 from abc import abstractmethod
 import copy
+from typing import List
 
 from mission_control.mission.ihtn import ElementaryTask
 from mission_control.core import Worker, Estimate
@@ -14,7 +15,7 @@ class TaskContext:
         self.prev_ctx: TaskContext = None
         
     def start(self):
-        self.origin = self.worker.position
+        self.origin = self.worker.location
 
     def unwind(self, next_task: ElementaryTask):
         next_task_ctx = copy.copy(self)
@@ -44,7 +45,7 @@ class TaskContext:
             return None
 
 
-def create_context_gen(worker: Worker, task_list: [ElementaryTask]):
+def create_context_gen(worker: Worker, task_list: List[ElementaryTask]):
     task_context = TaskContext(worker=worker)
     task_context.start()
 

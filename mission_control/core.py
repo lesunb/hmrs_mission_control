@@ -39,8 +39,8 @@ class Worker:
     Minimal representation or robots for realizing the task allocation. 
     Snapshot view for realizing a short living evaluation
     """
-    def __init__(self, position=None, capabilities = [], skills = []):
-        self.position = position
+    def __init__(self, location=None, capabilities = [], skills = []):
+        self.location = location
         self.skills = skills
         self.properties_register = {}
         for capability in capabilities:
@@ -51,11 +51,12 @@ class Worker:
 
     def register(self, capability: Capability):
         for prop in capability.properties:
+            setattr(self, prop.key, prop.value)
             self.properties_register[prop.key]=prop.value
 
-def worker_factory(position, capabilities, skills):
+def worker_factory(location, capabilities, skills):
     # TODO check if have the required capabilities
-    unit = Worker(position=position, capabilities=capabilities, skills=skills)
+    unit = Worker(location=location, capabilities=capabilities, skills=skills)
     return unit
 
 class Request:

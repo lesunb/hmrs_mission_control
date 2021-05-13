@@ -60,17 +60,17 @@ for enum_item in poi:
 role_r1 = Role('r1')
 
 class robot(Enum):
-    a = worker_factory(position = poi.sr.value, 
+    a = worker_factory(location = poi.sr.value, 
         capabilities=[
             Move(avg_speed = 10, u='m/s')
         ],
         skills=[task_type.NAV_TO, task_type.PICK_UP])
-    b = worker_factory(position = poi.room1.value, 
+    b = worker_factory(location = poi.room1.value, 
         capabilities=[
             Move(avg_speed = 15, u='m/s')
         ],
         skills=[task_type.NAV_TO, task_type.PICK_UP])
-    c = worker_factory(position = poi.room1.value, 
+    c = worker_factory(location = poi.room1.value, 
         capabilities=[
             Move(avg_speed = 20, u='m/s')
         ],

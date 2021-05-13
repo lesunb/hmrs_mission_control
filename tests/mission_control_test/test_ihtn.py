@@ -18,24 +18,24 @@ def test_count_elementary_tasks(ihtn_pickup_sample):
 
 def test_abstract_task_assign_to(ihtn_pickup_sample):
     obtained = ihtn_pickup_sample.assign_to
-    expected = [Roles.r1, Roles.lab_arm, Roles.nurse]
+    expected = [r1, lab_arm, nurse]
     diff =  set(obtained) ^ set(expected)
     assert not diff
 
 def test_distribute_single_not_assigned_task(ihtn_deposit):
-    distribution = distribute(ihtn_deposit, Roles.r1)
+    distribution = distribute(ihtn_deposit, r1)
     assert distribution is None
 
 def test_distribute_single_assigned_task(ihtn_navto_room3):
-    distribution = distribute(ihtn_navto_room3, Roles.r1)
+    distribution = distribute(ihtn_navto_room3, r1)
     assert eq(distribution, ihtn_navto_room3, 'name', 'destination')
 
 
 def test_sync_between_two_agents(ihtn_unload_sample):
-     distribution = distribute(ihtn_unload_sample, Roles.r1)
+     distribution = distribute(ihtn_unload_sample, r1)
      assert count_elementary_tasks(distribution) == 2
      assert check_tasks_names(flat_plan(distribution), ['close_drawer_lab', 'open_drawer_lab', 'send_message', 'wait_message'])
 
 def test_distribute(ihtn_pickup_sample):
-    distribution = distribute(ihtn_pickup_sample, Roles.r1)
+    distribution = distribute(ihtn_pickup_sample, r1)
     assert count_elementary_tasks(distribution) == 9

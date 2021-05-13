@@ -16,7 +16,18 @@ from mission_control.mission.ihtn import Method, MethodOrdering, Task, Elementar
 from mission_control.core import POI, Worker, Role
 from mission_control.manager.coalition_formation import CoalitionFormationProcess
 
-class task_type(Enum):
+from mission_control.mission.ihtn import SyncTask
+
+class Defs(object):
+    def __iter__(self):
+        for attr in [attr for attr in dir(self) \
+            if not callable(getattr(self, attr)) and not attr.startswith("__")]:
+            yield getattr(self, attr)
+    def all(self):
+        return list(self)
+
+
+class task_type(Defs):
     NAV_TO = 'navigation'
     APPROACH_PERSON = 'approach_person'
     AUTHENTICATE_PERSON = 'authenticate_person'
@@ -24,8 +35,8 @@ class task_type(Enum):
     APPROACH_ROBOT = 'approach_robot'
     PICK_UP = 'pick_up'
     DEPOSIT = 'deposit'
-
-all_skills = [ tt.value for tt in task_type ]
+    
+all_skills = task_type().all()
 
 class poi(Enum):
     respiratory_control = POI("Respiratory Control")
@@ -56,10 +67,9 @@ all_rooms = [ poi_.value for poi_ in [ poi.ic_room_1, poi.ic_room_2, poi.ic_room
               poi.pc_room_3, poi.pc_room_4, poi.pc_room_5, poi.pc_room_6, 
               poi.pc_room_7, poi.pc_room_8, poi.pc_room_9, poi.pc_room_10 ]]
 
-class Roles(Enum):
-    nurse =  Role('nurse', type=Role.Type.NOT_MANAGED)
-    lab_arm = Role('lab_arm', type=Role.Type.NOT_MANAGED)
-    r1 = Role('r1')
+nurse =  Role('nurse', type=Role.Type.NOT_MANAGED)
+lab_arm = Role('lab_arm', type=Role.Type.NOT_MANAGED)
+r1 = Role('r1')
 
 # Defined as Enum so we can reference methods and tasks, and we can have references
 # to names that we later on set on them with set_name()
@@ -68,17 +78,17 @@ class Roles(Enum):
 def pickup_ihtn(pickup_location):
     class lab_samples_ihtn(Enum):
         # elementary tasks
-        navto_room = ElementaryTask(task_type.NAV_TO, destination=pickup_location, assign_to=[Roles.r1])
-        approach_nurse = ElementaryTask(task_type.APPROACH_PERSON, target=Roles.nurse, assign_to=[Roles.r1])
-        authenticate_nurse = ElementaryTask(task_type.AUTHENTICATE_PERSON, target=Roles.nurse, assign_to=[Roles.r1])
-        open_drawer = ElementaryTask(task_type.OPERATE_DRAWER, action='open', assign_to=[Roles.r1])
-        deposit = ElementaryTask(task_type.DEPOSIT, assign_to = [Roles.nurse])
-        close_drawer = ElementaryTask(task_type.OPERATE_DRAWER, action='close', assign_to=[Roles.r1])
-        navto_pharmacy = ElementaryTask(task_type.NAV_TO, destination=poi.pharmacy.value, assign_to=[Roles.r1])
-        approach_arm = ElementaryTask(task_type.APPROACH_ROBOT, target=Roles.lab_arm, assign_to=[Roles.r1])
-        open_drawer_lab = ElementaryTask(task_type.OPERATE_DRAWER, action='open', assign_to=[Roles.r1])
-        pick_up_sample  = ElementaryTask(task_type.PICK_UP, target=Roles.r1, assign_to=[Roles.lab_arm])
-        close_drawer_lab = ElementaryTask(task_type.OPERATE_DRAWER, action='close', assign_to=[Roles.r1])
+        navto_room = ElementaryTask(task_type.NAV_TO, destination=pickup_location, assign_to=[r1])
+        approach_nurse = ElementaryTask(task_type.APPROACH_PERSON, target=nurse, assign_to=[r1])
+        authenticate_nurse = ElementaryTask(task_type.AUTHENTICATE_PERSON, target=nurse, assign_to=[r1])
+        open_drawer = ElementaryTask(task_type.OPERATE_DRAWER, action='open', assign_to=[r1])
+        deposit = ElementaryTask(task_type.DEPOSIT, assign_to = [nurse])
+        close_drawer = ElementaryTask(task_type.OPERATE_DRAWER, action='close', assign_to=[r1])
+        navto_pharmacy = ElementaryTask(task_type.NAV_TO, destination=poi.pharmacy.value, assign_to=[r1])
+        approach_arm = ElementaryTask(task_type.APPROACH_ROBOT, target=lab_arm, assign_to=[r1])
+        open_drawer_lab = ElementaryTask(task_type.OPERATE_DRAWER, action='open', assign_to=[r1])
+        pick_up_sample  = ElementaryTask(task_type.PICK_UP, target=r1, assign_to=[lab_arm])
+        close_drawer_lab = ElementaryTask(task_type.OPERATE_DRAWER, action='close', assign_to=[r1])
 
         # methods and abstract tasks
         m_deposit = Method(subtasks = [open_drawer, deposit, close_drawer])
@@ -129,10 +139,27 @@ routes_ed = container[RoutesEnvironmentDescriptor]
 
 # skill desc
 nav_sd = container[NavigationSkillDescriptor]
+approach_person_sd = generic_skill_descriptor_constant_cost_factory('approach_person', 50)
+authenticate_person_sd = generic_skill_descriptor_constant_cost_factory('authenticate_person', 10)
+operate_drawer_sd = generic_skill_descriptor_constant_cost_factory('operate_drawer', 10)
+approach_robot_sd = generic_skill_descriptor_constant_cost_factory('approach_robot', 50)
 pick_up_sd = generic_skill_descriptor_constant_cost_factory('pick_up', 10)
 
+send_message_sd = generic_skill_descriptor_constant_cost_factory('send_message', 0)
+wait_message_sd = generic_skill_descriptor_constant_cost_factory('wait_message', 10)
+
 # skill desc container singleton
-sd_register = SkillDescriptorRegister( (task_type.NAV_TO, nav_sd), (task_type.PICK_UP, pick_up_sd))
+sd_register = SkillDescriptorRegister( 
+    (task_type.NAV_TO, nav_sd), 
+    (task_type.APPROACH_PERSON, approach_person_sd),
+    (task_type.AUTHENTICATE_PERSON, authenticate_person_sd),
+    (task_type.OPERATE_DRAWER, operate_drawer_sd),
+    (task_type.APPROACH_ROBOT, approach_robot_sd),
+    (task_type.PICK_UP, pick_up_sd),
+    (SyncTask.SyncType.SEND_MESSAGE, send_message_sd),
+    (SyncTask.SyncType.WAIT_MESSAGE, wait_message_sd)
+    )
+
 container[SkillDescriptorRegister] = sd_register
 
 # estimate manager

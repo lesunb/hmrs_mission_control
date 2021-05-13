@@ -5,7 +5,7 @@ from evaluation.framework.exec_sim import SimExec
 from evaluation.framework.trial import Trial
 from evaluation.framework.trial import total_combinations, draw_without_repetition, draw_with_repetition
 
-from resources.world_lab_samples import task_type, all_skills, all_rooms, pickup_ihtn, cf_process
+from resources.world_lab_samples import task_type, all_skills, all_rooms, cf_process, pickup_ihtn
 
 
 def gen_requests(times, locations):
@@ -57,6 +57,10 @@ def main():
         draw_without_repetition([x * 0.001 for x in range(10, 30)], number_of_robots),
         draw_without_repetition([x * 0.001 for x in range(10, 30)], number_of_robots),
     ]
+
+    # constant for all robots
+    avg_speed = [[10, 10, 10, 10, 10]]
+    
     
     # Design - total combination of robot factors
     ######
@@ -65,7 +69,9 @@ def main():
         'skills': skills,
         'location': locations,
         'battery_level': battery_levels,
-        'battery_consumption_rate': battery_consumption_rates })
+        'battery_consumption_rate': battery_consumption_rates,
+        'avg_speed': avg_speed
+    })
 
     # set of requests    
     trial_id = 0

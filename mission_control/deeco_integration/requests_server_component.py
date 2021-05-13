@@ -1,7 +1,7 @@
-from deeco.core import Component, Role, BaseKnowledge
+from deeco.core import Component, ComponentRole, BaseKnowledge
 
 # Roles
-class RequestsHandler(Role):
+class RequestsHandler(ComponentRole):
     __curr_requests_ids = None
 
     def __init__(self):

@@ -85,8 +85,8 @@ class CoalitionFormationProcess:
 
     def get_compatible_workers(self, task_list: List[ElementaryTask], workers: List[Worker]):
         """  get the workers that have the required skills for executing all tasks in 'task_list' """
-        required_skills = set([ task.type for task in task_list ])
-
+        required_skills = set([ task.type for task in task_list if isinstance(task, ElementaryTask)])
+    
         for worker in workers:
             if not required_skills.difference(worker.skills):
                 yield worker

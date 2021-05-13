@@ -3,16 +3,17 @@ from mission_control.core import Worker, POI
 from mission_control.mission.ihtn import ElementaryTask
 
 def test_task_context_start():
-    worker = Worker(position = (3, 4))
+    sr_poi = POI('storage_room')
+    worker = Worker(location = sr_poi)
     tsk_ctx = TaskContext(worker)
     tsk_ctx.start()
-    assert tsk_ctx.origin == (3, 4)
+    assert tsk_ctx.origin == sr_poi
 
 def test_task_context_get_properties():
     sr_poi = POI('storage_room')
     room3_poi = POI('room3')
 
-    worker = Worker(position = sr_poi)
+    worker = Worker(location = sr_poi)
     tsk_ctx = TaskContext(worker)
     tsk_ctx.start()
     task = ElementaryTask(type='navigate', destination=room3_poi)
@@ -30,7 +31,7 @@ task2 = ElementaryTask(type='navigate', destination=room1_poi)
 task3 = ElementaryTask(type='simple_action')
 task4 = ElementaryTask(type='navigate', destination=room3_poi)
 
-worker = Worker(position = sr_poi)
+worker = Worker(location = sr_poi)
 task_list = [task1, task2, task3, task4]
 
 def test_task_context_position_unwinding():

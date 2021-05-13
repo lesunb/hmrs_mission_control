@@ -32,6 +32,7 @@ class MissionCoordinationEnsemble(EnsembleDefinition):
 
 	def knowledge_exchange(self, coord: MissionCoordinator, member: Worker):	    
 		# member to coordinator
+		coord.update_worker(member)
 		if member.local_mission:
 			mission_assigned = self.get_mission_member_is_assigned(coord, member)
 			# update coordinator about progress

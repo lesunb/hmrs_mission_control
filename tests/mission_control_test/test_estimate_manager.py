@@ -20,7 +20,7 @@ task_list = [task1, task2, task3]
 
 worker1 = robots[1]
 
-worker_factory(position = poi.sr.value, 
+worker_factory(location = poi.sr.value, 
         capabilities=[
             Move(avg_speed = 15, u='m/s'),
             # power_source_battery( 

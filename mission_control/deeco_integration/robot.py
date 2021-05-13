@@ -19,6 +19,7 @@ class Worker(ComponentRole):
 		self.location: POI = None
 		self.battery_level: float = None
 		self.battery_consumption_rate: float = None
+		self.avg_speed: float = None
 
 # Component
 class Robot(Component):
@@ -37,7 +38,8 @@ class Robot(Component):
 				location: POI,
 				battery_level: float,
 				battery_consumption_rate: float,
-				local_mission: LocalMission=None):
+				local_mission: LocalMission=None,
+				avg_speed = 0):
 
 		super().__init__(node)
 
@@ -48,6 +50,7 @@ class Robot(Component):
 		self.knowledge.battery_level = battery_level
 		self.knowledge.battery_consumption_rate = battery_consumption_rate
 		self.knowledge.local_mission = local_mission
+		self.knowledge.avg_speed = avg_speed
 
 		print("Robot " + str(self.knowledge.id) + " created")
 	

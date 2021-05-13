@@ -21,7 +21,7 @@ class NavigationSkillDescriptor(SkillDescriptor):
     def estimate(self, task_context):
         origin: POI = task_context.get('origin')
         dest: POI = task_context.get('destination')
-        avg_speed = task_context.worker.get('avg_speed')
+        avg_speed = task_context.worker.avg_speed
 
         route = self.routes_ed.get(origin, dest)
         if not route:

@@ -37,7 +37,7 @@ class SimExec:
     def instantiate_robot_component(node, **initial_knowledge):
          return Robot(node, **initial_knowledge)
 
-    def run(self, trial: Trial, limit_ms=3000):
+    def run(self, trial: Trial, limit_ms=5000):
         requests = trial.requests
         robots_initial_conf = trial.robots
         

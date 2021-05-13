@@ -1,8 +1,8 @@
 
-from deeco.core import BaseKnowledge, Role, Component, Node
+from deeco.core import BaseKnowledge, ComponentRole, Component, Node
 
 
-class MissionClient(Role):
+class MissionClient(ComponentRole):
     def __init__(self):
         super().__init__()
         self.requests = []

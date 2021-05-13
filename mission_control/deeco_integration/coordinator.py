@@ -14,7 +14,16 @@ from ..manager.supervision import SupervisionProcess
 class MissionCoordinator(ComponentRole):
     def __init__(self):
         self.missions: List[MissionContext] = []
-        self.active_workers: List[Worker] = None
+        self.active_workers: List[Worker] = []
+    
+    def update_worker(self, worker):
+        to_remove = None
+        for aw in self.active_workers:
+            if aw.id == worker.id:
+                to_remove = aw
+        if to_remove is not None:
+            self.active_workers.remove(to_remove)
+        self.active_workers.append(worker)
 
 
 class Coordinator(Component, MissionHandler):
