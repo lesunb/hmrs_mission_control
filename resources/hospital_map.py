@@ -2,8 +2,8 @@ from mission_control.common_descriptors.routes_ed import Map, Nodes
 
 def create_hospital_scenario_map() -> Map:
     map = Map()
-    respiratory_control = Nodes("Respiratory Control", [-37, 35])
-    ic_corridor_1 = Nodes("IC Corridor 1", [-37, 35])
+    respiratory_control = Nodes("Respiratory Control", [-37, 36])
+    ic_corridor_1 = Nodes("IC Corridor 1", [-37, 34])
     ic_corridor_2 = Nodes("IC Corridor 2", [-37, 23])
     ic_corridor_3 = Nodes("IC Corridor 3", [-37, 16])
 
