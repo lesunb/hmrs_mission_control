@@ -42,6 +42,12 @@ class Map:
     def get_waypoint(self, poi: POI) -> Nodes:
         return self.get_node(poi.label)
 
+    def __iter__(self):
+        for node in self.nodes:
+            yield node
+        return
+
+
 
 class Route:
     def __init__(self, origin: Nodes, destination: Nodes, nodes=[Nodes]):
