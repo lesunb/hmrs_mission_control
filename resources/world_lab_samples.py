@@ -10,7 +10,7 @@ from mission_control.common_descriptors.generic_constant_cost_sd import generic_
 from mission_control.common_descriptors.navigation_sd import NavigationSkillDescriptor
 from mission_control.common_descriptors.routes_ed import Map, RoutesEnvironmentDescriptor
 
-from resources.hospital_map import create_hospial_scenario_map
+from resources.hospital_map import create_hospital_scenario_map
 
 from mission_control.mission.ihtn import Method, MethodOrdering, Task, ElementaryTask, AbstractTask
 from mission_control.core import POI, Worker, Role
@@ -129,7 +129,7 @@ def ihtn_deposit():
 
 ##
 # Map
-hospital_map = create_hospial_scenario_map()
+hospital_map = create_hospital_scenario_map()
 def get_position_of_poi(poi: POI):
     return tuple(hospital_map.get_node(poi.label).coords)
 
@@ -139,7 +139,7 @@ def get_position_of_poi(poi: POI):
 
 container = Container()
 # env desc
-container[Map] = hospital_map = create_hospial_scenario_map()
+container[Map] = hospital_map = create_hospital_scenario_map()
 
 routes_ed = container[RoutesEnvironmentDescriptor]
 
