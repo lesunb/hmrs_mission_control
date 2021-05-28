@@ -14,7 +14,7 @@ from resources.hospital_map import create_hospital_scenario_map
 
 from mission_control.mission.ihtn import Method, MethodOrdering, Task, ElementaryTask, AbstractTask
 from mission_control.core import POI, Worker, Role
-from mission_control.manager.coalition_formation import CoalitionFormationProcess
+from mission_control.processes.coalition_formation import CoalitionFormationProcess
 
 from mission_control.mission.ihtn import SyncTask
 

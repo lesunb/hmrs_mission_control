@@ -1,7 +1,7 @@
 
 from ..world_collector import *
 
-from mission_control.manager.coalition_formation import CoalitionFormationProcess, Bid
+from mission_control.processes.coalition_formation import CoalitionFormationProcess, Bid
 from mission_control.core import Estimate, ImpossibleToEstimate, MissionContext
 
 nav_to_room3 = collection_ihtn.navto_room3.value

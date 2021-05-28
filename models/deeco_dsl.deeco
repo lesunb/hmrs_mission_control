@@ -1,0 +1,56 @@
+role Worker:
+    skills, local_mission, location, battery_level, battery_consumption_rate, avg_speed
+
+component Robot features Worker
+    knowledge:
+        skills = []
+        local_mission = ...
+        location = ...
+        battery_level = ...
+        battery_consumption_rate = ...
+        avg_speed = ...
+        task_status = ...
+
+    process task_execution
+        in local_mission
+        inout task_status
+
+component MissionCoordinator:
+    missions: List:[MissionContext], active_workers
+
+
+component Coordinator features MissionCoordinator
+    knowledge
+        missions: List:[MissionContext] = []
+        active_workers: List[Worker]  = []
+
+    process coalition_formation
+        inout missions
+        inout active_workers
+        function:
+            ...
+        scheduling: periodic( 100ms )
+
+    process supervision
+        inout missions
+        function:
+            ...
+        scheduling: periodic( 100ms )
+
+
+ensemble MissionCoordination:
+    coordinator: MissionCoordinator
+    member: Worker
+
+    membership:
+        True
+    
+    knowledge exchange:
+        # member to coordinator
+        coord.workers <- member
+        mission_assigned = self.get_mission_member_is_assigned(coord, member)
+        update_mission_progress(mission_assigned, member.local_mission)
+        # coordinator to member
+        member.local_mission <- get_member_local_mission(coordinator, member)
+    scheduling: periodic( 100ms )
+

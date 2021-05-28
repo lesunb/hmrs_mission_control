@@ -16,7 +16,7 @@ from mission_control.deeco_integration.plugins.requests_queue import RequestsQue
 from mission_control.deeco_integration.mission_coordination_ensemble import MissionCoordinationEnsemble
 
 
-from mission_control.manager.coalition_formation import CoalitionFormationProcess
+from mission_control.processes.coalition_formation import CoalitionFormationProcess
 
 from resources.world_lab_samples import *
 

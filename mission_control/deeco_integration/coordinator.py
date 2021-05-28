@@ -4,9 +4,9 @@ from deeco.core import BaseKnowledge, Component, ComponentRole, Node
 from deeco.core import process
 
 from ..core import MissionContext, Worker
-from ..manager.integration import MissionHandler, MissionUnnexpectedError
-from ..manager.coalition_formation import CoalitionFormationProcess
-from ..manager.supervision import SupervisionProcess
+from ..processes.integration import MissionHandler, MissionUnnexpectedError
+from ..processes.coalition_formation import CoalitionFormationProcess
+from ..processes.supervision import SupervisionProcess
 
 
 class MissionCoordinator(ComponentRole):

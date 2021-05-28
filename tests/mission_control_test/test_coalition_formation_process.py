@@ -4,7 +4,7 @@ from ..world_collector import *
 
 from mission_control.mission.ihtn import Task
 from mission_control.core import MissionContext
-from mission_control.manager.integration import MissionHandler
+from mission_control.processes.integration import MissionHandler
 
 
 

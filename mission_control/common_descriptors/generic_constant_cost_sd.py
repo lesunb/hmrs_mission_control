@@ -1,8 +1,7 @@
 from typing import Final
 
 from ..estimate.core import SkillDescriptor
-from .routes_ed import RoutesEnvironmentDescriptor
-from ..core import POI, Capability, Estimate, ImpossibleToEstimate
+from ..core import Estimate
 
 
 def generic_skill_descriptor_constant_cost_factory(name, time_constant_cost):
