@@ -77,7 +77,7 @@ def create_hospital_scenario_map() -> Map:
 
     lab.add_edges([lab_corridor])
 
-    map.add_nodes([respiratory_control, ic_corner
+    map.add_nodes([respiratory_control, ic_corner,
                    ic_corridor_1, ic_corridor_2, ic_corridor_3,
                    ic_corridor_4, ic_corridor_5, ic_corridor_6,
                    ic_room_1, ic_room_2, ic_room_3, ic_room_4, ic_room_5, ic_room_6,
