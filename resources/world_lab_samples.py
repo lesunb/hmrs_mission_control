@@ -59,13 +59,18 @@ class poi(Enum):
     pc_room_9 = POI("PC Room 9")
     pc_room_10 = POI("PC Room 10")
     reception = POI("Reception")
-    pharmacy_corridor = POI("Pharmacy Corridor")
-    pharmacy = POI("Pharmacy")
+    lab_corridor = POI("Laboratory Corridor")
+    laboratory = POI("Laboratory")
 
 all_rooms = [ poi_.value for poi_ in [ poi.ic_room_1, poi.ic_room_2, poi.ic_room_3, poi.ic_room_4, 
               poi.ic_room_5, poi.ic_room_6, poi.pc_room_1, poi.pc_room_2, 
               poi.pc_room_3, poi.pc_room_4, poi.pc_room_5, poi.pc_room_6, 
               poi.pc_room_7, poi.pc_room_8, poi.pc_room_9, poi.pc_room_10 ]]
+
+near_ic_pc_rooms = [ poi_.value for poi_ in [   
+              poi.ic_room_2, poi.ic_room_3, poi.ic_room_4, poi.ic_room_5, poi.ic_room_6,
+              poi.pc_room_3, poi.pc_room_4, poi.pc_room_5, poi.pc_room_6, 
+              poi.pc_room_7, poi.pc_room_8]]
 
 nurse =  Role('nurse', type=Role.Type.NOT_MANAGED)
 lab_arm = Role('lab_arm', type=Role.Type.NOT_MANAGED)
@@ -84,7 +89,7 @@ def pickup_ihtn(pickup_location):
         open_drawer = ElementaryTask(task_type.OPERATE_DRAWER, action='open', assign_to=[r1])
         deposit = ElementaryTask(task_type.DEPOSIT, assign_to = [nurse])
         close_drawer = ElementaryTask(task_type.OPERATE_DRAWER, action='close', assign_to=[r1])
-        navto_pharmacy = ElementaryTask(task_type.NAV_TO, destination=poi.pharmacy.value, assign_to=[r1])
+        navto_lab = ElementaryTask(task_type.NAV_TO, destination=poi.laboratory.value, assign_to=[r1])
         approach_arm = ElementaryTask(task_type.APPROACH_ROBOT, target=lab_arm, assign_to=[r1])
         open_drawer_lab = ElementaryTask(task_type.OPERATE_DRAWER, action='open', assign_to=[r1])
         pick_up_sample  = ElementaryTask(task_type.PICK_UP, target=r1, assign_to=[lab_arm])
@@ -97,7 +102,7 @@ def pickup_ihtn(pickup_location):
         retrive_sample = AbstractTask(methods=[m_retrieve])
         m_unload = Method(subtasks=[open_drawer_lab, pick_up_sample, close_drawer_lab])
         unload_sample = AbstractTask(methods=[m_unload])
-        m_mission = Method(subtasks=[navto_room, retrive_sample, navto_pharmacy, approach_arm, unload_sample])
+        m_mission = Method(subtasks=[navto_room, retrive_sample, navto_lab, approach_arm, unload_sample])
 
         # root task
         pickup_sample = AbstractTask(methods=[m_mission])

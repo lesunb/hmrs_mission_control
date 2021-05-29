@@ -7,7 +7,7 @@ from evaluation.framework.exec_sim import SimExec
 from evaluation.framework.trial import Trial
 from evaluation.framework.trial import total_combinations, draw_without_repetition, draw_with_repetition
 
-from resources.world_lab_samples import task_type, all_skills, all_rooms, cf_process, pickup_ihtn, get_position_of_poi
+from resources.world_lab_samples import task_type, all_skills, near_ic_pc_rooms, cf_process, pickup_ihtn, get_position_of_poi
 
 
 def gen_requests(times, locations, rand):
@@ -43,9 +43,9 @@ def main():
 
     # three selections of positions for each robot
     locations = [ 
-        draw_without_repetition(all_rooms, number_of_robots, random),
-        draw_without_repetition(all_rooms, number_of_robots, random),
-        draw_without_repetition(all_rooms, number_of_robots, random)
+        draw_without_repetition(near_ic_pc_rooms, number_of_robots, random),
+        draw_without_repetition(near_ic_pc_rooms, number_of_robots, random),
+        draw_without_repetition(near_ic_pc_rooms, number_of_robots, random)
     ]
 
     # three selections of starting battery level for each robot
@@ -93,7 +93,7 @@ def main():
             trial_robots.append(robot_facotrs)
 
         
-        locations_without_robot = list(set(all_rooms) - set(trial_robots_factors['location']))
+        locations_without_robot = list(set(near_ic_pc_rooms) - set(trial_robots_factors['location']))
         # generate the a request for each time
         requests = []
         requests_locations = []
