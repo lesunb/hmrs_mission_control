@@ -79,8 +79,10 @@ def create_hospital_scenario_map() -> Map:
 
     map.add_nodes([respiratory_control,
                    ic_corridor_1, ic_corridor_2, ic_corridor_3,
+                   ic_corridor_4, ic_corridor_5, ic_corridor_6,
                    ic_room_1, ic_room_2, ic_room_3, ic_room_4, ic_room_5, ic_room_6,
                    pc_corridor_1, pc_corridor_2, pc_corridor_3, pc_corridor_4,
+                   pc_corridor_5, pc_corridor_6, pc_corridor_7, pc_corridor_8,
                    pc_room_1, pc_room_2, pc_room_3, pc_room_4, pc_room_5,
                    pc_room_6, pc_room_7, pc_room_8, lab, lab_corridor])
     return map
