@@ -13,6 +13,7 @@ def test_mission_no_mission():
     assert True
 
 def test_mission_start(ihtn_collect):
+    global_mission = collection_ihtn.collect.value.clone()
     seq_proc = SequencingProcess(skill_library = collector_skill_library)
     task_status = TaskStatus()
     local_mission_ctrl  = LocalMissionController(ihtn_collect)
@@ -22,11 +23,11 @@ def test_mission_start(ihtn_collect):
     assert isinstance(local_mission_ctrl._curr_task, ElementaryTask)
 
 
-def test_task_finished_and_has_next():
-    global_mission = collection_ihtn.collect.value.clone()
+def test_task_finished_and_has_next(ihtn_collect):
+    #global_mission = collection_ihtn.collect.value.clone()
     seq_proc = SequencingProcess(skill_library = collector_skill_library)
     task_status = TaskStatus()
-    local_mission_ctrl  = LocalMissionController(global_mission)
+    local_mission_ctrl  = LocalMissionController(ihtn_collect)
     active_skill_crl= ActiveSkillController()
     
     # Two ticks to complete the first task
@@ -54,7 +55,7 @@ def test_mission_just_finished():
 
     # Next tick loads the next task
     seq_proc.run(local_mission_ctrl, active_skill_crl, task_status=task_status)
-    assert local_mission_ctrl._curr_task == collection_ihtn.pick_up_object.value
+    assert collection_ihtn.pick_up_object.value == local_mission_ctrl._curr_task
     seq_proc.run(local_mission_ctrl, active_skill_crl, task_status=task_status)
      # mission concluded
     assert local_mission_ctrl._curr_task == None

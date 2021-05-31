@@ -28,7 +28,7 @@ class ElementaryTask(Task):
         self.type = type
         self.name = None
         super().__init__(**kwargs)
-        self._attrs = list(filter(lambda a: not a.startswith('__'), dir(self)))
+        self._attrs = list(filter(lambda a: not a.startswith('__') and not callable(getattr(self, a)), dir(self)))
     
     def clone(self):
         cpy = copy(self)

@@ -13,18 +13,16 @@ def test_local_mission_has_plan(ihtn_collect):
     assert not lm_ctrl.has_no_plan()
 
 
-def test_local_mission_get_first_task():
-    root = collection_ihtn.collect.value
-    lm_ctrl = LocalMissionController(local_plan= root)
+def test_local_mission_get_first_task(ihtn_collect):
+    lm_ctrl = LocalMissionController(local_plan= ihtn_collect)
     task = lm_ctrl.next_task()
-    assert collection_ihtn.navto_room3.value is task
+    assert collection_ihtn.navto_room3.value == task
 
-def test_local_mission_get_second_task():
-    root = collection_ihtn.collect.value
-    lm_ctrl = LocalMissionController(local_plan= root)
+def test_local_mission_get_second_task(ihtn_collect):
+    lm_ctrl = LocalMissionController(local_plan= ihtn_collect)
     task = lm_ctrl.next_task()
     tick = TickStatus(status = TickStatus.Type.SUCCESS_END, task=task)
     lm_ctrl.update(tick)
     second_task = lm_ctrl.next_task()
-    assert collection_ihtn.pick_up_object.value is second_task
+    assert collection_ihtn.pick_up_object.value == second_task
 

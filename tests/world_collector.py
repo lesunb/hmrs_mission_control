@@ -98,7 +98,7 @@ for enum_item in collection_ihtn:
 
 @pytest.fixture
 def ihtn_collect():
-    return collection_ihtn.collect.value
+    return collection_ihtn.collect.value.clone()
 
 @pytest.fixture
 def r1():
