@@ -90,7 +90,7 @@ class LocalMission:
         CONCLUDED = 4
         NOT_MANAGED = 5
 
-    def __init__(self, local_plan:Task, role, global_mission, worker = None):
+    def __init__(self, local_plan: Task, role, global_mission, worker = None):
         self.plan: Task = local_plan
         self.role = role
         self.global_mission = global_mission

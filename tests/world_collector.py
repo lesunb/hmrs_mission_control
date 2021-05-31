@@ -1,3 +1,4 @@
+from mission_control.processes.sequencing import SkillImplementation, SkillLibrary, TickStatus
 import pytest
 
 from lagom import Container
@@ -64,17 +65,17 @@ class robot(Enum):
         capabilities=[
             Move(avg_speed = 10, u='m/s')
         ],
-        skills=[task_type.NAV_TO, task_type.PICK_UP])
+        skills=[task_type.NAV_TO.value, task_type.PICK_UP.value])
     b = worker_factory(location = poi.room1.value, 
         capabilities=[
             Move(avg_speed = 15, u='m/s')
         ],
-        skills=[task_type.NAV_TO, task_type.PICK_UP])
+        skills=[task_type.NAV_TO.value, task_type.PICK_UP.value])
     c = worker_factory(location = poi.room1.value, 
         capabilities=[
             Move(avg_speed = 20, u='m/s')
         ],
-        skills=[task_type.NAV_TO])
+        skills=[task_type.NAV_TO.value])
 
 for enum_item in robot:
     setattr(enum_item.value, 'name', enum_item.name)
@@ -84,8 +85,8 @@ robots = [ unit.value for unit in robot ]
 # to names that we later on set on them with set_name()
 class collection_ihtn(Enum):
     # elementary tasks
-    navto_room3 = ElementaryTask(task_type.NAV_TO, destination=poi.room3.value, assign_to=[role_r1])
-    pick_up_object  = ElementaryTask(task_type.PICK_UP, target=role_r1, assign_to=[role_r1])
+    navto_room3 = ElementaryTask(task_type.NAV_TO.value, destination=poi.room3.value, assign_to=[role_r1])
+    pick_up_object  = ElementaryTask(task_type.PICK_UP.value, target=role_r1, assign_to=[role_r1])
     m_collect = Method(subtasks=[navto_room3, pick_up_object])
 
     # root task
@@ -127,7 +128,7 @@ nav_sd = container[NavigationSkillDescriptor]
 pick_up_sd = generic_skill_descriptor_constant_cost_factory('pick_up', 10)
 
 # skill desc container singleton
-sd_register = SkillDescriptorRegister( (task_type.NAV_TO, nav_sd), (task_type.PICK_UP, pick_up_sd))
+sd_register = SkillDescriptorRegister( (task_type.NAV_TO.value, nav_sd), (task_type.PICK_UP.value, pick_up_sd))
 container[SkillDescriptorRegister] = sd_register
 
 
@@ -150,3 +151,28 @@ def estimate_manager():
 @pytest.fixture
 def routes_envdesc():
     return routes_ed
+
+
+###
+# Execution
+###
+class OneTickSkill(SkillImplementation):
+    task = None
+    def on_load(self, task):
+        self.tick_count = 0
+        self.task = task
+        print(task)
+
+    def on_tick(self):
+        if self.tick_count is 0:
+            self.tick_count = 1
+            return TickStatus(status=TickStatus.Type.IN_PROGRESS, task=self.task)
+        else:
+            return TickStatus(status=TickStatus.Type.SUCCESS_END, task=self.task)
+
+    def on_complete(self):
+        print(f'task completed')
+
+collector_skill_library = SkillLibrary()
+collector_skill_library.add(task_type.NAV_TO.value, OneTickSkill)
+collector_skill_library.add(task_type.PICK_UP.value, OneTickSkill)

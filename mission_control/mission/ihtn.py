@@ -9,10 +9,14 @@ class MethodOrdering(Enum):
     NON_ORDERED = 1
 
 class Task:
+    id = 0
     def __init__(self, **kwargs):
+        self.id = Task.id
+        Task.id += 1
         self.assign_to = None
         self.attributes = kwargs
         self.__dict__.update(kwargs)
+
 
     @abstractmethod
     def clone():
@@ -21,11 +25,29 @@ class Task:
 
 class ElementaryTask(Task):
     def __init__(self, type, **kwargs):
-        super().__init__(**kwargs)
         self.type = type
+        self.name = None
+        super().__init__(**kwargs)
+        self._attrs = list(filter(lambda a: not a.startswith('__'), dir(self)))
     
     def clone(self):
-        return copy(self)
+        cpy = copy(self)
+        return cpy
+    
+    def __eq__(self, other):
+        if isinstance(other, ElementaryTask):
+            if self.id == other.id:
+                for key in self._attrs:
+                    if getattr(other, key) != getattr(other, key):
+                        return False
+                return True
+        return False
+
+    def __hash__(self):
+        str_ = str(list(map( lambda k:(k,getattr(self, k)), self._attrs)))
+        hashx =  hash(str_)
+        return hashx
+
 
 class SyncTask(Task):
     class SyncType(Enum):
@@ -48,7 +70,7 @@ class Method:
     
     def clone(self):
         new_ = copy(self)
-        new_.subtasks = None
+        new_.subtasks = list(map(lambda st:st.clone(), self.subtasks))
         return new_
 
 
@@ -82,8 +104,8 @@ class AbstractTask(Task):
 
     def clone(self):
         new_ = copy(self)
-        new_.selected_method = None
-        new_.methods = None
+        new_.selected_method = self.selected_method.clone()
+        new_.methods = list(map( lambda m: m.clone(), self.methods))
         return new_
 
 

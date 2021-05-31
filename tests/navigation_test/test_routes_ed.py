@@ -22,16 +22,16 @@ def test_routes_going_and_back_should_be_same_distance():
 def test_routes_going_and_back_should_be_same_distance_2():
     map = create_hospital_scenario_map()
     routes_ed: RoutesEnvironmentDescriptor = RoutesEnvironmentDescriptor(map)
-    route1 = routes_ed.get(POI("PC Room 9"), POI("PC Room 10"))
-    route2 = routes_ed.get(POI("PC Room 10"), POI("PC Room 9"))
+    route1 = routes_ed.get(POI("IC Room 2"), POI("PC Room 5"))
+    route2 = routes_ed.get(POI("PC Room 5"), POI("IC Room 2"))
     assert route1.get_distance() == route2.get_distance()
 
 
 def test_routes_going_and_back_should_be_same_distance_2():
     map = create_hospital_scenario_map()
     routes_ed: RoutesEnvironmentDescriptor = RoutesEnvironmentDescriptor(map)
-    route1 = routes_ed.get(POI("PC Room 9"), POI("PC Room 10"))
-    route2 = routes_ed.get(POI("PC Room 10"), POI("PC Room 9"))
+    route1 = routes_ed.get(POI("PC Room 7"), POI("PC Room 8"))
+    route2 = routes_ed.get(POI("PC Room 8"), POI("PC Room 7"))
     assert route1.get_distance() == route2.get_distance()
 
 

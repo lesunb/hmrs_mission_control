@@ -14,7 +14,7 @@ def test_flat_plan(cf_process: CoalitionFormationProcess, ihtn_collect):
 
 
 def test_get_compatible_workers(cf_process: CoalitionFormationProcess, ihtn_collect, collection_robots, collection_robots_a_and_b):
-    task_list = cf_process.flat_plan(ihtn_collect,)
+    task_list = cf_process.flat_plan(ihtn_collect)
     comp_workers = list(cf_process.get_compatible_workers(task_list, collection_robots))
     # robot_a and robot_b have the skills, robot_c does not
     diff =  set(comp_workers) ^ set(collection_robots_a_and_b)

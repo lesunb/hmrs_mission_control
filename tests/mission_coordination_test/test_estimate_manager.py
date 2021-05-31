@@ -11,9 +11,9 @@ from mission_control.mission.ihtn import ElementaryTask
 from mission_control.common_descriptors.routes_ed import RoutesEnvironmentDescriptor, Map
 from mission_control.common_descriptors.navigation_sd import NavigationSkillDescriptor, Move
 
-task1 = ElementaryTask(type=task_type.NAV_TO, destination=poi.room3.value)
-task2 = ElementaryTask(type=task_type.NAV_TO, destination=poi.room1.value)
-task3 = ElementaryTask(type=task_type.NAV_TO, destination=poi.room3.value)
+task1 = ElementaryTask(type=task_type.NAV_TO.value, destination=poi.room3.value)
+task2 = ElementaryTask(type=task_type.NAV_TO.value, destination=poi.room1.value)
+task3 = ElementaryTask(type=task_type.NAV_TO.value, destination=poi.room3.value)
 
 task_list = [task1, task2, task3]
 
@@ -27,7 +27,7 @@ worker_factory(location = poi.sr.value,
             #     { capacity:1000, u:'Ah'},
             #     { charge:900, u:'Ah'}, ),
         ],
-        skills=[task_type.NAV_TO],
+        skills=[task_type.NAV_TO.value],
         # models=[
         #     c('constant_power_consumption', rate=300, u='Ah'),
         # ]
