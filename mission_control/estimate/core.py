@@ -2,14 +2,14 @@ from abc import abstractmethod
 import copy
 from typing import List
 
-from mission_control.mission.ihtn import ElementaryTask
+from mission_control.mission.ihtn import ElementaryTask, Task
 from mission_control.core import Worker, Estimate
 
 
 class TaskContext:
     def __init__(self, worker: Worker):
         self.worker = worker
-        self.task = None
+        self.task: Task = None
         self.factors = None
         self.origin = None
         self.prev_ctx: TaskContext = None

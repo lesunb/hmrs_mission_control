@@ -28,5 +28,5 @@ class NavigationSkillDescriptor(SkillDescriptor):
             return ImpossibleToEstimate(reason=f'No route from {origin} to {dest}')
         distance = route.get_distance()
         estimate_time = distance / avg_speed
-        return Estimate(time = estimate_time, plan=route, task=task_context.task)
+        return Estimate(time = estimate_time), route
 

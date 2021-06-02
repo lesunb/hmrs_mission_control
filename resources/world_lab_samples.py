@@ -124,7 +124,7 @@ def ihtn_pickup_sample():
 @pytest.fixture
 def ihtn_unload_sample():
     _, lab_samples_ihtn =  pickup_ihtn(poi.ic_room_3.value)
-    return lab_samples_ihtn.unload_sample.value
+    return lab_samples_ihtn.unload_sample.value.clone()
 
 @pytest.fixture
 def ihtn_navto_room3():

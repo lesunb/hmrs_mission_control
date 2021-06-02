@@ -1,11 +1,12 @@
 
-from typing import Generator, Dict, List, Sequence
+from mission_control.mission.ihtn import transverse_ihtn_apply_for_task
+from typing import Generator, Dict, List, Sequence, Tuple
 
-from mission_control.mission.ihtn import ElementaryTask, Task
+from mission_control.mission.ihtn import Assignment, ElementaryTask, Task
 from mission_control.mission.planning import distribute, flat_plan
 from .integration import MissionHandler, MissionUnnexpectedError
-from ..core import MissionContext, Worker, LocalMission, Role
-from ..estimate.estimate import EstimateManager, Bid
+from ..core import Estimate, MissionContext, Worker, LocalMission, Role
+from ..estimate.estimate import EstimateManager, Bid, Partial
 
 def coalitionFormationError(e, mission_context):
     message = f'Unexpected error forming coalition for {mission_context}'
@@ -31,7 +32,7 @@ class CoalitionFormationProcess:
     def do_run(self, mission_context: MissionContext, workers: List[Worker], mission_handler: MissionHandler):
         if mission_context.status == MissionContext.Status.NEW:
             mission_context.local_missions = list(self.initialize_local_missions(mission_context))
-            mission_context.state = MissionContext.Status.PENDING_ASSIGNMENTS
+            mission_context.status = MissionContext.Status.PENDING_ASSIGNMENTS
             mission_handler.start_mission(mission_context)
 
         is_success = self.create_coalition(mission_context, workers)
@@ -62,7 +63,7 @@ class CoalitionFormationProcess:
             plan_rank_map[local_mission] = bids
 
         selected_bids =  self.select_bids(plan_rank_map)
-        self.set_assignment_from_selected_bids(selected_bids)
+        self.set_assignment_from_selected_bids(mission_context, selected_bids)
         return True
 
     @staticmethod    
@@ -115,14 +116,19 @@ class CoalitionFormationProcess:
             selected_bids[local_mission] = bid_rank[0]
         return selected_bids
     
-    def set_assignment_from_selected_bids(self, selected_bids):
+    def set_assignment_from_selected_bids(self, mission_context: MissionContext, selected_bids: Dict[LocalMission, Bid]):
         for local_mission, bid in selected_bids.items():
             local_mission.worker = bid.worker
             local_mission.status = LocalMission.Status.PENDING_COMMIT
-            self.set_plans_into_tasks(local_mission, bid.partials)
-    
-    @staticmethod
-    def set_plans_into_tasks(local_mission, partials):
-        for partial in partials:
-            if partial.plan is not None:
-                partial.task.plan = partial.plan
+            # set assignment on global plan
+            global_plan = mission_context.global_plan
+
+            winning_bid_tasks = list(map(lambda p: p.task, bid.partials))
+            partials_map = {}
+            for partial in bid.partials:
+                partials_map[partial.task] = Assignment(partial.estimate, partial.plan)
+            
+            def set_assignment(ihtn_task: Task, task: Task):
+                ihtn_task.assignment = partials_map[task]
+
+            transverse_ihtn_apply_for_task(global_plan, winning_bid_tasks, set_assignment)

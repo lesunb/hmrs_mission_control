@@ -71,4 +71,3 @@ def test_eliminate_left_task_all_tasks():
     assert res_plan is None
     
 
-        

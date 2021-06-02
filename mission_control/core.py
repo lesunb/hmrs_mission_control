@@ -72,12 +72,12 @@ class Request:
         self.id = Request.__gen_id()
 
 class Estimate:
-    def __init__(self, task=None, time=math.inf, energy=math.inf, plan=None):
+    def __init__(self, time=math.inf, energy=math.inf, progress: float=0.0):
         self.is_impossible_to_estimate = False
-        self.task, self.time, self.energy, self.plan = task, time, energy, plan
+        self.time, self.energy, self.progress = time, energy, progress
 
 class ImpossibleToEstimate(Estimate):
-    def __init__(self, reason:str, ):
+    def __init__(self, reason:str):
         super().__init__(time = math.inf, energy = math.inf)
         self.reason = reason
         self.is_impossible_to_estimate = True
@@ -114,6 +114,8 @@ class MissionContext:
         self.occurances = []
     
 
-            
+class MissionStatus:
+    def __init__(self, time_remaining):
+        self.time_remaining = time_remaining
 
     

@@ -8,10 +8,6 @@ from mission_control.processes.integration import MissionHandler
 
 
 
-class MissionHandlerMock(MissionHandler):
-    def start_mission(*params):
-        pass
-
 
 
 def test_coalition_formation_process(cf_process: CoalitionFormationProcess, ihtn_collect: Task, collection_robots):

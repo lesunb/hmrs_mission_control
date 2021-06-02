@@ -1,8 +1,11 @@
 
 
+import functools
+import operator
+from mission_control.mission.ihtn import Assignment, Task, TaskState, TaskStatus, ihtn_aggregate, transverse_ihtn
 from typing import List
 
-from ..core import MissionContext, Worker
+from ..core import Estimate, MissionContext, MissionStatus, Worker
 from .integration import MissionHandler, MissionUnnexpectedError
 
 def createError(e, acitve_mission, updates):
@@ -75,6 +78,31 @@ class SupervisionProcess:
 
     def get_progress():
         pass
+
+    def evaluate_mission_status(mission_context: MissionContext) -> MissionStatus:
+        def get_remaining_time(task: Task):
+            if task.state.is_status(TaskStatus.SUCCESS_END):
+                return 0
+            estimate: Estimate = task.assignment.estimate
+            state: TaskState = task.state
+            return estimate.time * \
+                        (1 - state.progress)
+
+        def set_remaining_time(task: Task, remaining_time):
+            if  task.assignment is None:
+                task.assignment = Assignment()
+            if  task.assignment.estimate is None:
+                task.assignment.estimate = Estimate()
+            task.assignment.estimate.time = remaining_time
+
+        def sum_remaining_time(abs_task: Task, subtasks: List[Task]):
+            remaining_time = functools.reduce(operator.add, 
+                map(lambda task: get_remaining_time(task)
+                    ,subtasks))
+            set_remaining_time(abs_task, remaining_time)
+
+        ihtn_aggregate(mission_context.global_plan, sum_remaining_time)
+        return MissionStatus(get_remaining_time(mission_context.global_plan))
 
 
     def try_handle_failure(self, failure):

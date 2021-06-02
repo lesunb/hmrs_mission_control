@@ -11,7 +11,7 @@ def generic_skill_descriptor_constant_cost_factory(name, time_constant_cost):
             self.time_constant_cost = time_constant_cost
             self.name = name
         
-        def estimate(self, task_context):
-            return Estimate(time = time_constant_cost, task=task_context.task)
+        def estimate(self, _):
+            return Estimate(time = time_constant_cost), None
 
     return GenericSkillDescriptor()

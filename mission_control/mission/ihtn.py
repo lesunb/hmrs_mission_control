@@ -1,12 +1,20 @@
+from __future__ import annotations
+
 from abc import abstractmethod
 from enum import Enum
 from copy import copy
 from collections.abc import Sequence
-from typing import List 
+from typing import Callable, List 
+
 
 class MethodOrdering(Enum):
     SEQUENTIAL= 0
     NON_ORDERED = 1
+
+class Assignment:
+    def __init__(self, estimate=None, plan=None):
+        self.estimate, self.plan = estimate, plan
+
 
 class Task:
     id = 0
@@ -14,14 +22,29 @@ class Task:
         self.id = Task.id
         Task.id += 1
         self.assign_to = None
+        self.assignment = Assignment()
+        self.state: TaskState = TaskState()
         self.attributes = kwargs
         self.__dict__.update(kwargs)
-
-
+        
     @abstractmethod
     def clone():
         pass
 
+class TaskStatus(Enum):
+        FATAL_FAILURE = 0
+        IN_PROGRESS = 1
+        SUCCESS_END = 2
+
+
+class TaskState:
+    def __init__(self, status: TaskStatus = TaskStatus.IN_PROGRESS, progress: float = 0.0, task: Task = None):
+        self.status, self.progress, self.task = status, progress, task
+        if status == TaskStatus.SUCCESS_END:
+            progress = 1 # 100%
+
+    def is_status(self, status: TaskState):
+        return self.status == status
 
 class ElementaryTask(Task):
     def __init__(self, type, **kwargs):
@@ -110,7 +133,49 @@ class AbstractTask(Task):
 
 
 
+def transverse_ihtn(ihtn: Task, task_state: TaskState, handle_subtree):
+    """
+    deep-first search for task_status.update, and apply handle_subtree 
+     into the each intermediate task
+    """
+    if isinstance(ihtn, ElementaryTask):
+        if ihtn == task_state.task:
+            handle_subtree(ihtn, task_state)
+            return True
+        else:
+            return False
+    
+    if isinstance(ihtn, AbstractTask):
+        for subtask in ihtn.selected_method.subtasks:
+            was_found = transverse_ihtn(subtask, task_state, handle_subtree)
+            if was_found:
+                handle_subtree(subtask, task_state)
+                return True
+        return False
+
+def transverse_ihtn_apply_for_task(ihtn: Task, task_list: List[Task], apply: Callable):
+    """
+    deep-first search the ihtn for tasks in task_list, for each match call apply for a pair ihtn task, task in task_list
+     into the each intermediate task
+    """
+    if isinstance(ihtn, ElementaryTask):
+        if ihtn in task_list:
+            index = task_list.index(ihtn)
+            apply(ihtn, task_list[index])
+    
+    if isinstance(ihtn, AbstractTask):
+        for subtask in ihtn.selected_method.subtasks:
+            transverse_ihtn_apply_for_task(subtask, task_list, apply)
 
 
-
-
+def ihtn_aggregate(ihtn: Task, agg_func: Callable):
+    """
+    aggregate results from subtasks into higher level abstract tasks
+    """
+    if isinstance(ihtn, ElementaryTask):
+        return ihtn
+    
+    if isinstance(ihtn, AbstractTask):
+        subtask_agg = map(lambda task: ihtn_aggregate(task, agg_func), ihtn.selected_method.subtasks)
+        return agg_func(ihtn, list(subtask_agg))
+        

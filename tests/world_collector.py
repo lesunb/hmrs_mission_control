@@ -1,3 +1,4 @@
+from mission_control.processes.integration import MissionHandler
 from mission_control.processes.sequencing import SkillImplementation, SkillLibrary, TickStatus
 import pytest
 
@@ -6,7 +7,7 @@ from typing import List
 
 from enum import Enum
 
-from mission_control.core import Role, Worker, worker_factory, POI
+from mission_control.core import MissionContext, Role, Worker, worker_factory, POI
 from mission_control.estimate.core import SkillDescriptorRegister
 from mission_control.estimate.estimate import EstimateManager
 from mission_control.processes.coalition_formation import CoalitionFormationProcess
@@ -176,3 +177,18 @@ class OneTickSkill(SkillImplementation):
 collector_skill_library = SkillLibrary()
 collector_skill_library.add(task_type.NAV_TO.value, OneTickSkill)
 collector_skill_library.add(task_type.PICK_UP.value, OneTickSkill)
+
+
+class MissionHandlerMock(MissionHandler):
+    def start_mission(*params):
+        pass
+
+@pytest.fixture
+def collection_mission():
+    mission_context = MissionContext(global_plan = collection_ihtn.collect.value.clone())
+    cfp.do_run(mission_context, robots, MissionHandlerMock())
+    robot_b = robots[1] # robot B that is the fastest that have the skills
+    cmission = {"mission": mission_context, 'robot': robot_b}
+    return cmission
+
+
