@@ -5,11 +5,10 @@ from ..world_collector import *
 
 from mission_control.core import POI, worker_factory
 from mission_control.estimate.estimate import EstimationManager
-from mission_control.estimate.core import create_context_gen, SkillDescriptorRegister
+from mission_control.estimate.core import create_context_gen
 from mission_control.mission.ihtn import ElementaryTask
 
-from mission_control.common_descriptors.routes_ed import RoutesEnvironmentDescriptor, Map
-from mission_control.common_descriptors.navigation_sd import NavigationSkillDescriptor, Move
+from mission_control.common_descriptors.navigation_sd import Move
 
 task1 = ElementaryTask(type=task_type.NAV_TO.value, destination=poi.room3.value)
 task2 = ElementaryTask(type=task_type.NAV_TO.value, destination=poi.room1.value)
@@ -50,11 +49,4 @@ def test_estimate(estimate_manager: EstimationManager):
 def test_estimate_route(routes_envdesc):
     route = routes_envdesc.get(poi.room3.value, poi.room1.value)
     assert route.get_distance() > 3
-
-
-
-
-# def test_estimate_no_route():
-#     # TODO   
-#     assert False
 

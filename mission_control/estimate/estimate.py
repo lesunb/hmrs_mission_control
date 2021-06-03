@@ -4,7 +4,7 @@ from typing import Callable, List, Tuple, Any
 from mission_control.mission.ihtn import ElementaryTask, Task
 
 from .core import SkillDescriptor, TaskContext, create_context_gen, SkillDescriptorRegister
-from ..core import BatteryTimeConstantDischargeModel, Worker, Estimate, InviableEstimate
+from ..core import BatteryTimeConstantDischarge, Worker, Estimate, InviableEstimate
 
 
 class Partial:
@@ -30,8 +30,6 @@ class TimeEstimator:
         res = sd.estimate(task_context)
         if isinstance(res, Tuple):
             task_estimate, task_plan = res
-            # merge(task_estimate, estimate)
-            # merge(task_plan, plan)
             if task_plan:
                 plan.update(task_plan)
         else:
@@ -40,8 +38,8 @@ class TimeEstimator:
 
 class EnergyEstimatorConstantDischarge:
     def estimation(self, task_context: TaskContext, estimate:Estimate, next:Callable, invalid:Callable) -> Tuple[Estimate, Any]:
-        energy_model = task_context.worker.energy_model
-        if isinstance(energy_model, BatteryTimeConstantDischargeModel):
+        energy_model = task_context.worker.get_resource(BatteryTimeConstantDischarge)
+        if isinstance(energy_model, BatteryTimeConstantDischarge):
             estimate.energy = estimate.time * energy_model.discharge_rate
         
         next(estimate)

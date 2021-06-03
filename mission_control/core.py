@@ -33,12 +33,12 @@ class Capability:
             self.properties.append(Capability.Property(key=key, value = value, **params))
 
 
-class EnergyModel:
+class EnergyResource:
     pass
 
-class BatteryTimeConstantDischargeModel(EnergyModel):
-    def __init__(self, capacity, discharge_rate):
-        self.capacity, self.discharge_rate = capacity, discharge_rate
+class BatteryTimeConstantDischarge(EnergyResource):
+    def __init__(self, capacity, discharge_rate, minimum_useful_level):
+        self.capacity, self.discharge_rate, minimum_useful_level = capacity, discharge_rate, minimum_useful_level
 
 class Worker:
     """
@@ -46,15 +46,20 @@ class Worker:
     Minimal representation or robots for realizing the task allocation. 
     Snapshot view for realizing a short living evaluation
     """
-    def __init__(self, location=None, capabilities = [], skills = [], energy_model: EnergyModel = None):
-        self.location, self.skills, self.energy_model = location, skills, energy_model
+    def __init__(self, location=None, capabilities = [], skills = [], resources = []):
+        self.location, self.skills, self.resources = location, skills, resources
         self.properties_register = {}
         for capability in capabilities:
             self.register(capability)
 
-
     def get(self, prop):
         return self.properties_register[prop]
+    
+    def get_resource(self, resource_cls):
+        for res in self.resources:
+            if isinstance(res, resource_cls):
+                return res
+        return None
 
     def register(self, capability: Capability):
         for prop in capability.properties:
