@@ -4,7 +4,7 @@ from typing import List
 
 from lagom.container import Container
 
-from mission_control.estimate.estimate import EstimateManager
+from mission_control.estimate.estimate import EnergyEstimatorConstantDischarge, EstimationManager, Estimator, TimeEstimator
 from mission_control.estimate.core import SkillDescriptorRegister
 from mission_control.common_descriptors.generic_constant_cost_sd import generic_skill_descriptor_constant_cost_factory
 from mission_control.common_descriptors.navigation_sd import NavigationSkillDescriptor
@@ -180,5 +180,10 @@ sd_register = SkillDescriptorRegister(
 container[SkillDescriptorRegister] = sd_register
 
 # estimate manager
-em: EstimateManager = container[EstimateManager]
+# estimate manager
+time_estimator = container[TimeEstimator]
+energy_estimator = EnergyEstimatorConstantDischarge()
+container[List[Estimator]] = [time_estimator, energy_estimator]
+
+em: EstimationManager = container[EstimationManager]
 cf_process: CoalitionFormationProcess = container[CoalitionFormationProcess]

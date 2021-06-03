@@ -6,7 +6,7 @@ from mission_control.mission.ihtn import Assignment, ElementaryTask, Task
 from mission_control.mission.planning import distribute, flat_plan
 from .integration import MissionHandler, MissionUnnexpectedError
 from ..core import Estimate, MissionContext, Worker, LocalMission, Role
-from ..estimate.estimate import EstimateManager, Bid, Partial
+from ..estimate.estimate import EstimationManager, Bid, Partial
 
 def coalitionFormationError(e, mission_context):
     message = f'Unexpected error forming coalition for {mission_context}'
@@ -18,9 +18,9 @@ class CoalitionFormationProcess:
     """ Service of creating coalitions. It receives an ihtn with tasks 
     assigned to roles an return a selection of robots to execute the plan """
 
-    def __init__(self, estimate_manager: EstimateManager):
+    def __init__(self, estimate_manager: EstimationManager):
         self.individual_plans = []
-        self.estimate_manager: EstimateManager = estimate_manager
+        self.estimate_manager: EstimationManager = estimate_manager
         
 
     def run(self, mission_context: MissionContext, workers: List[Worker], mission_handler: MissionHandler):
@@ -95,11 +95,11 @@ class CoalitionFormationProcess:
         return
         
     def estimate(self, worker, task_list: List[ElementaryTask]) -> Bid: 
-        return self.estimate_manager.estimate(worker, task_list)
+        return self.estimate_manager.estimation(worker, task_list)
 
     @staticmethod
     def check_viable(bid: Bid) -> bool:
-        if bid.estimate.is_impossible_to_estimate:
+        if bid.estimate.is_inviable:
             return False
         # TODO check worker resources / battery
         else:

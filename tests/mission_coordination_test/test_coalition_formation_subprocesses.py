@@ -2,7 +2,7 @@
 from ..world_collector import *
 
 from mission_control.processes.coalition_formation import CoalitionFormationProcess, Bid
-from mission_control.core import Estimate, ImpossibleToEstimate, MissionContext
+from mission_control.core import Estimate, InviableEstimate, MissionContext
 
 nav_to_room3 = collection_ihtn.navto_room3.value
 pick_up_object = collection_ihtn.pick_up_object.value
@@ -28,7 +28,7 @@ def test_check_viable(cf_process: CoalitionFormationProcess, collection_robots):
 
 def test_check_not_viable(cf_process: CoalitionFormationProcess, collection_robots):
     worker = collection_robots[0]
-    bid = Bid(worker = worker, estimate = ImpossibleToEstimate(reason='no route'))
+    bid = Bid(worker = worker, estimate = InviableEstimate(reason='no route'))
     assert cf_process.check_viable(bid) == False
 
 

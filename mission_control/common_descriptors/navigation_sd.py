@@ -2,7 +2,7 @@ from typing import Final
 
 from ..estimate.core import SkillDescriptor, TaskContext
 from .routes_ed import RoutesEnvironmentDescriptor
-from ..core import POI, Capability, Estimate, ImpossibleToEstimate
+from ..core import POI, Capability, Estimate, InviableEstimate
 
 class Move(Capability):
     def __init__(self, avg_speed, u):
@@ -25,8 +25,8 @@ class NavigationSkillDescriptor(SkillDescriptor):
 
         route = self.routes_ed.get(origin, dest)
         if not route:
-            return ImpossibleToEstimate(reason=f'No route from {origin} to {dest}')
+            return InviableEstimate(reason=f'No route from {origin} to {dest}')
         distance = route.get_distance()
         estimate_time = distance / avg_speed
-        return Estimate(time = estimate_time), route
+        return Estimate(time = estimate_time), {'route': route}
 

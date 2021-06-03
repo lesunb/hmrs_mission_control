@@ -9,7 +9,7 @@ from enum import Enum
 
 from mission_control.core import MissionContext, Role, Worker, worker_factory, POI
 from mission_control.estimate.core import SkillDescriptorRegister
-from mission_control.estimate.estimate import EstimateManager
+from mission_control.estimate.estimate import EnergyEstimatorConstantDischarge, EstimationManager, Estimator, TimeEstimator
 from mission_control.processes.coalition_formation import CoalitionFormationProcess
 from mission_control.mission.ihtn import Method, ElementaryTask, AbstractTask
 
@@ -133,9 +133,14 @@ sd_register = SkillDescriptorRegister( (task_type.NAV_TO.value, nav_sd), (task_t
 container[SkillDescriptorRegister] = sd_register
 
 
+
 # estimate manager
 container[List[Worker]] = robots
-em:EstimateManager = container[EstimateManager]
+time_estimator = container[TimeEstimator]
+energy_estimator = EnergyEstimatorConstantDischarge()
+container[List[Estimator]] = [time_estimator, energy_estimator]
+
+em:EstimationManager = container[EstimationManager]
 cfp: CoalitionFormationProcess = container[CoalitionFormationProcess]
 ######
 # Robots

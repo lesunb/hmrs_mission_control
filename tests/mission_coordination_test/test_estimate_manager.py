@@ -4,7 +4,7 @@ from lagom import Container
 from ..world_collector import *
 
 from mission_control.core import POI, worker_factory
-from mission_control.estimate.estimate import EstimateManager
+from mission_control.estimate.estimate import EstimationManager
 from mission_control.estimate.core import create_context_gen, SkillDescriptorRegister
 from mission_control.mission.ihtn import ElementaryTask
 
@@ -38,13 +38,13 @@ task_ctxs = list(task_context_gen)
 last_ctx = task_ctxs[2]
 
 
-def test_estimate_navigation_task_in_context(estimate_manager):
-    estimate = estimate_manager.estimate_task_in_context(last_ctx)
+def test_estimate_navigation_task_in_context(estimate_manager: EstimationManager):
+    estimate = estimate_manager.estimation_in_task_context(last_ctx)
     assert estimate is not None
 
 
-def test_estimate(estimate_manager):
-    bid = estimate_manager.estimate(worker1, task_list)
+def test_estimate(estimate_manager: EstimationManager):
+    bid = estimate_manager.estimation(worker1, task_list)
     assert bid.estimate.time > 5 and bid.estimate.time < 6
 
 def test_estimate_route(routes_envdesc):

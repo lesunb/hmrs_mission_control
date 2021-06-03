@@ -33,18 +33,25 @@ class Capability:
             self.properties.append(Capability.Property(key=key, value = value, **params))
 
 
+class EnergyModel:
+    pass
+
+class BatteryTimeConstantDischargeModel(EnergyModel):
+    def __init__(self, capacity, discharge_rate):
+        self.capacity, self.discharge_rate = capacity, discharge_rate
+
 class Worker:
     """
     Entities that can realize tasks on missions. 
     Minimal representation or robots for realizing the task allocation. 
     Snapshot view for realizing a short living evaluation
     """
-    def __init__(self, location=None, capabilities = [], skills = []):
-        self.location = location
-        self.skills = skills
+    def __init__(self, location=None, capabilities = [], skills = [], energy_model: EnergyModel = None):
+        self.location, self.skills, self.energy_model = location, skills, energy_model
         self.properties_register = {}
         for capability in capabilities:
             self.register(capability)
+
 
     def get(self, prop):
         return self.properties_register[prop]
@@ -73,14 +80,14 @@ class Request:
 
 class Estimate:
     def __init__(self, time=math.inf, energy=math.inf, progress: float=0.0):
-        self.is_impossible_to_estimate = False
+        self.is_inviable = False
         self.time, self.energy, self.progress = time, energy, progress
 
-class ImpossibleToEstimate(Estimate):
+class InviableEstimate(Estimate):
     def __init__(self, reason:str):
         super().__init__(time = math.inf, energy = math.inf)
         self.reason = reason
-        self.is_impossible_to_estimate = True
+        self.is_inviable = True
             
 class LocalMission:
     class Status(Enum):

@@ -1,6 +1,6 @@
 from abc import abstractmethod
 import copy
-from typing import List
+from typing import Any, List, Tuple
 
 from mission_control.mission.ihtn import ElementaryTask, Task
 from mission_control.core import Worker, Estimate
@@ -9,7 +9,7 @@ from mission_control.core import Worker, Estimate
 class TaskContext:
     def __init__(self, worker: Worker):
         self.worker = worker
-        self.task: Task = None
+        self.task: ElementaryTask = None
         self.factors = None
         self.origin = None
         self.prev_ctx: TaskContext = None
@@ -69,7 +69,11 @@ class SkillDescriptor:
     required_capabilities = None
 
     @abstractmethod
-    def estimate(self, task_context: TaskContext) -> Estimate:
+    def estimate(self, task_context: TaskContext) -> Tuple[Estimate, Any]:
+        """
+        Realize estimate. Returns an Estimate and optionally a plan to be 
+        used by an equivalent skill implementation
+        """
         pass
 
 class SkillDescriptorRegister:
@@ -81,5 +85,5 @@ class SkillDescriptorRegister:
     def register(self, task_type, descriptor: SkillDescriptor):
         self.descs[task_type] = descriptor
 
-    def get(self, type):
+    def get(self, type) -> SkillDescriptor:
         return self.descs[type]
