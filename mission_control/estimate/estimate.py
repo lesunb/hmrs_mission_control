@@ -17,7 +17,15 @@ class Bid:
         self.estimate = estimate
         self.partials = partials
 
-class TimeEstimator:
+
+class Estimator:
+    def estimation(self, task_context: TaskContext, estimate:Estimate, next:Callable, invalid:Callable, **plans ) -> Tuple[Estimate, Any]:
+        pass
+
+    def check_viable(self, bid: Bid, next, invalid):
+        next()
+
+class TimeEstimator(Estimator):
     def __init__(self, skill_descriptors: SkillDescriptorRegister):
         self.skill_descriptors = skill_descriptors
     
@@ -36,18 +44,22 @@ class TimeEstimator:
             task_estimate = res
         next(task_estimate, **plan)
 
-class EnergyEstimatorConstantDischarge:
+
+class EnergyEstimatorConstantDischarge(Estimator):
     def estimation(self, task_context: TaskContext, estimate:Estimate, next:Callable, invalid:Callable) -> Tuple[Estimate, Any]:
         energy_model = task_context.worker.get_resource(BatteryTimeConstantDischarge)
         if isinstance(energy_model, BatteryTimeConstantDischarge):
             estimate.energy = estimate.time * energy_model.discharge_rate
         
         next(estimate)
-
-class Estimator:
-    def estimation(self, task_context: TaskContext, estimate:Estimate, next:Callable, invalid:Callable, **plans ) -> Tuple[Estimate, Any]:
-        pass
-
+    
+    def check_viable(self, bid: Bid, next:Callable, invalid: Callable):
+        energy_model: BatteryTimeConstantDischarge = bid.worker.get_resource(BatteryTimeConstantDischarge)
+        if energy_model.capacity - bid.estimate.energy > energy_model.minimum_useful_level:
+            next()
+        else:
+            invalid('Not enough battery')
+        
 class EstimationChain:
     def __init__(self, estimators: List[Estimator]):
         self.estimators = list(estimators)
@@ -69,25 +81,52 @@ class EstimationChain:
             nonlocal result_estimate, result_plan
             if plans:
                 result_plan = plans
-            if not self.estimators:
+            if not self.estimators:  # chain ended
                 result_estimate = curr_estimate
                 return 
             estimator = self.estimators.pop(0)
-            #try:
-            estimator.estimation(task_context, curr_estimate, next, inviable)
-            #except Exception as e:
-            #    inviable(f'exception in estimating with {estimator.__class__}: {traceback.format_exc()} ')
+            try:
+                estimator.estimation(task_context, curr_estimate, next, inviable)
+            except Exception as e:
+               inviable(f'exception in estimating with {estimator.__class__}: {traceback.format_exc()} ')
 
         next(Estimate())
         return result_estimate, result_plan
 
+class CheckViabilityChain:
+    def __init__(self, estimators: List[Estimator]):
+        self.estimators = list(estimators)
+    
+    def check_viable(self, bid: Bid) -> bool:
+        result = True
+        result_estimate = None
+        
+        def inviable(reason: str):
+            nonlocal result_estimate, result
+            result = False
+
+            estimate = InviableEstimate(reason)
+            estimate.is_inviable = True
+            result_estimate = estimate
+            return
+        
+        def next():
+            if not self.estimators: # chain ended
+                return
+            
+            estimator = self.estimators.pop(0)
+            try:
+                estimator.check_viable(bid, next, inviable)
+            except Exception as e:
+               inviable(f'exception in estimating with {estimator.__class__}: {traceback.format_exc()} ')
+
+        next()
+        return result, result_estimate
 
 class EstimationManager:
     def __init__(self, estimate_chain: List[Estimator]):
         self.estimate_chain = estimate_chain
         
-        
-
     def estimation(self, worker: Worker, task_list: List[ElementaryTask]) -> Bid: 
         task_context_gen = create_context_gen(worker, task_list)
         partials = []
@@ -99,6 +138,9 @@ class EstimationManager:
     
         aggregated = self.aggregate_estimates(partials)
         return Bid(worker, estimate=aggregated, partials=partials)
+
+    def check_viable(self, bid: Bid):
+        return CheckViabilityChain(self.estimate_chain).check_viable(bid)
     
     def estimation_in_task_context(self, task_context) -> Tuple[Estimate, Any]:
         return EstimationChain(self.estimate_chain).estimate(task_context)

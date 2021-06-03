@@ -7,7 +7,7 @@ from typing import List
 
 from enum import Enum
 
-from mission_control.core import MissionContext, Role, Worker, worker_factory, POI
+from mission_control.core import BatteryTimeConstantDischarge, MissionContext, Role, Worker, worker_factory, POI
 from mission_control.estimate.core import SkillDescriptorRegister
 from mission_control.estimate.estimate import EnergyEstimatorConstantDischarge, EstimationManager, Estimator, TimeEstimator
 from mission_control.processes.coalition_formation import CoalitionFormationProcess
@@ -62,21 +62,38 @@ for enum_item in poi:
 role_r1 = Role('r1')
 
 class robot(Enum):
-    a = worker_factory(location = poi.sr.value, 
+    a = Worker(location = poi.sr.value, 
         capabilities=[
             Move(avg_speed = 10, u='m/s')
         ],
+        resources=[
+            BatteryTimeConstantDischarge(capacity=1, discharge_rate=0.0001, minimum_useful_level=0.05)
+        ],
         skills=[task_type.NAV_TO.value, task_type.PICK_UP.value])
-    b = worker_factory(location = poi.room1.value, 
+    b = Worker(location = poi.room1.value, 
         capabilities=[
             Move(avg_speed = 15, u='m/s')
         ],
+        resources=[
+            BatteryTimeConstantDischarge(capacity=1, discharge_rate=0.0001, minimum_useful_level=0.05)
+        ],
         skills=[task_type.NAV_TO.value, task_type.PICK_UP.value])
-    c = worker_factory(location = poi.room1.value, 
+    c = Worker(location = poi.room1.value, 
         capabilities=[
             Move(avg_speed = 20, u='m/s')
         ],
+        resources=[
+            BatteryTimeConstantDischarge(capacity=1, discharge_rate=0.0001, minimum_useful_level=0.05)
+        ],
         skills=[task_type.NAV_TO.value])
+    d = Worker(location = poi.room1.value,
+        capabilities=[
+            Move(avg_speed = 25, u='m/s')
+        ],
+        resources=[
+            BatteryTimeConstantDischarge(capacity=0.20, discharge_rate=0.02, minimum_useful_level=0.05)
+        ],
+        skills=[task_type.NAV_TO.value, task_type.PICK_UP.value])
 
 for enum_item in robot:
     setattr(enum_item.value, 'name', enum_item.name)
@@ -110,8 +127,8 @@ def collection_robots():
     return robots
 
 @pytest.fixture
-def collection_robots_a_and_b():
-    robots = [ enum_item.value for enum_item in [robot.a, robot.b]]
+def collection_robots_a_b_and_d():
+    robots = [ enum_item.value for enum_item in [robot.a, robot.b, robot.d]]
     return robots
 
 

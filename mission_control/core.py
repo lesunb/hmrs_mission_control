@@ -38,7 +38,7 @@ class EnergyResource:
 
 class BatteryTimeConstantDischarge(EnergyResource):
     def __init__(self, capacity, discharge_rate, minimum_useful_level):
-        self.capacity, self.discharge_rate, minimum_useful_level = capacity, discharge_rate, minimum_useful_level
+        self.capacity, self.discharge_rate, self.minimum_useful_level = capacity, discharge_rate, minimum_useful_level
 
 class Worker:
     """

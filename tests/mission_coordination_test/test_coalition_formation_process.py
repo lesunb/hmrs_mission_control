@@ -7,9 +7,6 @@ from mission_control.core import MissionContext
 from mission_control.processes.integration import MissionHandler
 
 
-
-
-
 def test_coalition_formation_process(cf_process: CoalitionFormationProcess, ihtn_collect: Task, collection_robots):
     mission_context = MissionContext(global_plan = ihtn_collect)
     cf_process.do_run(mission_context, collection_robots, MissionHandlerMock())

@@ -97,13 +97,15 @@ class CoalitionFormationProcess:
     def estimate(self, worker, task_list: List[ElementaryTask]) -> Bid: 
         return self.estimate_manager.estimation(worker, task_list)
 
-    @staticmethod
-    def check_viable(bid: Bid) -> bool:
+    def check_viable(self, bid: Bid) -> bool:
         if bid.estimate.is_inviable:
             return False
-        # TODO check worker resources / battery
-        else:
-            return True
+        res, estimate = self.estimate_manager.check_viable(bid)
+        
+        if not res:
+            bid.estimate = estimate
+        return res
+
     @staticmethod
     def rank_bids(bids: List[Bid]) -> List[Bid]:
         return sorted(bids, key=lambda bid: bid.estimate.time, reverse=False)

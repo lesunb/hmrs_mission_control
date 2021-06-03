@@ -13,17 +13,24 @@ def test_flat_plan(cf_process: CoalitionFormationProcess, ihtn_collect):
     assert not diff
 
 
-def test_get_compatible_workers(cf_process: CoalitionFormationProcess, ihtn_collect, collection_robots, collection_robots_a_and_b):
+def test_get_compatible_workers(cf_process: CoalitionFormationProcess, ihtn_collect, collection_robots, collection_robots_a_b_and_d):
     task_list = cf_process.flat_plan(ihtn_collect)
     comp_workers = list(cf_process.get_compatible_workers(task_list, collection_robots))
     # robot_a and robot_b have the skills, robot_c does not
-    diff =  set(comp_workers) ^ set(collection_robots_a_and_b)
+    diff =  set(comp_workers) ^ set(collection_robots_a_b_and_d)
     assert not diff
 
 def test_check_viable(cf_process: CoalitionFormationProcess, collection_robots):
     worker = collection_robots[0]
-    bid = Bid(worker = worker, estimate = Estimate(time = 3, energy = 5))
+    bid = Bid(worker = worker, estimate = Estimate(time = 3, energy = 0.1))
     assert cf_process.check_viable(bid) == True
+
+def test_check_inviable(cf_process: CoalitionFormationProcess, collection_robots):
+    worker = collection_robots[0]
+    bid = Bid(worker = worker, estimate = Estimate(time = 3, energy = 10))
+    res =  cf_process.check_viable(bid)
+    assert res == False
+    assert bid.estimate.is_inviable == True
 
 
 def test_check_not_viable(cf_process: CoalitionFormationProcess, collection_robots):
