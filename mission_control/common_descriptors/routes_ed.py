@@ -2,7 +2,6 @@ from typing import List, Tuple
 from ..estimate.core import EnvironmentDescriptor
 from mission_control.core import POI
 
-
 class Edge:
     def __init__(self, origin, dest):
         self.origin = origin
@@ -72,15 +71,26 @@ class Route:
 
     def get_route_progress(self,  curr_position: Nodes):
         curr_index = self.nodes.index(curr_position)
+        if curr_index == len(self.nodes) - 1:
+            return 1
         return sum(self.euclidean_distance(x, y) for x, y in
-                   zip(self.nodes, self.nodes[1:curr_index+1])) / self.total_distance
+                   zip(self.nodes[curr_index:], self.nodes[curr_index+1:])) / self.total_distance
 
     def euclidean_distance(self, a: Nodes, b: Nodes):
-        return (sum((x0 - x1) ** 2 for x0, x1 in zip(a.coords, b.coords))) ** 0.5
+        return (sum((x0 - x1) ** 2 for x0, x1 in zip(a.coords[:2], b.coords[:2]))) ** 0.5
 
     def get_distance(self):
         self.total_distance = sum(self.euclidean_distance(x, y) for x,y in zip(self.nodes, self.nodes[1:]))
         return self.total_distance
+
+    def simplify(self):
+        index = 1
+        while index < len(self.nodes)-1:
+            if (self.nodes[index-1].coords[0] == self.nodes[index].coords[0] == self.nodes[index+1].coords[0]
+                or self.nodes[index-1].coords[1] == self.nodes[index].coords[1] == self.nodes[index+1].coords[1]):
+                self.nodes.pop(index)
+            else:
+                index += 1
 
 
 class RoutesEnvironmentDescriptor(EnvironmentDescriptor):
@@ -112,6 +122,7 @@ class RoutesEnvironmentDescriptor(EnvironmentDescriptor):
     def _get(self, origin: Nodes, destination: Nodes) -> Route:
         path = self.calculate_route(origin, destination, set(), [])
         route = Route(origin=origin, destination=destination, nodes=path)
+        route.simplify()
         route.get_distance()
         return route
 
@@ -121,5 +132,3 @@ class RoutesEnvironmentDescriptor(EnvironmentDescriptor):
     def get(self, origin:POI, destination:POI):
         return self._get(self.nodes_dict[origin.label], \
              self.nodes_dict[destination.label])
-
-
