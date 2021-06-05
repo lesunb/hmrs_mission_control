@@ -41,17 +41,7 @@ class Robot(Component):
 		self.knowledge.goal = self.gen_random_position()
 		self.knowledge.color = self.random.choice(self.COLORS)
 
-#		# Register network receive method
-#		node.networkDevice.add_receiver(self.__receive_packet)
-
-#		node.position = self.knowledge.position
-
-		print("Robot " + str(self.knowledge.id) + " created")
-
-#	def __receive_packet(self, packet):
-#		print((str(self.knowledge.time) + " ms: " + str(self.knowledge.id) + " Received packet: " + str(packet)))
-
-	# Processes follow
+		print("Robot " + str(self.uuid) + " created")
 
 	@process(period_ms=10)
 	def update_time(self, node: Node):
@@ -59,7 +49,7 @@ class Robot(Component):
 
 	@process(period_ms=1000)
 	def status(self, node: Node):
-		print(str(self.knowledge.time) + " ms: " + str(self.knowledge.id) + " at " + str(self.knowledge.position) + " goal " + str(
+		print(str(self.knowledge.time) + " ms: " + str(self.uuid) + " at " + str(self.knowledge.position) + " goal " + str(
 			self.knowledge.goal) + " dist: " + str(self.knowledge.position.dist_to(self.knowledge.goal)))
 
 	@process(period_ms=100)
@@ -72,8 +62,3 @@ class Robot(Component):
 			self.knowledge.goal = self.gen_random_position()
 			node.walker.set_target(self.knowledge.goal)
 		node.walker.set_target(self.knowledge.goal)
-
-#	@process(period_ms=2500)
-#	def send_echo_packet(self, node: Node):
-#		node.networkDevice.send(node.id, TextPacket("Echo packet payload from: " + str(self.knowledge.id)))
-#		node.networkDevice.broadcast(TextPacket("Broadcast echo packet payload from: " + str(self.knowledge.id)))

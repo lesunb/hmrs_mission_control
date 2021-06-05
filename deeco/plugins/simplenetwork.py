@@ -2,10 +2,9 @@ import copy
 from random import Random
 from functools import partial
 
-from deeco.core import Node
+from deeco.core import Node, NodePlugin
 from deeco.packets import Packet
 from deeco.runnable import SimPlugin
-from deeco.runnable import NodePlugin
 
 
 class SimpleNetworkDevice(NodePlugin):
@@ -23,7 +22,7 @@ class SimpleNetworkDevice(NodePlugin):
 
 	def receive(self, packet, time_ms):
 		for receiver in self.receivers:
-			receiver(packet)
+			receiver(packet, time_ms)
 
 	def send(self, destination, packet: Packet):
 		"""Send packet to destination, distance limit is not take into account"""

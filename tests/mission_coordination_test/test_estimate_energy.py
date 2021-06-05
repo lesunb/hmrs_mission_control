@@ -15,7 +15,10 @@ worker1 = Worker(location = poi.sr.value,
         ],
         skills=[task_type.NAV_TO.value],
         resources=[
-           BatteryTimeConstantDischarge(capacity=1, discharge_rate=0.0003, minimum_useful_level=0.05)
+           BatteryTimeConstantDischarge(
+                battery=Battery(capacity=1, charge=1),
+                discharge_rate=0.0003,
+                minimum_useful_level=0.05)
         ])
 
 task_context_gen = create_context_gen(worker1, task_list)

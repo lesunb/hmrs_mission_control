@@ -8,7 +8,7 @@ from deeco.core import ComponentRole
 from deeco.core import process
 from deeco.position import Position
 
-from mission_control.core import LocalMission, POI
+from mission_control.core import Battery, LocalMission, POI
 
 # Roles
 class Worker(ComponentRole):
@@ -17,8 +17,8 @@ class Worker(ComponentRole):
 		self.skills = None
 		self.local_mission: LocalMission = None
 		self.location: POI = None
-		self.battery_level: float = None
-		self.battery_consumption_rate: float = None
+		self.battery: Battery = None
+		self.battery_discharge_rate: float = None
 		self.avg_speed: float = None
 
 # Component
@@ -28,16 +28,16 @@ class Robot(Component):
 		return Position(Robot.random.uniform(0, 1), Robot.random.uniform(0, 1))
 
 	# Knowledge definition
-	class Knowledge(Worker, BaseKnowledge):
-		def __init__(self):
-			super().__init__()
+	class Knowledge(BaseKnowledge, Worker):
+		pass
 
 	# Component initialization
-	def __init__(self, node: Node = None,
+	def __init__(self,node: Node = None,
+				name: str = None,
 				skills: List[str] = None,
 				location: POI = None,
-				battery_level: float = None,
-				battery_consumption_rate: float = None,
+				battery: Battery = None,
+				battery_discharge_rate = None,
 				local_mission: LocalMission=None,
 				avg_speed = 0, 
 				id = 0):
@@ -45,20 +45,26 @@ class Robot(Component):
 		super().__init__(node)
 
 		# Initialize knowledge
-		self.knowledge.node_id = node.id
+		self.name = name
 		self.knowledge.skills = skills
 		self.knowledge.location = location
-		self.knowledge.battery_level = battery_level
-		self.knowledge.battery_consumption_rate = battery_consumption_rate
+		self.knowledge.battery = battery
+		self.knowledge.battery_discharge_rate = battery_discharge_rate
 		self.knowledge.local_mission = local_mission
 		self.knowledge.avg_speed = avg_speed
 
-		print("Robot " + str(self.knowledge.id) + " created")
+		print("Robot " + str(self.name) + " created")
 	
 	# Processes follow
 	@process(period_ms=10)
 	def update_time(self, node: Node):
 		self.knowledge.time = node.runtime.scheduler.get_time_ms()
+		
+	@process(period_ms=1000)
+	def sequencing(self, node: Node):
+		if self.knowledge.local_mission:
+			print(self.knowledge.local_mission)
+
 
 	@process(period_ms=10)
 	def sense_task_execution_status(self, node: Node):

@@ -1,3 +1,4 @@
+from deeco.plugins.ensemblereactor import EnsembleMember
 from deeco.core import EnsembleDefinition, BaseKnowledge
 from deeco.core import ComponentRole, Group
 from deeco.mapping import SetValue
@@ -30,18 +31,19 @@ class MissionCoordinationEnsemble(EnsembleDefinition):
 		assert isinstance(member, Worker)
 		return True	
 
-	def knowledge_exchange(self, coord: MissionCoordinator, member: Worker):	    
+	def knowledge_exchange(self, coord: MissionCoordinator, member: EnsembleMember[Worker]):
 		# member to coordinator
 		coord.update_worker(member)
-		if member.local_mission:
-			mission_assigned = self.get_mission_member_is_assigned(coord, member)
+		worker = member.knowledge
+		if worker.local_mission:
+			mission_assigned = self.get_mission_member_is_assigned(coord, worker)
 			# update coordinator about progress
-			self.update_mission_progress(mission_assigned, member.local_mission)
+			self.update_mission_progress(mission_assigned, worker.local_mission)
 
 		# coordinator to member
 		exchanges_coord_member = []
 		assigned_local_mision, assigned_mission = self.get_local_mission_member_should_be_assigned(coord, member)		
-		if member.local_mission is not assigned_local_mision:
+		if worker.local_mission is not assigned_local_mision:
 			# plan distribuition
 			print(f'assigning mission {assigned_local_mision}')
 			set_local_mission = SetValue('local_mission', assigned_local_mision)
@@ -63,10 +65,10 @@ class MissionCoordinationEnsemble(EnsembleDefinition):
 		pass
 	
 	@staticmethod
-	def get_local_mission_member_should_be_assigned(coord: MissionCoordinator, member: Worker):
+	def get_local_mission_member_should_be_assigned(coord: MissionCoordinator, member: EnsembleMember[Worker]):
 		for mission in coord.missions:
 			for local_mission in mission.local_missions:
-				if local_mission.worker and (member.id is local_mission.worker.id):
+				if member.same_uuid(local_mission.worker):
 					return (local_mission, mission)
 		return None, None
 

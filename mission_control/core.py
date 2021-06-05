@@ -1,8 +1,12 @@
+from deeco.core import Identifiable
 import math
+
+
 from enum import Enum
 from typing import List
 
 from .mission.ihtn import Task
+
 
 class Role:
     class Type(Enum):
@@ -37,17 +41,22 @@ class EnergyResource:
     pass
 
 class BatteryTimeConstantDischarge(EnergyResource):
-    def __init__(self, capacity, discharge_rate, minimum_useful_level):
-        self.capacity, self.discharge_rate, self.minimum_useful_level = capacity, discharge_rate, minimum_useful_level
+    def __init__(self, battery, discharge_rate, minimum_useful_level):
+        self.battery, self.discharge_rate, self.minimum_useful_level = battery, discharge_rate, minimum_useful_level
 
-class Worker:
+class Battery:
+    def __init__(self, capacity=1, charge=1, minimum_useful_level=0.05):
+        self.capacity, self.charge, self.minimum_useful_level = capacity, charge, minimum_useful_level
+
+class Worker(Identifiable):
     """
     Entities that can realize tasks on missions. 
     Minimal representation or robots for realizing the task allocation. 
     Snapshot view for realizing a short living evaluation
     """
-    def __init__(self, location=None, capabilities = [], skills = [], resources = []):
-        self.location, self.skills, self.resources = location, skills, resources
+    def __init__(self, uuid=None, name=None, location=None, capabilities = [], skills = [], resources = []):
+        super().__init__(uuid)
+        self.name, self.location, self.skills, self.resources = name, location, skills, resources
         self.properties_register = {}
         for capability in capabilities:
             self.register(capability)

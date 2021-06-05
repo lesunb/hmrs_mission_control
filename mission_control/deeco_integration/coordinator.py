@@ -1,9 +1,13 @@
-from typing import List
+import copy
 
-from deeco.core import BaseKnowledge, Component, ComponentRole, Node
+from deeco.plugins.ensemblereactor import EnsembleMember
+from mission_control.common_descriptors.navigation_sd import Move
+from typing import List, Mapping
+
+from deeco.core import BaseKnowledge, Component, ComponentRole, Node, UUID
 from deeco.core import process
 
-from ..core import MissionContext, Worker
+from ..core import Battery, BatteryTimeConstantDischarge, MissionContext, Worker
 from ..processes.integration import MissionHandler, MissionUnnexpectedError
 from ..processes.coalition_formation import CoalitionFormationProcess
 from ..processes.supervision import SupervisionProcess
@@ -12,37 +16,31 @@ from ..processes.supervision import SupervisionProcess
 class MissionCoordinator(ComponentRole):
     def __init__(self):
         self.missions: List[MissionContext] = []
-        self.active_workers: List[Worker] = []
+        self.active_workers: dict[UUID, Worker] = {}
     
-    def update_worker(self, worker):
-        to_remove = None
-        for aw in self.active_workers:
-            if aw.id == worker.id:
-                to_remove = aw
-        if to_remove is not None:
-            self.active_workers.remove(to_remove)
-        self.active_workers.append(worker)
+    def update_worker(self, member: EnsembleMember[Worker]):
+        self.active_workers[member.uuid] = member.knowledge
 
 
 class Coordinator(Component, MissionHandler):
     # Knowledge definition
-    class Knowledge(BaseKnowledge, MissionCoordinator):
-        def __init__(self):
-            super().__init__()
-
+    class Knowledge(MissionCoordinator, BaseKnowledge):
+        pass
 
     # Component initialization
     def __init__(self, node: Node= None, 
             required_skills = None,
             cf_process: CoalitionFormationProcess = None,
-            supervision_proces: SupervisionProcess = None):
+            supervision_proces: SupervisionProcess = None,
+            name = None):
         super().__init__(node)
         self.cf_process = cf_process
         self.supervision_process = supervision_proces
+        self.name = name
 
         # Initialize knowledge
 
-        print("Coordinator " + str(self.knowledge.id) + " created")
+        print("Coordinator " + str(self.name) + " created")
 
     @process(period_ms=10)
     def update_time(self, node: Node):
@@ -51,7 +49,7 @@ class Coordinator(Component, MissionHandler):
     @process(period_ms=1000)
     def coalition_formation(self, node: Node):
         for mission_context in list(self.get_missions_with_pending_assignments()):
-            workers = self.get_free_workers()
+            workers = list(map(self.transform_worker, self.get_free_workers().items()))
             self.cf_process.run(mission_context, workers, self)
 
     def get_missions_with_pending_assignments(self):
@@ -74,7 +72,7 @@ class Coordinator(Component, MissionHandler):
         while self.node.requests_queue:
             request = self.node.requests_queue.pop()
             mission_context = MissionContext(request.task)
-            print(f'coordinator {self.id} got has a new mission {mission_context}')
+            print(f'coordinator {self.uuid} got has a new mission {mission_context}')
             self.knowledge.missions.append(mission_context)
             yield mission_context
         return
@@ -125,14 +123,35 @@ class Coordinator(Component, MissionHandler):
         print(error.message)
         print(error.orignal_error)
 
-    def get_free_workers(self):
-        workers = self.knowledge.active_workers or []
+    @staticmethod
+    def transform_worker(uuid_worker):
+        uuid, worker_knowledge = uuid_worker
+        worker = Worker(
+            uuid=uuid,
+            location=worker_knowledge.location,
+            skills=worker_knowledge.skills,
+            capabilities=[
+                Move(avg_speed = worker_knowledge.avg_speed, u='m/s')
+            ],
+            resources = [
+                BatteryTimeConstantDischarge(
+                    battery = worker_knowledge.battery,
+                    discharge_rate=worker_knowledge.battery_discharge_rate,
+                    minimum_useful_level=0.05
+                )
+            ])
+        return worker
+
+    def get_free_workers(self) -> Mapping[UUID, Worker]:
+        workers = dict(self.knowledge.active_workers)
         missions = self.knowledge.missions 
         assigned_workers = []
         
         for mission in missions:
             for local_mission in mission.local_missions:
-                assigned_workers.append(local_mission.worker)
+                if local_mission.worker.uuid in workers:
+                    workers.pop(local_mission.worker.uuid)
         
-        return set(workers) - set(assigned_workers)
+    
+        return workers
 

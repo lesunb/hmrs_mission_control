@@ -1,4 +1,4 @@
-from deeco.runnable import NodePlugin
+from deeco.core import NodePlugin
 from deeco.position import Position
 from deeco.plugins.positionprovider import PositionProvider
 

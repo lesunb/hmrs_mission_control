@@ -7,7 +7,7 @@ from random import Random
 
 def test_total_combinations():
     robot_factors =  {
-        'battery_level': range(0, 100, 50),
+        'battery_charge': range(0, 100, 50),
         'battery_rate': [0.05, 0.10],
         'initial_position': [ POI('a'), POI('b')],
         'skills': ['a']
@@ -20,13 +20,13 @@ def test_total_combinations():
 def test_gen_trials_with_nest():
     robot_factors =  {
         'robots.[1]': {
-            'battery_level': range(0, 100, 50),
+            'battery_charge': range(0, 100, 50),
             'battery_rate': [0.05, 0.10],
             'initial_position': [ POI('a'), POI('b')],
             'skills': [1, 2]
         },
         'robots.[2]': {
-            'battery_level': range(0, 100, 50),
+            'battery_charge': range(0, 100, 50),
             'battery_rate': [0.05, 0.10],
             'initial_position': [ POI('a'), POI('b')],
             'skills': [1, 2]

@@ -46,21 +46,26 @@ class CoalitionFormationProcess:
     def create_coalition(self, mission_context: MissionContext, workers: List[Worker]) -> bool:
         plan_rank_map = {}
         for local_mission in self.get_pending_assignments(mission_context):
+            mission_context.occurances.append(f'evaluating local mission for {local_mission.role}')
             task_list = self.flat_plan(local_mission.plan)
             bids = []
             candidates = self.get_compatible_workers(task_list, workers)
             for worker in candidates:
+                mission_context.occurances.append(f'evaluating robot {worker.uuid}')
                 bid = self.estimate(worker, task_list)
                 is_viable = self.check_viable(bid)
+                mission_context.occurances.append(f'evaluating robot {worker.uuid}: bid is viable:{is_viable}')
                 if is_viable:
                     bids.append(bid)
                 else:
+                    mission_context.occurances.append(f'inviable reason: {bid.estimate.reason}')
                     pass # TODO log
             if not bids: # empty list of viable bids
                 mission_context.occurances.append(f'no viable assignment for {local_mission.role}')
                 return False
             bids = self.rank_bids(bids)
             plan_rank_map[local_mission] = bids
+            local_mission.bids = bids
 
         selected_bids =  self.select_bids(plan_rank_map)
         self.set_assignment_from_selected_bids(mission_context, selected_bids)
@@ -93,7 +98,7 @@ class CoalitionFormationProcess:
             if not required_skills.difference(worker.skills):
                 yield worker
         return
-        
+
     def estimate(self, worker, task_list: List[ElementaryTask]) -> Bid: 
         return self.estimate_manager.estimation(worker, task_list)
 

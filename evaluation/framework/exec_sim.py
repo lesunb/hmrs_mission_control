@@ -1,5 +1,6 @@
 
 
+from mission_control.core import Battery
 from deeco.core import Node
 from deeco.sim import Sim
 from deeco.plugins.identity_replicas import IdentityReplicas
@@ -32,8 +33,13 @@ class SimExec:
         self.cf_process = cf_process
 
     @staticmethod
-    def instantiate_robot_component(node, **initial_knowledge):
-         return Robot(node, **initial_knowledge)
+    def instantiate_robot_component(node, battery_charge, **initial_knowledge):
+         return Robot(node=node,
+            battery = Battery(
+                capacity = 1,
+				charge = battery_charge
+                ),
+            **initial_knowledge)
 
     def run(self, trial: Trial, limit_ms=5000):
         requests = trial.requests
@@ -57,7 +63,7 @@ class SimExec:
         EnsembleReactor(coord_node, [ MissionCoordinationEnsemble() ])
 
         # mission coordinator component
-        coord = Coordinator(coord_node, required_skills=[], cf_process=cf_process)
+        coord = Coordinator(coord_node, name='mission_coordinator', required_skills=[], cf_process=cf_process)
         coord_node.add_component(coord)
 
         robots, robots_nodes = [], []
@@ -66,7 +72,7 @@ class SimExec:
         for r in robots_initial_conf:
             
             node = Node(sim)
-            robot = self.instantiate_robot_component(node, **r)
+            robot = self.instantiate_robot_component(node, name=f'robot_{ r["id"]}', **r)
             node.add_component(robot)
             # node plugins
             KnowledgePublisher(node)
@@ -92,9 +98,10 @@ class SimExec:
             },
             'components': {
                 'coordinator': coord.knowledge,
-                'robots': map(lambda r : r.knowledge, robots)
+                'robots': list(map(lambda r : r.knowledge, robots))
             },
-            'local_plans': local_plans
+            'local_plans': local_plans,
+            'missions': coord.knowledge.missions
         }
 
 

@@ -1,4 +1,5 @@
 from abc import abstractmethod
+from deeco.plugins.ensemblereactor import EnsembleMember
 
 from deeco.core import EnsembleDefinition, BaseKnowledge
 from deeco.core import ComponentRole
@@ -44,14 +45,13 @@ class RobotGroup(EnsembleDefinition):
 
 
 class RobotGroup(EnsembleDefinition):
-    class RobotGroupKnowledge(BaseKnowledge, Group):
-        def __init__(self):
-            super().__init__()
-
+    class RobotGroupKnowledge(Group):
         def __str__(self):
             return self.__class__.__name__ + " centered at " + str(self.center) + " with component ids " + str(list(map(lambda x: x.id, self.members)))
 
     def fitness(self, a: Rover, b: Rover):
+        if not b:
+            return 0
         return 1.0 / a.position.dist_to(b.position)
 
     def membership(self, a: Rover, b: Rover):
@@ -59,8 +59,9 @@ class RobotGroup(EnsembleDefinition):
         assert isinstance(b, Rover)
         return True
 
-    def knowledge_exchange(self, a: Rover, b: Rover):
+    def knowledge_exchange(self, a: Rover, member: EnsembleMember[Rover]):
         knowledge = self.RobotGroupKnowledge()
+        b = member.knowledge
         knowledge.center = Position.average(a.position, b.position)
         knowledge.members = [a, b]
 

@@ -4,24 +4,13 @@ from deeco.position import Position
 from deeco.plugins.simplenetwork import SimpleRangeLimitedNetwork
 from deeco.plugins.walker import Walker
 from deeco.plugins.knowledgepublisher import KnowledgePublisher
-from deeco.plugins.ensemblereactor import EnsembleReactor
+from deeco.plugins.ensemblereactor import EnsembleReactor, has_member
 
 from deeco.plugins.snapshoter import Snapshoter
 
 from .leader_follower import Leader, Follower, LeaderFollowingGroup
 
 print("Running simulation")
-
-
-def get_knowledge_about(reactor: EnsembleReactor, member:Component):
-    for instance in reactor.instances:
-        for mk in instance.memberKnowledge:
-            if mk.id is member.id:
-                return mk
-    return None
-
-def has_member(reactor: EnsembleReactor, member:Component):
-    return get_knowledge_about(reactor, member) is not None
 
 
 def test_join_ensemble_and_update_knowledge():

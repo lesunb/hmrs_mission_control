@@ -9,8 +9,8 @@ class HandleRequestServer(Server[RequestPacket]):
     def __init__(self, node):
         super().__init__(node, RequestPacket) # register to listen
 
-    def receive(self, request: RequestPacket): # TODO response
-        print(f'received request id: {request.id}')
+    def receive(self, request: RequestPacket, time_ms): # TODO response
+        print(f'received request id: {request.id} at {time_ms}')
         request = request.content
         mission_context = self.cf_manager.create_coalition(request.task)
         # TODO send to supervisor

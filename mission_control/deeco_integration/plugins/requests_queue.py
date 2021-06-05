@@ -1,7 +1,6 @@
+from deeco.core import NodePlugin
 from typing import List
 from mission_control.core import Request
-from queue import SimpleQueue
-from deeco.runnable import NodePlugin
 
 def request_sequence_gen(requests: List[Request]):
     requests.sort(key=lambda req: req.timestamp)

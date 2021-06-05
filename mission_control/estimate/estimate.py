@@ -55,7 +55,7 @@ class EnergyEstimatorConstantDischarge(Estimator):
     
     def check_viable(self, bid: Bid, next:Callable, invalid: Callable):
         energy_model: BatteryTimeConstantDischarge = bid.worker.get_resource(BatteryTimeConstantDischarge)
-        if energy_model.capacity - bid.estimate.energy > energy_model.minimum_useful_level:
+        if energy_model.battery.charge - bid.estimate.energy > energy_model.minimum_useful_level:
             next()
         else:
             invalid('Not enough battery')
@@ -133,7 +133,7 @@ class EstimationManager:
         for task_context in task_context_gen:
             task_estimate, task_plan = self.estimation_in_task_context(task_context)
             if task_estimate.is_inviable:
-                return Bid(worker, cost=task_estimate) # inf cost
+                return Bid(worker, estimate=task_estimate) # inf cost
             partials.append(Partial(task=task_context.task, estimate=task_estimate, plan=task_plan))
     
         aggregated = self.aggregate_estimates(partials)

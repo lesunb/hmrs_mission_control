@@ -1,3 +1,4 @@
+from deeco.plugins.ensemblereactor import EnsembleMember
 from random import Random
 
 from deeco.core import BaseKnowledge
@@ -6,7 +7,6 @@ from deeco.core import Node
 from deeco.core import ComponentRole
 from deeco.core import process
 from deeco.position import Position
-from deeco.packets import TextPacket
 
 from deeco.core import EnsembleDefinition, BaseKnowledge
 from deeco.mapping import SetValue
@@ -43,9 +43,6 @@ class Leader(Component):
         self.knowledge.position = node.positionProvider.get()
         self.knowledge.goal = self.gen_random_position()
 
-        print("Leader " + str(self.knowledge.id) + " created")
-
-
     @process(period_ms=10)
     def update_time(self, node: Node):
         self.knowledge.time = node.runtime.scheduler.get_time_ms()
@@ -79,9 +76,6 @@ class Follower(Component):
         # Initialize knowledge
         self.knowledge.position = node.positionProvider.get()
         self.knowledge.goal = None
-
-        print("Leader " + str(self.knowledge.id) + " created")
-
 
     @process(period_ms=10)
     def update_time(self, node: Node):
@@ -124,7 +118,7 @@ class LeaderFollowingGroup(EnsembleDefinition):
         assert isinstance(b, FollowerRole)
         return True
 
-    def knowledge_exchange(self, coord: Leader.Knowledge, member: Follower.Knowledge):
+    def knowledge_exchange(self, coord: Leader.Knowledge, member: EnsembleMember[Follower.Knowledge]):
         set_goal = SetValue('goal', coord.position)
         return (coord, [set_goal])
 

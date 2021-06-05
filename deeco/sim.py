@@ -1,8 +1,7 @@
+from deeco.runnable import SimPlugin
+from deeco.core import Runnable, Runtime
 import types
 from queue import PriorityQueue
-
-from .runnable import *
-
 
 class Timer:
 	pass
@@ -33,7 +32,7 @@ class SimScheduler(Scheduler):
 	def run(self, limit_ms: int):
 		self.time_ms = 0
 		while not self.events.empty() and self.time_ms < limit_ms:
-			event = self.events.get()
+			event: Timer = self.events.get()
 			self.time_ms = event.time_ms
 			event.run(self.time_ms)
 

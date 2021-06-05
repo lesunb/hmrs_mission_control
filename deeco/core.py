@@ -1,6 +1,91 @@
-from abc import abstractmethod
+from __future__ import annotations
 
-from deeco.runnable import *
+from abc import abstractmethod
+from typing import Any, List
+
+import shortuuid
+
+class ComponentRole:
+    pass
+
+class Group(ComponentRole):
+    def __init__(self):
+        super().__init__()
+        self.members = []
+
+class UUID(str):
+    pass
+
+class Identifiable:
+
+    def __init__(self, uuid = None):
+        super().__init__()
+        if uuid:
+            self.__uuid = uuid
+        else:
+            self.__uuid: UUID = self.gen_new_uuid()
+    
+    @staticmethod
+    def gen_new_uuid() -> UUID:
+        return shortuuid.uuid()
+
+    @property
+    def uuid(self):
+        return self.__uuid
+
+    def isid(self, uuid: str) -> bool:
+        return self.__uuid == uuid
+
+    def same_uuid(self, other: Any):
+        if isinstance(other, Identifiable):
+            return other.uuid == self.uuid
+        return False
+
+
+class BaseKnowledge(ComponentRole):
+    def __init__(self):
+        self.time = None
+
+class Component(Identifiable):
+    counter = 0
+
+    class Knowledge(BaseKnowledge):
+        pass
+
+    def __init__(self, node: Node):
+        super().__init__()
+        self.node = node
+        self.time = None
+        self.knowledge = self.Knowledge()
+        self.metadata = Metadata()
+
+
+class Runnable:
+	def run(self, scheduler):
+		pass
+
+
+class Runtime:
+	@abstractmethod
+	def add_runnable(self, runnable: Runnable):
+		pass
+
+	@abstractmethod
+	def add_plugin(self, plugin):
+		pass
+
+	@abstractmethod
+	def get_scheduler(self):
+		pass
+	
+	@abstractmethod
+	def add_node(self, node):
+		pass
+
+class NodePlugin(Runnable):
+	def __init__(self, node: Node):
+		self.node = node
+		node.add_plugin(self)
 
 class Node(Runnable):
     counter = 0
@@ -18,7 +103,7 @@ class Node(Runnable):
         self.id = self.__gen_id()
 
         self.plugins = []
-        self.components = []
+        self.__components: dict[UUID, Component] = {}
 
         # Deploy system plugins on node
         for plugin in runtime.plugins:
@@ -27,21 +112,18 @@ class Node(Runnable):
     def __getstate__(self):
         return {"id": self.id, "components": self.components}
 
-    def add_component(self, component):
-        self.components.append(component)
+    def add_component(self, component:Component):
+        self.__components[component.uuid] = component
 
-    def get_components(self):
-        return self.components
+    @property
+    def components(self) -> List[Component]:
+        return list(self.__components.values())
 
-    def get_component_ids(self):
-        return map(lambda x: x.id, self.components)
+    def get_components_uuids(self):
+        return list(self.__components.keys())
 
-    def get_component_by_id(self, id: int):
-        for component in self.components:
-            if component.id == id:
-                return component
-
-        return None
+    def get_component(self, uuid: UUID) -> Component:
+        return self.__components.get(uuid)
 
     def add_plugin(self, plugin: NodePlugin):
         self.plugins.append(plugin)
@@ -52,37 +134,12 @@ class Node(Runnable):
             plugin.run(scheduler)
 
         # schedule component (processes)
-        for component in self.components:
+        for component in self.__components.values():
             for entry in type(component).__dict__.values():
                 if hasattr(entry, "is_process"):
                     method = process_factory(component, entry, self)
                     scheduler.set_periodic_timer(method, entry.period_ms)
 
-
-class ComponentRole:
-    pass
-
-class Group(ComponentRole):
-    def __init__(self):
-        super().__init__()
-        self.members = []
-
-class Identifiable(ComponentRole):
-    def __init__(self):
-        super().__init__()
-        self.node_id = None
-        self.id = None
-
-
-class TimeStamped(ComponentRole):
-    def __init__(self):
-        super().__init__()
-        self.time = None
-
-
-class BaseKnowledge(Identifiable, TimeStamped):
-    def __init__(self):
-        super().__init__()
 
 class Metadata:
     def __init__(self):
@@ -103,28 +160,6 @@ def process_factory(component, entry, node: Node):
     return lambda time_ms: entry(component, node)
 
 
-class Component:
-    counter = 0
-
-    class Knowledge:
-        pass
-
-    @staticmethod
-    def gen_id():
-        identifier = Component.counter
-        Component.counter += 1
-        return identifier
-
-    def __init__(self, node: Node):
-        self.id = self.gen_id()
-        self.node = node
-        self.time = None
-        self.knowledge = self.Knowledge()
-        self.knowledge.id = self.id
-        self.knowledge.node_id = node.id if node else None
-        self.metadata = Metadata()
-
-
 class EnsembleDefinition:
     class Knowledge:
         pass
@@ -134,7 +169,7 @@ class EnsembleDefinition:
         self.member = member
 
     @abstractmethod
-    def fitness(self, coordinator, candidate):
+    def fitness(self, coordinator, candidate) -> float:
         pass
 
     @abstractmethod
@@ -144,80 +179,3 @@ class EnsembleDefinition:
     @abstractmethod
     def knowledge_exchange(self, coordinator, candidate):
         pass
-
-    def instantiate(self, coordinator):
-        return EnsembleInstance(self, coordinator)
-
-
-class EnsembleInstance:
-    def __init__(self, definition: EnsembleDefinition, coordinator: Component):
-        self.definition = definition
-        self.memberKnowledge = []
-        self.coordinator = coordinator
-
-    def id(self):
-        return hash(map(lambda x: x.id, self.memberKnowledge))
-
-    def contains(self, component_id: int):
-        return component_id in map(lambda x: x.id, self.memberKnowledge)
-
-    def add(self, knowledge: BaseKnowledge):
-        # TODO: Filter out outdated knowledge
-        self.memberKnowledge = list(filter(lambda x: x.id != knowledge.id, self.memberKnowledge))
-        self.memberKnowledge.append(knowledge)
-
-    def fitness(self):
-        return self.fitness_of(None)
-
-    def fitness_of(self, candidate):
-        try:
-            return self.definition.fitness(self.coordinator.knowledge, candidate)
-        except (TypeError, AttributeError) as e:
-            print(e)
-            return 0
-
-    def membership_of(self, member_knowledge):
-        try:
-            if not isinstance(member_knowledge, self.definition.member):
-                return False
-            else:
-                return self.definition.membership(self.coordinator.knowledge, member_knowledge)
-        except (TypeError, IndexError) as e:
-            print(e)
-            return False
-
-    def membership(self):
-        is_active = False
-        for mk in self.memberKnowledge:
-            if self.membership_of(mk):
-                is_active = True
-            else:
-                print('should unsubscribe {mk} from {self}')
-        return is_active
-
-    def knowledge_exchange(self):
-        patches = []
-        coordinator = self.coordinator
-
-        for member in self.memberKnowledge:
-            coord, member_mappings =  self.definition.knowledge_exchange(coordinator.knowledge, member)
-            patches.append( (member.node_id, member.id, member_mappings))
-        return patches
-
-    def add_impact(self, knowledge):
-        if not self.membership_of(knowledge): # cordinator and new one
-            return  float('-inf')
-        else:
-            new_fitness = self.fitness_of(knowledge)
-            old_fitness = self.fitness()
-            return new_fitness - old_fitness
-
-    def remove_impact(self, knowledge):
-        new_members = filter(lambda x: x.id != knowledge.id, self.memberKnowledge)
-        return self.definition.fitness(new_members) - self.fitness()
-
-    def replace_impact(self, added_knowledge, removed_knowledge):
-        return self.add_impact(added_knowledge) + self.remove_impact(removed_knowledge)
-
-    def __str__(self):
-        return self.__class__.__name__ + " of " + str(self.definition) + " with id " + str(self.id())

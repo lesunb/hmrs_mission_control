@@ -5,7 +5,7 @@ from deeco.plugins.identity_replicas import IdentityReplicas
 from deeco.plugins.simplenetwork import SimpleRangeLimitedNetwork
 from deeco.plugins.walker import Walker
 from deeco.plugins.knowledgepublisher import KnowledgePublisher
-from deeco.plugins.ensemblereactor import EnsembleReactor
+from deeco.plugins.ensemblereactor import EnsembleReactor, get_knowledge_about, has_member
 
 from deeco.plugins.snapshoter import Snapshoter
 
@@ -42,18 +42,6 @@ def test_multiple_nodes():
     sim.run(1000)
 
 
-def get_knowledge_about(reactor: EnsembleReactor, member:Component):
-    for instance in reactor.instances:
-        for mk in instance.memberKnowledge:
-            if mk.id is member.id:
-                return mk
-    return None
-
-def has_member(reactor: EnsembleReactor, member:Component):
-    return get_knowledge_about(reactor, member) is not None
-
-
-
 def test_join_ensemble_and_update_ensemble_knowledge():
     sim = Sim()
 
@@ -80,7 +68,8 @@ def test_join_ensemble_and_update_ensemble_knowledge():
     assert has_member(er0, robot1)
 
     # check if er2 has an updated knowledge about robo
-    dist = get_knowledge_about(er0, robot1).position.dist_to(node1.positionProvider.get())
+    er0_knowledge_about_robot1 = next(get_knowledge_about(er0, robot1))
+    dist = er0_knowledge_about_robot1.position.dist_to(node1.positionProvider.get())
     # assert that ensemble knowledge is at most two walker step behind
     assert dist < 2*0.001/3.6
 
