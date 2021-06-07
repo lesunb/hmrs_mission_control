@@ -53,7 +53,7 @@ class CoalitionFormationProcess:
             for worker in candidates:
                 mission_context.occurances.append(f'evaluating robot {worker.uuid}')
                 bid = self.estimate(worker, task_list)
-                is_viable = self.check_viable(bid)
+                is_viable = self.check_viable(bid, mission_context)
                 mission_context.occurances.append(f'evaluating robot {worker.uuid}: bid is viable:{is_viable}')
                 if is_viable:
                     bids.append(bid)
@@ -102,10 +102,10 @@ class CoalitionFormationProcess:
     def estimate(self, worker, task_list: List[ElementaryTask]) -> Bid: 
         return self.estimate_manager.estimation(worker, task_list)
 
-    def check_viable(self, bid: Bid) -> bool:
+    def check_viable(self, bid: Bid, mission_context: MissionContext) -> bool:
         if bid.estimate.is_inviable:
             return False
-        res, estimate = self.estimate_manager.check_viable(bid)
+        res, estimate = self.estimate_manager.check_viable(bid, mission_context)
         
         if not res:
             bid.estimate = estimate
@@ -127,6 +127,8 @@ class CoalitionFormationProcess:
         for local_mission, bid in selected_bids.items():
             local_mission.worker = bid.worker
             local_mission.status = LocalMission.Status.PENDING_COMMIT
+
+            local_mission.plan.assignment.estimate = selected_bids[local_mission].estimate
             # set assignment on global plan
             global_plan = mission_context.global_plan
 

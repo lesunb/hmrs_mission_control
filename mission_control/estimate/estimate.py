@@ -4,7 +4,7 @@ from typing import Callable, List, Tuple, Any
 from mission_control.mission.ihtn import ElementaryTask, Task
 
 from .core import SkillDescriptor, TaskContext, create_context_gen, SkillDescriptorRegister
-from ..core import BatteryTimeConstantDischarge, Worker, Estimate, InviableEstimate
+from ..core import BatteryTimeConstantDischarge, MissionContext, Worker, Estimate, InviableEstimate
 
 
 class Partial:
@@ -44,6 +44,18 @@ class TimeEstimator(Estimator):
             task_estimate = res
         next(task_estimate, **plan)
 
+    def check_viable(self, bid: Bid, mission_context: MissionContext, next, invalid):
+        if not mission_context or not mission_context.global_plan:
+            next()
+            return
+        
+        max_time = mission_context.global_plan.attributes.get('max_time')
+        if max_time is None or bid.estimate.time < max_time:
+            next()
+            return
+        else:
+            invalid('max time exceeded (5 min)')
+
 
 class EnergyEstimatorConstantDischarge(Estimator):
     def estimation(self, task_context: TaskContext, estimate:Estimate, next:Callable, invalid:Callable) -> Tuple[Estimate, Any]:
@@ -53,7 +65,7 @@ class EnergyEstimatorConstantDischarge(Estimator):
         
         next(estimate)
     
-    def check_viable(self, bid: Bid, next:Callable, invalid: Callable):
+    def check_viable(self, bid: Bid, mission_context: MissionContext, next, invalid):
         energy_model: BatteryTimeConstantDischarge = bid.worker.get_resource(BatteryTimeConstantDischarge)
         if energy_model.battery.charge - bid.estimate.energy > energy_model.minimum_useful_level:
             next()
@@ -97,7 +109,7 @@ class CheckViabilityChain:
     def __init__(self, estimators: List[Estimator]):
         self.estimators = list(estimators)
     
-    def check_viable(self, bid: Bid) -> bool:
+    def check_viable(self, bid: Bid, mission_context: MissionContext) -> bool:
         result = True
         result_estimate = None
         
@@ -116,7 +128,7 @@ class CheckViabilityChain:
             
             estimator = self.estimators.pop(0)
             try:
-                estimator.check_viable(bid, next, inviable)
+                estimator.check_viable(bid, mission_context, next, inviable)
             except Exception as e:
                inviable(f'exception in estimating with {estimator.__class__}: {traceback.format_exc()} ')
 
@@ -139,8 +151,8 @@ class EstimationManager:
         aggregated = self.aggregate_estimates(partials)
         return Bid(worker, estimate=aggregated, partials=partials)
 
-    def check_viable(self, bid: Bid):
-        return CheckViabilityChain(self.estimate_chain).check_viable(bid)
+    def check_viable(self, bid: Bid, mission_context: MissionContext):
+        return CheckViabilityChain(self.estimate_chain).check_viable(bid, mission_context)
     
     def estimation_in_task_context(self, task_context) -> Tuple[Estimate, Any]:
         return EstimationChain(self.estimate_chain).estimate(task_context)

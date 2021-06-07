@@ -152,14 +152,14 @@ routes_ed = container[RoutesEnvironmentDescriptor]
 
 # skill desc
 nav_sd = container[NavigationSkillDescriptor]
-approach_person_sd = generic_skill_descriptor_constant_cost_factory('approach_person', 50)
-authenticate_person_sd = generic_skill_descriptor_constant_cost_factory('authenticate_person', 10)
-operate_drawer_sd = generic_skill_descriptor_constant_cost_factory('operate_drawer', 10)
-approach_robot_sd = generic_skill_descriptor_constant_cost_factory('approach_robot', 50)
-pick_up_sd = generic_skill_descriptor_constant_cost_factory('pick_up', 10)
+approach_person_sd = generic_skill_descriptor_constant_cost_factory('approach_person', 2)
+authenticate_person_sd = generic_skill_descriptor_constant_cost_factory('authenticate_person', 2)
+operate_drawer_sd = generic_skill_descriptor_constant_cost_factory('operate_drawer', 2)
+approach_robot_sd = generic_skill_descriptor_constant_cost_factory('approach_robot', 2)
+pick_up_sd = generic_skill_descriptor_constant_cost_factory('pick_up', 2)
 
-send_message_sd = generic_skill_descriptor_constant_cost_factory('send_message', 0)
-wait_message_sd = generic_skill_descriptor_constant_cost_factory('wait_message', 10)
+send_message_sd = generic_skill_descriptor_constant_cost_factory('send_message', 2)
+wait_message_sd = generic_skill_descriptor_constant_cost_factory('wait_message', 2)
 
 
 

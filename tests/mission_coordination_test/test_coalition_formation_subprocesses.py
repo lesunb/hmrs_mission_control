@@ -23,12 +23,12 @@ def test_get_compatible_workers(cf_process: CoalitionFormationProcess, ihtn_coll
 def test_check_viable(cf_process: CoalitionFormationProcess, collection_robots):
     worker = collection_robots[0]
     bid = Bid(worker = worker, estimate = Estimate(time = 3, energy = 0.1))
-    assert cf_process.check_viable(bid) == True
+    assert cf_process.check_viable(bid, None) == True
 
 def test_check_inviable(cf_process: CoalitionFormationProcess, collection_robots):
     worker = collection_robots[0]
     bid = Bid(worker = worker, estimate = Estimate(time = 3, energy = 10))
-    res =  cf_process.check_viable(bid)
+    res =  cf_process.check_viable(bid, None)
     assert res == False
     assert bid.estimate.is_inviable == True
 
@@ -36,7 +36,7 @@ def test_check_inviable(cf_process: CoalitionFormationProcess, collection_robots
 def test_check_not_viable(cf_process: CoalitionFormationProcess, collection_robots):
     worker = collection_robots[0]
     bid = Bid(worker = worker, estimate = InviableEstimate(reason='no route'))
-    assert cf_process.check_viable(bid) == False
+    assert cf_process.check_viable(bid, None) == False
 
 
 def test_sort_and_select_bids(cf_process: CoalitionFormationProcess, collection_robots):
