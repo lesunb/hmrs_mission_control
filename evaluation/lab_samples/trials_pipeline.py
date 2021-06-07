@@ -1,14 +1,19 @@
+
+from copy import deepcopy
 import json
+from typing import List
 from __init__ import *
 from random import Random
+from evaluation.lab_samples import baseline_plan
 
 from mission_control.core import BatteryTimeConstantDischarge, Request
 from evaluation.framework.exec_sim import SimExec
 from evaluation.framework.trial import Trial
 from evaluation.framework.trial import total_combinations, draw_without_repetition, draw_with_repetition
 
-from resources.world_lab_samples import task_type, all_skills, near_ic_pc_rooms, cf_process, pickup_ihtn, get_position_of_poi
+from resources.world_lab_samples import task_type, all_skills, poi, routes_ed, near_ic_pc_rooms, cf_process, pickup_ihtn, get_position_of_poi
 
+from evaluation.lab_samples.baseline_plan import append_baseline_trial, get_baseline_plan
 
 def gen_requests(times, locations, rand):
     selected_locations = draw_without_repetition(locations, len(times), rand)
@@ -81,6 +86,7 @@ def main():
     trial_id = 0
     trials = []
     requests = None
+    baseline_trials = []
     for trial_robots_factors in robots_factors_combinatios:
         trial_robots = []
         for robot_id in range(0, number_of_robots):
@@ -93,20 +99,32 @@ def main():
             trial_robots.append(robot_facotrs)
         
         locations_without_robot = list(set(near_ic_pc_rooms) - set(trial_robots_factors['location']))
-        # generate the a request for each time
+
+        # generate a request for each time
         requests = []
         nurses = []
+        nurses_locations = []
         for location, request in gen_requests(request_times, locations_without_robot, random):
             requests.append(request)
             nurses.append({ 'position': get_position_of_poi(location), 'location': location.label})
+            nurses_locations.append(location)
 
         trial = Trial(id=trial_id, robots=trial_robots, requests=requests)
+            
         trial.nurses = nurses
         trials.append(trial)
+        append_baseline_trial(baseline_trials, id=trial_id, robots=trial_robots, 
+            nurses_locations=nurses_locations, nurses=nurses, routes_ed=routes_ed, random=random)
+        
         trial_id += 1
     
         planned_trials = []
         no_plan_trials = []
+
+
+    # dump baseline trials
+    with open('experiment_baseline_trials.json', 'w') as outfile:
+        json.dump(baseline_trials, outfile, indent=4, sort_keys=True)
 
     # batch exec for trials
     for trial in trials:
@@ -137,9 +155,11 @@ def main():
     with open('experiment_planned_trials.json', 'w') as outfile:
         json.dump(planned_trials, outfile, indent=4, sort_keys=True)
 
-    with open('experiment_no_plan_trials.json', 'w') as outfile:
-        json.dump(no_plan_trials, outfile, indent=4, sort_keys=True)
-    
+    if no_plan_trials:
+        with open('experiment_no_plan_trials.json', 'w') as outfile:
+            json.dump(no_plan_trials, outfile, indent=4, sort_keys=True)
+
+
 
 
 def get_sim_exec():

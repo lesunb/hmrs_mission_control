@@ -129,6 +129,6 @@ class RoutesEnvironmentDescriptor(EnvironmentDescriptor):
     def get_position(self, poi: POI):
         return self.nodes_dict[poi.label]
 
-    def get(self, origin:POI, destination:POI):
+    def get(self, origin:POI, destination:POI) -> Route:
         return self._get(self.nodes_dict[origin.label], \
              self.nodes_dict[destination.label])
