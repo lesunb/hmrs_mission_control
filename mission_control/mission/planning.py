@@ -10,9 +10,9 @@ def create_send_message(next_task, role):
     smt = SyncTask(type=SEND_MESSAGE, to_=next_task.assign_to, assign_to=role)
     return smt
 
-def create_wait_message(next_task, role):
+def create_wait_message(prev_task, role):
     WAIT_MESSAGE = SyncTask.SyncType.WAIT_MESSAGE.value
-    wmt = SyncTask(type=WAIT_MESSAGE, from_=next_task.assign_to, assign_to=role)
+    wmt = SyncTask(type=WAIT_MESSAGE, from_=prev_task.assign_to, assign_to=role)
     return wmt
 
 def distribute(task: Task, role):
@@ -43,8 +43,9 @@ def distribute(task: Task, role):
                     if k + 1 == len(method.subtasks):
                         pass
                     else:
-                        next_task = method.subtasks[k+1]
+                        
                         if is_assigned(ktask, role):
+                            next_task = method.subtasks[k+1]
                             if not is_assigned(next_task, role):
                                 # assigned to this, and  not the next
                                 # = notify the next
@@ -52,7 +53,8 @@ def distribute(task: Task, role):
                                 nsubtasks.append(smt)
                         elif is_assigned(method.subtasks[k+1], role):
                             # not assign to this, but to the next
-                            wmt = create_wait_message(next_task, role)
+                            prev_task = method.subtasks[k-1]
+                            wmt = create_wait_message(prev_task, role)
                             nsubtasks.append(wmt)
                         else:
                             pass

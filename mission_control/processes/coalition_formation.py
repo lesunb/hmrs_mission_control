@@ -139,3 +139,4 @@ class CoalitionFormationProcess:
                 ihtn_task.assignment = partials_map[task]
 
             transverse_ihtn_apply_for_task(global_plan, winning_bid_tasks, set_assignment)
+            transverse_ihtn_apply_for_task(local_mission.plan, winning_bid_tasks, set_assignment)

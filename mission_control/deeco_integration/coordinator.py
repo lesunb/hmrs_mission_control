@@ -149,7 +149,7 @@ class Coordinator(Component, MissionHandler):
         
         for mission in missions:
             for local_mission in mission.local_missions:
-                if local_mission.worker.uuid in workers:
+                if local_mission.worker and local_mission.worker.uuid in workers:
                     workers.pop(local_mission.worker.uuid)
         
     

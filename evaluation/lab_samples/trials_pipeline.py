@@ -57,9 +57,9 @@ def main():
     ]
 
     battery_discharge_rates = [
-        draw_without_repetition([x * 0.0000002 for x in range(10, 30)], number_of_robots, random),
-        draw_without_repetition([x * 0.0000002 for x in range(10, 30)], number_of_robots, random),
-        draw_without_repetition([x * 0.0000002 for x in range(10, 30)], number_of_robots, random),
+        draw_without_repetition([x * 0.00005 for x in range(10, 30)], number_of_robots, random),
+        draw_without_repetition([x * 0.00005 for x in range(10, 30)], number_of_robots, random),
+        draw_without_repetition([x * 0.00005 for x in range(10, 30)], number_of_robots, random),
     ]
 
     # constant for all robots
@@ -91,7 +91,6 @@ def main():
                 robot_facotrs[key] = values_set[robot_id]
             
             trial_robots.append(robot_facotrs)
-
         
         locations_without_robot = list(set(near_ic_pc_rooms) - set(trial_robots_factors['location']))
         # generate the a request for each time

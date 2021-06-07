@@ -17,9 +17,10 @@ def mc_task_to_exeuctor(elementary_task):
         parameters.append(elementary_task.to_.pop().label)
     if getattr(elementary_task, 'from_', None) is not None:
         parameters.append(elementary_task.from_.pop().label)
-    if getattr(elementary_task, 'plan', None) is not None:
-        if isinstance(elementary_task.plan, Route):
-            route: Route = elementary_task.plan
+    if getattr(elementary_task, 'assignment', None) is not None and \
+        getattr(elementary_task.assignment, 'plan', None) is not None:
+        if isinstance(elementary_task.assignment.plan['route'], Route):
+            route = elementary_task.assignment.plan['route']
             waypoints = route.get_all_waypoints()
             parameters.append(waypoints)
     return (command, parameters)
