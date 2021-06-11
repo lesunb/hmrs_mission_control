@@ -1,5 +1,5 @@
 role Worker:
-    skills, local_mission, location, battery_charge, battery_discharge_rate, avg_speed
+                    skills, local_mission, location, battery_charge, battery_discharge_rate, avg_speed
 
 component Robot features Worker
     knowledge:

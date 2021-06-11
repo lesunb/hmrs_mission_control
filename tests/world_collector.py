@@ -11,7 +11,7 @@ from mission_control.core import Battery, BatteryTimeConstantDischarge, MissionC
 from mission_control.estimate.core import SkillDescriptorRegister
 from mission_control.estimate.estimate import EnergyEstimatorConstantDischarge, EstimationManager, Estimator, TimeEstimator
 from mission_control.processes.coalition_formation import CoalitionFormationProcess
-from mission_control.mission.ihtn import Method, ElementaryTask, AbstractTask
+from mission_control.mission.ihtn import Method, ElementaryTask, AbstractTask, Task, TaskState
 
 from mission_control.common_descriptors.routes_ed import RoutesEnvironmentDescriptor, Map, Nodes
 from mission_control.common_descriptors.navigation_sd import NavigationSkillDescriptor, Move
@@ -117,6 +117,14 @@ class collection_ihtn(Enum):
 
     # root task
     collect = AbstractTask(methods=[m_collect])
+
+def collector_ihtn_plan_repair(ihtn: Task, task_state: TaskState):
+    if task_state.task == collection_ihtn.navto_room3.value:
+        return ihtn
+    else:
+        return False
+
+
 
 for enum_item in collection_ihtn:
     setattr(enum_item.value, 'name', enum_item.name)

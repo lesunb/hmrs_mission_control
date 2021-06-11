@@ -3,6 +3,8 @@
 import functools
 import operator
 from mission_control.mission.ihtn import Assignment, Task, TaskState, TaskStatus, ihtn_aggregate, transverse_ihtn
+from mission_control.mission.coordination import update_mission
+
 from typing import List
 
 from ..core import Estimate, MissionContext, MissionStatus, Worker
@@ -22,10 +24,24 @@ class SupervisionProcess:
         except Exception as e:
             self.m_handler.handle_unnexpected_error(createError(e, active_mission, updates))
 
-    def do_run(self, active_mission: MissionContext, assigned_workers: List[Worker], updates):
-        (robot_statuses, mission_status) = self.update_mission()
-                    
+    def do_run(self, mission_context: MissionContext, assigned_workers: List[Worker], updates):
+        mission_status = self.update_mission()
+        
+    
+        # handle mission status
+        if mission_status.is_ok:
+            if robot_status.is_completed_with_success:
+                self.assignment_complete(robot_status.robot)
+            
+            self.report(mission_status)
+
+        else:
+            repair(mission_context)
+        
+        robot_status = self.get_robot_status()
+        # 
         for robot_status in robot_statuses:
+            
             if robot_status.is_completed_with_success:
                 self.assignment_complete(robot_status.robot)
             elif robot_status.is_fatal_failure:
@@ -39,13 +55,43 @@ class SupervisionProcess:
 
         self.report_progress(active_mission)
 
-    def update_mission(self, updates):
+    def evaluate_mission_status(mission_context: MissionContext) -> MissionStatus:
+        def get_remaining_time(task: Task):
+            if task.state.is_status(TaskStatus.SUCCESS_END):
+                return 0
+            estimate: Estimate = task.assignment.estimate
+            state: TaskState = task.state
+            return estimate.time * \
+                        (1 - state.progress)
+
+        def set_remaining_time(task: Task, remaining_time):
+            if  task.assignment is None:
+                task.assignment = Assignment()
+            if  task.assignment.estimate is None:
+                task.assignment.estimate = Estimate()
+            task.assignment.estimate.time = remaining_time
+
+        def sum_remaining_time(abs_task: Task, subtasks: List[Task]):
+            remaining_time = functools.reduce(operator.add, 
+                map(lambda task: get_remaining_time(task)
+                    ,subtasks))
+            set_remaining_time(abs_task, remaining_time)
+
+        ihtn_aggregate(mission_context.global_plan, sum_remaining_time)
+        return MissionStatus(get_remaining_time(mission_context.global_plan))
+
+    def get_updated_mission_status(self, mission_context: MissionContext) -> MissionStatus:
+        task_states = self.get_task_states()
+        for task_state in task_states:
+            update_mission(mission_context.global_plan, task_state)
+
+        evaluate_mission_status(mission_context)
+
         # do update
         violations = self.check_restrictions()
 
-    def handle_reasignable_failure(self, robot_status):
-        request = Request(self.active_mission)
-        self.queue_request(request)
+    def repair(self, mission_context: MissionContext):
+        pass
 
     def assignment_complete(self, robot):
         self.update_assigment(ScheduleUpdate(worker=robot, status='avaiable') )
@@ -79,30 +125,7 @@ class SupervisionProcess:
     def get_progress():
         pass
 
-    def evaluate_mission_status(mission_context: MissionContext) -> MissionStatus:
-        def get_remaining_time(task: Task):
-            if task.state.is_status(TaskStatus.SUCCESS_END):
-                return 0
-            estimate: Estimate = task.assignment.estimate
-            state: TaskState = task.state
-            return estimate.time * \
-                        (1 - state.progress)
 
-        def set_remaining_time(task: Task, remaining_time):
-            if  task.assignment is None:
-                task.assignment = Assignment()
-            if  task.assignment.estimate is None:
-                task.assignment.estimate = Estimate()
-            task.assignment.estimate.time = remaining_time
-
-        def sum_remaining_time(abs_task: Task, subtasks: List[Task]):
-            remaining_time = functools.reduce(operator.add, 
-                map(lambda task: get_remaining_time(task)
-                    ,subtasks))
-            set_remaining_time(abs_task, remaining_time)
-
-        ihtn_aggregate(mission_context.global_plan, sum_remaining_time)
-        return MissionStatus(get_remaining_time(mission_context.global_plan))
 
 
     def try_handle_failure(self, failure):

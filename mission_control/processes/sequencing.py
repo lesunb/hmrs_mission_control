@@ -118,13 +118,18 @@ class LocalMissionController:
         """
         Update curr plan with tick status
         """
-        if tick_status.status is TickStatus.Type.SUCCESS_END:
+        if tick_status.status is TickStatus.Type.SUCCESS_END: # task ended
             self.curr_plan = eliminate_left_task(tick_status.task, self.curr_plan)
             self._curr_task: Task = None
             self.concluded_curr_plan_tasks += 1
             if self.curr_plan is None:
                 self.status = LocalMissionController.Status.CONCLUDED_WIH_SUCCESS
-    
+        #TODO task in progress
+
+        #TODO failure
+
+        #TODO send status
+
     def next_task(self):
         if self._curr_task is None:
             curr_task = self.get_next_task()
@@ -142,10 +147,8 @@ class LocalMissionController:
         pass
 
 
-                    
-
 class TaskStatus:
-    def set_value():
+    def set_value(self, value):
         pass
 
 class SequencingProcess:
@@ -166,6 +169,6 @@ class SequencingProcess:
             
         tick_status = active_skill_ctrl.tick()
         local_mission.update(tick_status)
-        #task_status.set_value(local_mission.get_task_status())
+        task_status.set_value(local_mission.get_task_status())
 
 

@@ -96,6 +96,18 @@ class Method:
         new_.subtasks = list(map(lambda st:st.clone(), self.subtasks))
         return new_
 
+class AbstractTask(Task):
+    def __init__(self, methods: List[Method] =[], **kwargs):
+        super().__init__(**kwargs)
+        self.methods = methods
+        self.selected_method: Method = methods[0]
+        self.assign_to = get_children_assignment(methods)
+
+    def clone(self):
+        new_ = copy(self)
+        new_.selected_method = self.selected_method.clone()
+        new_.methods = list(map( lambda m: m.clone(), self.methods))
+        return new_
 
 def get_children_assignment(methods: List[ Method ]):
 
@@ -117,19 +129,6 @@ def get_children_assignment(methods: List[ Method ]):
                 assingments.update(get_children_assignment(task.methods))
     return assingments
 
-
-class AbstractTask(Task):
-    def __init__(self, methods: List[Method] =[], **kwargs):
-        super().__init__(**kwargs)
-        self.methods = methods
-        self.selected_method: Method = methods[0]
-        self.assign_to = get_children_assignment(methods)
-
-    def clone(self):
-        new_ = copy(self)
-        new_.selected_method = self.selected_method.clone()
-        new_.methods = list(map( lambda m: m.clone(), self.methods))
-        return new_
 
 
 

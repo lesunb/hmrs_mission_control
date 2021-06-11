@@ -62,9 +62,9 @@ def main():
     ]
 
     battery_discharge_rates = [
-        draw_without_repetition([x * 0.00005 for x in range(10, 20)], number_of_robots, random),
-        draw_without_repetition([x * 0.00005 for x in range(10, 20)], number_of_robots, random),
-        draw_without_repetition([x * 0.00005 for x in range(10, 20)], number_of_robots, random),
+        draw_without_repetition([x * 0.00001 for x in range(10, 20)], number_of_robots, random),
+        draw_without_repetition([x * 0.00001 for x in range(10, 20)], number_of_robots, random),
+        draw_without_repetition([x * 0.00001 for x in range(10, 20)], number_of_robots, random),
     ]
 
     # constant for all robots
