@@ -9,8 +9,6 @@ from ..world_collector import *
 
 def test_mark_local_mission_as_having_failures(collection_mission, collection_ihtn):
     mission: MissionContext = collection_mission['mission']
-    
-    # mark first task as concluded
     task_state = TaskState(task=collection_ihtn.navto_room3.value, status=TaskStatus.FAILURE)
 
     class MySupervisionProcess(SupervisionProcess):
@@ -23,31 +21,17 @@ def test_mark_local_mission_as_having_failures(collection_mission, collection_ih
     assert mission.local_missions[0].is_status(TaskStatus.FAILURE)
     
 
-def test_can_repair_plan(collection_mission, collection_ihtn):
-    mission: MissionContext = collection_mission['mission']
+# def test_can_repair_plan(collection_mission, collection_ihtn):
+#     pass
     
-    # mark first task as concluded
-    task_state = TaskState(task=collection_ihtn.navto_room3.value, status=TaskStatus.FAILURE)
+# def test_waiting_repair():
+#     pass
 
-    class MySupervisionProcess(SupervisionProcess):
-        def get_pending_updates(self, local_mission: LocalMission) -> List[TaskState]:
-            return [task_state]
-    
-    my_sp = MySupervisionProcess(None)
+# def test_mission_repaired():
+#     pass
 
-    my_sp.run(mission)
-    my_sp.run(mission)
-    assert mission.local_missions[0].is_status(TaskStatus.FAILURE)
-    
-
-def test_waiting_repair():
-    pass
-
-def test_mission_repaired():
-    pass
-
-def test_reasign():
-    pass
+# def test_reasign():
+#     pass
 
 # def test_can_not_repair_plan(collection_mission):
 #     mission: MissionContext = collection_mission['mission']

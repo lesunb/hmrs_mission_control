@@ -38,7 +38,6 @@ class SupervisionProcess:
     def update_mission_in_progress(self, mission_context: MissionContext):
         for local_mission, task_states in self.get_local_mission_in_progress_and_updates(mission_context):
             # local mission in progress
-            has_failure = False
             for task_state in task_states:
                 update_mission(local_mission.plan, task_state)
                 update_mission(mission_context.global_plan, task_state)
@@ -101,9 +100,7 @@ class SupervisionProcess:
         for lm in lms_in_progress:
             yield lm, self.get_pending_updates(lm)
 
-
-    @staticmethod
-    def report_mission_status(mission_context: MissionContext, mission_status: MissionStatus):
+    def report_mission_status(self, mission_context: MissionContext, mission_status: MissionStatus):
         pass
 
     @abstractmethod
