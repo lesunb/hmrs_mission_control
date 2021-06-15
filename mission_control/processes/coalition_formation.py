@@ -1,5 +1,5 @@
 
-from mission_control.mission.ihtn import transverse_ihtn_apply_for_task
+from mission_control.mission.ihtn import TaskStatus, transverse_ihtn_apply_for_task
 from typing import Generator, Dict, List, Sequence, Tuple
 
 from mission_control.mission.ihtn import Assignment, ElementaryTask, Task
@@ -73,7 +73,7 @@ class CoalitionFormationProcess:
 
     @staticmethod    
     def get_pending_assignments(mission_context: MissionContext) -> Sequence[LocalMission]:
-        return filter(lambda lm: lm.status == LocalMission.Status.PENDING_ASSIGNMENTS, 
+        return filter(lambda lm: lm.assignment_status == LocalMission.AssignmentStatus.NOT_ASSIGNED, 
                         mission_context.local_missions)
 
     @staticmethod
@@ -82,7 +82,7 @@ class CoalitionFormationProcess:
             local_mission = distribute(mission_context.global_plan, role)
             lm = LocalMission(local_plan=local_mission, role=role, global_mission = mission_context)
             if role.type == Role.Type.NOT_MANAGED:
-                lm.status = LocalMission.Status.NOT_MANAGED
+                lm.assignment_status =  LocalMission.AssignmentStatus.NOT_MANAGED
             yield lm
         return
 
@@ -126,7 +126,7 @@ class CoalitionFormationProcess:
     def set_assignment_from_selected_bids(self, mission_context: MissionContext, selected_bids: Dict[LocalMission, Bid]):
         for local_mission, bid in selected_bids.items():
             local_mission.worker = bid.worker
-            local_mission.status = LocalMission.Status.PENDING_COMMIT
+            local_mission.status = TaskStatus.IN_PROGRESS
 
             local_mission.plan.assignment.estimate = selected_bids[local_mission].estimate
             # set assignment on global plan

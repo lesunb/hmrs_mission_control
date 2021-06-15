@@ -5,20 +5,28 @@ import math
 from enum import Enum
 from typing import List
 
-from .mission.ihtn import Task
+import json
+
+from .mission.ihtn import Task, TaskStatus
 
 
 class Role:
-    class Type(Enum):
-        MANAGED=0
-        NOT_MANAGED=1
+    class Type(str, Enum):
+        MANAGED= 'MANAGED'
+        NOT_MANAGED= 'NOT_MANAGED'
 
     def __init__(self, label, type = Type.MANAGED):
         self.label, self.type = label, type
 
+    def __str__(self):
+        return json.dumps(self.__dict__)
+
 class POI:
     def __init__(self, label):
         self.label = label
+    
+    def __str__(self):
+        return self.label
 
 class Capability:
     class Property:
@@ -104,20 +112,22 @@ class InviableEstimate(Estimate):
         self.is_inviable = True
             
 class LocalMission:
-    class Status(Enum):
-        PENDING_ASSIGNMENTS = 1
-        PENDING_COMMIT = 2
-        ASSIGNED = 3
-        CONCLUDED = 4
-        NOT_MANAGED = 5
+    class AssignmentStatus(Enum):
+        NOT_MANAGED = 0
+        NOT_ASSIGNED = 1
+        ASSIGNED = 2
+        
 
     def __init__(self, local_plan: Task, role, global_mission, worker = None):
         self.plan: Task = local_plan
         self.role = role
         self.global_mission = global_mission
         self.worker: Worker = worker
-        self.status = LocalMission.Status.PENDING_ASSIGNMENTS
+        self.assignment_status: self.AssignmentStatus = LocalMission.AssignmentStatus.NOT_ASSIGNED
         
+    
+    def is_status(self, status: TaskStatus):
+        return self.plan.state.is_status(status)
 
 class MissionContext:
     class Status(Enum):

@@ -12,7 +12,7 @@ def test_mission_no_mission():
     # just check nothing breaks when running a non completly started process
     assert True
 
-def test_mission_start(ihtn_collect):
+def test_mission_start(ihtn_collect, collection_ihtn):
     global_mission = collection_ihtn.collect.value.clone()
     seq_proc = SequencingProcess(skill_library = collector_skill_library)
     task_status = TaskStatus()
@@ -23,7 +23,7 @@ def test_mission_start(ihtn_collect):
     assert isinstance(local_mission_ctrl._curr_task, ElementaryTask)
 
 
-def test_task_finished_and_has_next(ihtn_collect):
+def test_task_finished_and_has_next(ihtn_collect, collection_ihtn):
     #global_mission = collection_ihtn.collect.value.clone()
     seq_proc = SequencingProcess(skill_library = collector_skill_library)
     task_status = TaskStatus()
@@ -42,7 +42,7 @@ def test_task_finished_and_has_next(ihtn_collect):
     assert local_mission_ctrl._curr_task == collection_ihtn.pick_up_object.value
 
 
-def test_mission_just_finished():
+def test_mission_just_finished(collection_ihtn):
     global_mission = collection_ihtn.collect.value.clone()
     seq_proc = SequencingProcess(skill_library = collector_skill_library)
     task_status = TaskStatus()

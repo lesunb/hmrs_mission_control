@@ -4,10 +4,12 @@ from ..world_collector import *
 from mission_control.processes.coalition_formation import CoalitionFormationProcess, Bid
 from mission_control.core import Estimate, InviableEstimate, MissionContext
 
-nav_to_room3 = collection_ihtn.navto_room3.value
-pick_up_object = collection_ihtn.pick_up_object.value
 
-def test_flat_plan(cf_process: CoalitionFormationProcess, ihtn_collect):
+def test_flat_plan(cf_process: CoalitionFormationProcess, ihtn_collect, collection_ihtn):
+    nav_to_room3 = collection_ihtn.navto_room3.value
+    pick_up_object = collection_ihtn.pick_up_object.value
+
+
     obtained_task = cf_process.flat_plan(ihtn_collect)
     diff =  set(obtained_task) ^ set([nav_to_room3, pick_up_object])
     assert not diff

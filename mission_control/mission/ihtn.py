@@ -1,10 +1,13 @@
 from __future__ import annotations
 
+import pprint
+
+import json
 from abc import abstractmethod
 from enum import Enum
 from copy import copy
 from collections.abc import Sequence
-from typing import Callable, List 
+from typing import Callable, Iterable, List 
 
 
 class MethodOrdering(Enum):
@@ -15,6 +18,8 @@ class Assignment:
     def __init__(self, estimate=None, plan=None):
         self.estimate, self.plan = estimate, plan
 
+    def __str__(self):
+        return json.dumps(self.__dict__)
 
 class Task:
     id = 0
@@ -31,20 +36,27 @@ class Task:
     def clone():
         pass
 
-class TaskStatus(Enum):
-        FATAL_FAILURE = 0
-        IN_PROGRESS = 1
-        SUCCESS_END = 2
-
+class TaskStatus(str, Enum):
+    NOT_ASSIGNED = 'NOT_ASSIGNED'
+    NOT_STARTED = 'NOT_STARTED'
+    IN_PROGRESS = 'IN_PROGRESS'
+    SUCCESS_ENDED = 'SUCCESS_ENDED'
+    FAILURE = 'FAILURE'
+    CANCELED = 'CANCELED'
+    
 
 class TaskState:
-    def __init__(self, status: TaskStatus = TaskStatus.IN_PROGRESS, progress: float = 0.0, task: Task = None):
+    def __init__(self, status: TaskStatus = TaskStatus.NOT_STARTED, progress: float = 0.0, task: Task = None):
         self.status, self.progress, self.task = status, progress, task
-        if status == TaskStatus.SUCCESS_END:
+        if status == TaskStatus.SUCCESS_ENDED:
             progress = 1 # 100%
 
     def is_status(self, status: TaskState):
         return self.status == status
+    
+    def is_in(self, *statuses) -> bool:
+        return self.status in statuses
+
 
 class ElementaryTask(Task):
     def __init__(self, type, **kwargs):
@@ -67,10 +79,26 @@ class ElementaryTask(Task):
         return False
 
     def __hash__(self):
-        str_ = str(list(map( lambda k:(k,getattr(self, k)), self._attrs)))
-        hashx =  hash(str_)
-        return hashx
+        pp = pprint.PrettyPrinter(indent=4)
+        dict = {}
+        def to_str(obj):
+            try:
+                return json.dumps(obj)
+            except (TypeError, OverflowError):
+                if not isinstance(obj, str) and isinstance(obj, Iterable):
+                    return list(map(lambda o: to_str(o), obj))
+                elif getattr(obj, '__dict__', False):
+                    return json.dumps(obj.__dict__)
+                else:
+                    return str(obj)
 
+        for attr in self._attrs:
+            if attr in ['attributes']:
+                continue
+            dict[attr] = to_str(getattr(self, attr))
+            
+        str_ = pp.pformat(dict)
+        return hash(str_)
 
 class SyncTask(Task):
     class SyncType(Enum):
@@ -132,23 +160,23 @@ def get_children_assignment(methods: List[ Method ]):
 
 
 
-def transverse_ihtn(ihtn: Task, task_state: TaskState, handle_subtree):
+def transverse_ihtn(ihtn: Task, task_state: TaskState, handle_leaf_match:Callable, handle_branch_match):
     """
     deep-first search for task_status.update, and apply handle_subtree 
      into the each intermediate task
     """
     if isinstance(ihtn, ElementaryTask):
         if ihtn == task_state.task:
-            handle_subtree(ihtn, task_state)
+            handle_leaf_match(ihtn, task_state)
             return True
         else:
             return False
     
     if isinstance(ihtn, AbstractTask):
         for subtask in ihtn.selected_method.subtasks:
-            was_found = transverse_ihtn(subtask, task_state, handle_subtree)
+            was_found = transverse_ihtn(subtask, task_state, handle_leaf_match, handle_branch_match)
             if was_found:
-                handle_subtree(subtask, task_state)
+                handle_branch_match(ihtn, task_state)
                 return True
         return False
 

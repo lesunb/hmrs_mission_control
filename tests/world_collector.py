@@ -1,3 +1,4 @@
+from copy import deepcopy
 from mission_control.processes.integration import MissionHandler
 from mission_control.processes.sequencing import SkillImplementation, SkillLibrary, TickStatus
 import pytest
@@ -109,7 +110,7 @@ robots = [ unit.value for unit in robot ]
 
 # Defined as Enum so we can reference methods and tasks, and we can have references
 # to names that we later on set on them with set_name()
-class collection_ihtn(Enum):
+class _collection_ihtn(Enum):
     # elementary tasks
     navto_room3 = ElementaryTask(task_type.NAV_TO.value, destination=poi.room3.value, assign_to=[role_r1])
     pick_up_object  = ElementaryTask(task_type.PICK_UP.value, target=role_r1, assign_to=[role_r1])
@@ -119,20 +120,23 @@ class collection_ihtn(Enum):
     collect = AbstractTask(methods=[m_collect])
 
 def collector_ihtn_plan_repair(ihtn: Task, task_state: TaskState):
-    if task_state.task == collection_ihtn.navto_room3.value:
+    if task_state.task == _collection_ihtn.navto_room3.value:
         return ihtn
     else:
         return False
 
 
 
-for enum_item in collection_ihtn:
+for enum_item in _collection_ihtn:
     setattr(enum_item.value, 'name', enum_item.name)
 
+@pytest.fixture
+def collection_ihtn():
+    return deepcopy(_collection_ihtn)
 
 @pytest.fixture
 def ihtn_collect():
-    return collection_ihtn.collect.value.clone()
+    return deepcopy(_collection_ihtn.collect.value.clone())
 
 @pytest.fixture
 def r1():
@@ -223,7 +227,7 @@ class MissionHandlerMock(MissionHandler):
 
 @pytest.fixture
 def collection_mission():
-    mission_context = MissionContext(global_plan = collection_ihtn.collect.value.clone())
+    mission_context = MissionContext(global_plan = deepcopy(_collection_ihtn.collect.value.clone()))
     cfp.do_run(mission_context, robots, MissionHandlerMock())
     robot_b = robots[1] # robot B that is the fastest that have the skills
     cmission = {"mission": mission_context, 'robot': robot_b}

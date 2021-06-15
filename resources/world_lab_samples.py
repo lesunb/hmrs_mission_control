@@ -1,3 +1,4 @@
+from copy import deepcopy
 import pytest
 from enum import Enum
 from typing import List
@@ -110,10 +111,10 @@ def pickup_ihtn(pickup_location):
     for enum_item in lab_samples_ihtn:
         setattr(enum_item.value, 'name', enum_item.name)
 
-    return (lab_samples_ihtn.pickup_sample.value, lab_samples_ihtn)
+    return (lab_samples_ihtn.pickup_sample.value.clone(), deepcopy(lab_samples_ihtn))
 
 
-pickup_sample, lab_samples_ihtn =  pickup_ihtn(poi.ic_room_3.value)
+# pickup_sample, lab_samples_ihtn =  pickup_ihtn(poi.ic_room_3.value)
 
 
 @pytest.fixture
@@ -128,10 +129,12 @@ def ihtn_unload_sample():
 
 @pytest.fixture
 def ihtn_navto_room3():
+    _, lab_samples_ihtn =  pickup_ihtn(poi.ic_room_3.value)
     return lab_samples_ihtn.navto_room.value
 
 @pytest.fixture
 def ihtn_deposit():
+    _, lab_samples_ihtn =  pickup_ihtn(poi.ic_room_3.value)
     return lab_samples_ihtn.deposit.value
 
 ##
