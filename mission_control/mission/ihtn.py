@@ -7,7 +7,8 @@ from abc import abstractmethod
 from enum import Enum
 from copy import copy
 from collections.abc import Sequence
-from typing import Callable, Iterable, List 
+from typing import Callable, Iterable, List
+from utils.to_string import obj_to_string 
 
 class Role:
     class Type(str, Enum):
@@ -17,9 +18,6 @@ class Role:
     def __init__(self, label, type = Type.MANAGED):
         self.label, self.type = label, type
 
-    def __str__(self):
-        return json.dumps(self.__dict__)
-
 class MethodOrdering(Enum):
     SEQUENTIAL= 0
     NON_ORDERED = 1
@@ -27,9 +25,6 @@ class MethodOrdering(Enum):
 class Assignment:
     def __init__(self, estimate=None, plan=None):
         self.estimate, self.plan = estimate, plan
-
-    def __str__(self):
-        return json.dumps(self.__dict__)
 
 class Task:
     id = 0
@@ -45,6 +40,12 @@ class Task:
     @abstractmethod
     def clone():
         pass
+    
+    def __str__(self) -> str:
+        return obj_to_string(self)
+
+    def __hash__(self):
+        return hash(self.__str__())
 
 class TaskExternalStatus(str, Enum):
     IN_PROGRESS = 'IN_PROGRESS'
@@ -99,26 +100,9 @@ class ElementaryTask(Task):
         return False
 
     def __hash__(self):
-        pp = pprint.PrettyPrinter(indent=4)
-        dict = {}
-        def to_str(obj):
-            try:
-                return json.dumps(obj)
-            except (TypeError, OverflowError):
-                if not isinstance(obj, str) and isinstance(obj, Iterable):
-                    return list(map(lambda o: to_str(o), obj))
-                elif getattr(obj, '__dict__', False):
-                    return json.dumps(obj.__dict__)
-                else:
-                    return str(obj)
-
-        for attr in self._attrs:
-            if attr in ['attributes']:
-                continue
-            dict[attr] = to_str(getattr(self, attr))
-            
-        str_ = pp.pformat(dict)
-        return hash(str_)
+        return super().__hash__()
+        # str_ = obj_to_string(self.__str__())
+        # return hash(str_)
 
 class SyncTask(Task):
     class SyncType(Enum):

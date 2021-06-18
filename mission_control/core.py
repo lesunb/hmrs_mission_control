@@ -1,3 +1,4 @@
+from utils.to_string import obj_to_string
 from deeco.core import Identifiable
 import math
 
@@ -93,6 +94,9 @@ class Estimate:
     def __init__(self, time=math.inf, energy=math.inf, progress: float=0.0):
         self.is_inviable = False
         self.time, self.energy, self.progress = time, energy, progress
+
+    def __str__(self):
+        return obj_to_string(self)
 
 class InviableEstimate(Estimate):
     def __init__(self, reason:str):
