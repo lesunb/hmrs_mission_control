@@ -1,12 +1,12 @@
 
 from mission_control.mission.ihtn import TaskStatus, transverse_ihtn_apply_for_task
-from typing import Generator, Dict, List, Sequence, Tuple
+from typing import Generator, Dict, List, Sequence
 
 from mission_control.mission.ihtn import Assignment, ElementaryTask, Task
 from mission_control.mission.planning import distribute, flat_plan
 from .integration import MissionHandler, MissionUnnexpectedError
-from ..core import Estimate, MissionContext, Worker, LocalMission, Role
-from ..estimate.estimate import EstimationManager, Bid, Partial
+from ..core import MissionContext, MissionStatus, Worker, LocalMission, Role
+from ..estimate.estimate import EstimationManager, Bid
 
 def coalitionFormationError(e, mission_context):
     message = f'Unexpected error forming coalition for {mission_context}'
@@ -30,14 +30,13 @@ class CoalitionFormationProcess:
         #     mission_handler.handle_unnexpected_error(coalitionFormationError(e, mission_context))
 
     def do_run(self, mission_context: MissionContext, workers: List[Worker], mission_handler: MissionHandler):
-        if mission_context.status == MissionContext.Status.NEW:
+        if mission_context.status == MissionStatus.NEW:
             mission_context.local_missions = list(self.initialize_local_missions(mission_context))
-            mission_context.status = MissionContext.Status.PENDING_ASSIGNMENTS
+            mission_context.status = MissionStatus.IN_PROGRESS
             mission_handler.start_mission(mission_context)
 
         is_success = self.create_coalition(mission_context, workers)
         if is_success:
-            mission_context.status = MissionContext.Status.DISTRIBUTING_TASKS
             mission_handler.update_assigments(mission_context)
         else:
             # its all or northing - or assign all pending tasks or none
@@ -126,8 +125,6 @@ class CoalitionFormationProcess:
     def set_assignment_from_selected_bids(self, mission_context: MissionContext, selected_bids: Dict[LocalMission, Bid]):
         for local_mission, bid in selected_bids.items():
             local_mission.worker = bid.worker
-            local_mission.status = TaskStatus.IN_PROGRESS
-
             local_mission.plan.assignment.estimate = selected_bids[local_mission].estimate
             # set assignment on global plan
             global_plan = mission_context.global_plan

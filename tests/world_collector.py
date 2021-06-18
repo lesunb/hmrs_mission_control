@@ -1,4 +1,5 @@
 from copy import deepcopy
+from mission_control.mission.repair import MissionRepairPlannerRegister, MissionRepairStatus, RepairPlanner
 from mission_control.processes.integration import MissionHandler
 from mission_control.processes.sequencing import SkillImplementation, SkillLibrary, TickStatus
 import pytest
@@ -8,7 +9,7 @@ from typing import List
 
 from enum import Enum
 
-from mission_control.core import Battery, BatteryTimeConstantDischarge, MissionContext, Role, Worker, worker_factory, POI
+from mission_control.core import Battery, BatteryTimeConstantDischarge, LocalMission, MissionContext, Role, Worker, POI
 from mission_control.estimate.core import SkillDescriptorRegister
 from mission_control.estimate.estimate import EnergyEstimatorConstantDischarge, EstimationManager, Estimator, TimeEstimator
 from mission_control.processes.coalition_formation import CoalitionFormationProcess
@@ -119,6 +120,9 @@ class _collection_ihtn(Enum):
     # root task
     collect = AbstractTask(methods=[m_collect])
 
+collection_mission_type = 'collection_mission'
+
+
 def collector_ihtn_plan_repair(ihtn: Task, task_state: TaskState):
     if task_state.task == _collection_ihtn.navto_room3.value:
         return ihtn
@@ -211,7 +215,7 @@ class OneTickSkill(SkillImplementation):
             self.tick_count = 1
             return TickStatus(status=TickStatus.Type.IN_PROGRESS, task=self.task)
         else:
-            return TickStatus(status=TickStatus.Type.SUCCESS_END, task=self.task)
+            return TickStatus(status=TickStatus.Type.COMPLETED_WITH_SUC, task=self.task)
 
     def on_complete(self):
         print(f'task completed')
@@ -227,10 +231,43 @@ class MissionHandlerMock(MissionHandler):
 
 @pytest.fixture
 def collection_mission():
-    mission_context = MissionContext(global_plan = deepcopy(_collection_ihtn.collect.value.clone()))
+    mission_context = MissionContext(global_plan = deepcopy(_collection_ihtn.collect.value.clone()), mission_type=collection_mission_type)
     cfp.do_run(mission_context, robots, MissionHandlerMock())
     robot_b = robots[1] # robot B that is the fastest that have the skills
     cmission = {"mission": mission_context, 'robot': robot_b}
     return cmission
 
 
+class CollectorMissionRepair(RepairPlanner):
+    def try_local_repair(self, local_mission: LocalMission) -> MissionRepairStatus:
+        if local_mission.failure.task == _collection_ihtn.navto_room3.value:
+            local_mission.worker = None
+            local_mission.assignment_status = LocalMission.AssignmentStatus.NOT_ASSIGNED
+            task_states = self.reset_task_states(local_mission.plan)
+            return MissionRepairStatus.REASSIGN, task_states
+        else:
+            return MissionRepairStatus.CANT_REPAIR, None
+
+    def try_global_repair(self, global_mission: MissionContext) -> MissionRepairStatus:
+        return MissionRepairStatus.CANT_REPAIR
+
+
+
+    def try_handle_failure(self, failure):
+        can_be_reasigned = self.can_be_reasigned(failure)
+        should_reasign = can_be_reasigned and \
+                (self.is_fatal(failure) or self.better_reasign(failure))
+
+        soluction = None
+        if should_reasign:
+            soluction = self.reasign(failure)
+        
+        if not soluction:
+            self.notify_not_recoverable_failure(failure, soluction)
+
+@pytest.fixture
+def collector_mission_repair_register():
+    cm_repair = CollectorMissionRepair()
+    repair_planner_register = MissionRepairPlannerRegister()
+    repair_planner_register.register(collection_mission_type, cm_repair)
+    return repair_planner_register

@@ -10,7 +10,7 @@ class TickStatus:
     class Type(Enum):
         FATAL_FAILURE = 0
         IN_PROGRESS = 1
-        SUCCESS_END = 2
+        COMPLETED_WITH_SUC = 2
     
     def __init__(self, status: Type, task: Task):
         self.status, self.task = status, task
@@ -88,7 +88,7 @@ class ActiveSkillController:
         Tick the active skill
         """
         tick_result = self.active_skill.tick()
-        if tick_result.status == TickStatus.Type.SUCCESS_END:
+        if tick_result.status == TickStatus.Type.COMPLETED_WITH_SUC:
             self.active_skill.complete()
             self.active_skill = None
 
@@ -118,7 +118,7 @@ class LocalMissionController:
         """
         Update curr plan with tick status
         """
-        if tick_status.status is TickStatus.Type.SUCCESS_END: # task ended
+        if tick_status.status is TickStatus.Type.COMPLETED_WITH_SUC: # task ended
             self.curr_plan = eliminate_left_task(tick_status.task, self.curr_plan)
             self._curr_task: Task = None
             self.concluded_curr_plan_tasks += 1

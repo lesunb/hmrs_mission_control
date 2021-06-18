@@ -1,11 +1,8 @@
-from typing import Callable, List
 from .ihtn import AbstractTask, ElementaryTask, Task, TaskState, TaskStatus, transverse_ihtn
 
 
-def update_mission(ihtn: Task, task_state: TaskState):
+def update_estimates_with_progress(ihtn: Task, task_state: TaskState):
     transverse_ihtn(ihtn, task_state, update_elementary_task, update_abstrack_task)
-
-
 
 def update_elementary_task(task:Task, task_state: TaskState):
     if isinstance(task, ElementaryTask):
@@ -13,10 +10,9 @@ def update_elementary_task(task:Task, task_state: TaskState):
     else:
         raise Exception('not supported task')
 
-
-def update_abstrack_task(task:Task, task_state: TaskState):
-    if task_state.status is TaskStatus.FAILURE:
-        task.state.status = TaskStatus.FAILURE
+def update_abstrack_task(task: AbstractTask, task_state: TaskState):
+    if task_state.status is TaskStatus.FAILED:
+        task.state.status = TaskStatus.FAILED
         return
 
     def check_any_with_status(status):
@@ -39,15 +35,15 @@ def update_abstrack_task(task:Task, task_state: TaskState):
         return check, check_all
 
     # new success
-    check_failure, any_failure = check_any_with_status(TaskStatus.FAILURE)
-    check_success, all_success = check_all_with_status(TaskStatus.SUCCESS_ENDED)
+    check_failure, any_failure = check_any_with_status(TaskStatus.FAILED)
+    check_success, all_success = check_all_with_status(TaskStatus.COMPLETED_WITH_SUC)
     for t in task.selected_method.subtasks:
         check_failure(t)
         check_success(t)
     if all_success():
-        task.state.status = TaskStatus.SUCCESS_ENDED
+        task.state.status = TaskStatus.COMPLETED_WITH_SUC
     elif any_failure():
-        task.state.status = TaskStatus.FAILURE
+        task.state.status = TaskStatus.FAILED
     else:
         task.state.status = TaskStatus.IN_PROGRESS
 

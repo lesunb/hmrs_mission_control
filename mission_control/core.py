@@ -7,19 +7,8 @@ from typing import List
 
 import json
 
-from .mission.ihtn import Task, TaskStatus
+from .mission.ihtn import Task, TaskState, TaskStatus, Role
 
-
-class Role:
-    class Type(str, Enum):
-        MANAGED= 'MANAGED'
-        NOT_MANAGED= 'NOT_MANAGED'
-
-    def __init__(self, label, type = Type.MANAGED):
-        self.label, self.type = label, type
-
-    def __str__(self):
-        return json.dumps(self.__dict__)
 
 class POI:
     def __init__(self, label):
@@ -110,43 +99,56 @@ class InviableEstimate(Estimate):
         super().__init__(time = math.inf, energy = math.inf)
         self.reason = reason
         self.is_inviable = True
-            
+
 class LocalMission:
     class AssignmentStatus(Enum):
         NOT_MANAGED = 0
         NOT_ASSIGNED = 1
         ASSIGNED = 2
-        
+        CANCELLED = 3
 
-    def __init__(self, local_plan: Task, role, global_mission, worker = None):
+
+    def __init__(self, local_plan: Task, role: Role, global_mission, worker = None):
         self.plan: Task = local_plan
         self.role = role
         self.global_mission = global_mission
         self.worker: Worker = worker
         self.assignment_status: self.AssignmentStatus = LocalMission.AssignmentStatus.NOT_ASSIGNED
-        
+        self.on_going_repair = None
+        self.failure: TaskState = None
     
     def is_status(self, status: TaskStatus):
         return self.plan.state.is_status(status)
+    def status_in(self, list_status: TaskStatus):
+        return self.plan.state.is_in(list_status)
+    def set_status(self, status: TaskStatus):
+        self.plan.state.status = status
+
+
+def is_success(local_mission: LocalMission):
+    return local_mission.is_status(TaskStatus.COMPLETED_WITH_SUC)
+
+def is_failed(local_mission: LocalMission):
+    return local_mission.is_status(TaskStatus.FAILED)
+
+class MissionStatus(str, Enum):
+    NEW = 'NEW'
+    IN_PROGRESS = 'IN_PROGRESS'
+    PLAN_RECOVERY = 'PLAN_RECOVERY'
+    COMPLETED_WITH_SUCCESS = 'COMPLETED_WITH_SUCCESS'
+    FAILED = 'FAILED'
+    CANCELED = 'CANCELED'
 
 class MissionContext:
-    class Status(Enum):
-        NEW = 0
-        PENDING_ASSIGNMENTS = 1
-        DISTRIBUTING_TASKS = 2
-        EXECUTING = 3
-        CONCLUDED = 4
-        REPLANNING_PENDING = 5
-
-    def __init__(self, global_plan: Task = None):
-        self.status = MissionContext.Status.NEW
+    def __init__(self, global_plan: Task = None, mission_type: str = None):
+        self.status:MissionStatus = MissionStatus.NEW
         self.global_plan: Task = global_plan
+        self.mission_type = mission_type
         self.local_missions: List[LocalMission] = []
         self.occurances = []
+        self.on_going_repair = None
+        self.failures = []
     
-
-class MissionStatus:
-    def __init__(self, time_remaining):
-        self.time_remaining = time_remaining
-
-    
+class MissionState:
+    def __init__(self, remaining_time):
+        self.remaining_time = remaining_time

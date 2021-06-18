@@ -1,4 +1,5 @@
 
+from typing import List
 from mission_control.mission.ihtn import Task, ElementaryTask, AbstractTask, SyncTask, MethodOrdering
 
 
@@ -79,7 +80,7 @@ def count_elementary_tasks(ihtn):
         return count
     else: return 0
 
-def flat_plan(ihtn):
+def flat_plan(ihtn) -> List[ElementaryTask]:
     if isinstance(ihtn, ElementaryTask) or isinstance(ihtn, SyncTask) :
         return [ihtn]
     elif isinstance(ihtn, AbstractTask):

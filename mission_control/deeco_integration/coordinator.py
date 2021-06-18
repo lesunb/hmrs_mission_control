@@ -7,7 +7,7 @@ from typing import List, Mapping
 from deeco.core import BaseKnowledge, Component, ComponentRole, Node, UUID
 from deeco.core import process
 
-from ..core import Battery, BatteryTimeConstantDischarge, MissionContext, Worker
+from ..core import BatteryTimeConstantDischarge, LocalMission, MissionContext, Worker
 from ..processes.integration import MissionHandler, MissionUnnexpectedError
 from ..processes.coalition_formation import CoalitionFormationProcess
 from ..processes.supervision import SupervisionProcess
@@ -65,8 +65,7 @@ class Coordinator(Component, MissionHandler):
 
     @staticmethod
     def has_pending_assignment(mission_context:MissionContext):
-        return mission_context.status in [MissionContext.Status.NEW,
-                            MissionContext.Status.PENDING_ASSIGNMENTS]
+        return any(filter(lambda lm: lm.assignment_status == LocalMission.AssignmentStatus.NOT_ASSIGNED, mission_context.local_missions))
 
     def handle_requests(self):
         while self.node.requests_queue:

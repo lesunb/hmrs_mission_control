@@ -9,6 +9,16 @@ from copy import copy
 from collections.abc import Sequence
 from typing import Callable, Iterable, List 
 
+class Role:
+    class Type(str, Enum):
+        MANAGED= 'MANAGED'
+        NOT_MANAGED= 'NOT_MANAGED'
+
+    def __init__(self, label, type = Type.MANAGED):
+        self.label, self.type = label, type
+
+    def __str__(self):
+        return json.dumps(self.__dict__)
 
 class MethodOrdering(Enum):
     SEQUENTIAL= 0
@@ -26,7 +36,7 @@ class Task:
     def __init__(self, **kwargs):
         self.id = Task.id
         Task.id += 1
-        self.assign_to = None
+        self.assign_to: List[Role] = None
         self.assignment = Assignment()
         self.state: TaskState = TaskState()
         self.attributes = kwargs
@@ -36,19 +46,25 @@ class Task:
     def clone():
         pass
 
+class TaskExternalStatus(str, Enum):
+    IN_PROGRESS = 'IN_PROGRESS'
+    COMPLETED_WITH_SUC = 'COMPLETED_WITH_SUC'
+    FAILED = 'FAILED'
+    CANCELED = 'CANCELED'
+
 class TaskStatus(str, Enum):
     NOT_ASSIGNED = 'NOT_ASSIGNED'
-    NOT_STARTED = 'NOT_STARTED'
     IN_PROGRESS = 'IN_PROGRESS'
-    SUCCESS_ENDED = 'SUCCESS_ENDED'
-    FAILURE = 'FAILURE'
+    PLAN_RECOVERY = 'PLAN_RECOVERY'
+    COMPLETED_WITH_SUC = 'COMPLETED_WITH_SUC'
+    FAILED = 'FAILED'
     CANCELED = 'CANCELED'
-    
+
 
 class TaskState:
-    def __init__(self, status: TaskStatus = TaskStatus.NOT_STARTED, progress: float = 0.0, task: Task = None):
+    def __init__(self, status: TaskStatus = TaskStatus.NOT_ASSIGNED, progress: float = 0.0, task: Task = None):
         self.status, self.progress, self.task = status, progress, task
-        if status == TaskStatus.SUCCESS_ENDED:
+        if status == TaskStatus.COMPLETED_WITH_SUC:
             progress = 1 # 100%
 
     def is_status(self, status: TaskState):
@@ -57,6 +73,10 @@ class TaskState:
     def is_in(self, *statuses) -> bool:
         return self.status in statuses
 
+class TaskFailure(TaskState):
+    def __init__(self, task: Task, failure_type = 'UnknownFailure', more_info=None):
+        super().__init__(status=TaskStatus.FAILED, progress=None, task=task)
+        self.failure_type, self.more_info = failure_type, more_info
 
 class ElementaryTask(Task):
     def __init__(self, type, **kwargs):
