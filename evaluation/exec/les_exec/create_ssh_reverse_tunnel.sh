@@ -1,0 +1,1 @@
+ssh -R 43022:localhost:22 azureuser@azuervps.westus2.cloudapp.azure.com

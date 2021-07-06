@@ -1,0 +1,10 @@
+[Unit]
+Description=AutoSSH tunnel service to local port 43022
+After=network.target
+
+[Service]
+Environment="AUTOSSH_GATETIME=0"
+ExecStart=/usr/bin/autossh -M 0 -o "ServerAliveInterval 30" -o "ServerAliveCountMax 3" -NL 43022:localhost:22  azurevps
+
+[Install]
+WantedBy=multi-user.target
