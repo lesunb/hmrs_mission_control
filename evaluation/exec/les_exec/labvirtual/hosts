@@ -1,8 +1,9 @@
-164.41.75.162 les-05.lesunb les-01
-164.41.75.162 les-05.lesunb les-02
-164.41.75.162 les-05.lesunb les-03
-164.41.75.162 les-05.lesunb les-04
-164.41.75.162 les-05.lesunb les-05
-164.41.75.162 les-05.lesunb les-06
-164.41.75.162 les-05.lesunb les-07
-164.41.75.162 les-05.lesunb les-08
+# $IP_PREFIX omitted for security reasons
+
+$IP_PREFIX.165  lab-01
+$IP_PREFIX.164  lab-02
+$IP_PREFIX.166  lab-03
+$IP_PREFIX.170  lab-05
+$IP_PREFIX.167  lab-06
+$IP_PREFIX.169  lab-07
+$IP_PREFIX.168  lab-08
