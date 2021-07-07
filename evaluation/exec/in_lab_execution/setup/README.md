@@ -23,12 +23,14 @@ cat client/.ssh/config >> ~/.ssh/config
 2. Put the key file to the path pointed by .ssh/config
 
 '''
-cp labaccessvps.pem ~/.ssh/remotes/labaccessvps.pem
+mkdir ~/.ssh/remotes
+cp labaccessvps.pem ~/.ssh/remotes/labaccessvps_key.pem
 '''
 
 3. Add the pub key of your machine to the labaccessvps, labvirtual and each workstations
 
 '''
+chmod +x ./client/init.sh
 ./client/init.sh
 '''
 

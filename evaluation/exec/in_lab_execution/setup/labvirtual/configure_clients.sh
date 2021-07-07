@@ -3,6 +3,7 @@
 #sudo cat ./hosts >> /etc/hosts
 
 echo "Setting name servers...."
+
 ssh-keygen -t rsa
 declare -a arr=( 2 3 4 5 6 7 8)
 for i in "${arr[@]}"
