@@ -134,3 +134,7 @@ dmypy.json
 #.vscode/
 #.gitignore
 .vscode/settings.json
+
+# secret
+*.pem
+**/acesso_les
