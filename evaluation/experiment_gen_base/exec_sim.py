@@ -1,5 +1,6 @@
 
 
+from evaluation.experiment_gen_base.trial_design import TrialDesign
 from mission_control.core import Battery
 from deeco.core import Node
 from deeco.sim import Sim
@@ -20,12 +21,8 @@ from mission_control.deeco_integration.mission_coordination_ensemble import Miss
 from mission_control.processes.coalition_formation import CoalitionFormationProcess
 
 from resources.world_lab_samples import *
-
-
-from .trial import Trial
 from .to_executor import prep_plan
-
-
+from .trial import Trial
 
 print("Running simulation")
 class SimExec:

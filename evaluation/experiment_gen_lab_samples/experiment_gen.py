@@ -1,24 +1,28 @@
 
-from copy import deepcopy
 import json
 from typing import List
 from __init__ import *
 from random import Random
-from evaluation.lab_samples import baseline_plan
 
-from mission_control.core import BatteryTimeConstantDischarge, Request
-from evaluation.framework.exec_sim import SimExec
-from evaluation.framework.trial import Trial
-from evaluation.framework.trial import total_combinations, draw_without_repetition, draw_with_repetition
+from mission_control.core import Request
+from evaluation.experiment_gen_base.exec_sim import SimExec
+from evaluation.experiment_gen_base.trial import Trial
+from evaluation.experiment_gen_base.trial_design import total_combinations, draw_without_repetition, draw_with_repetition
 
 from resources.world_lab_samples import task_type, all_skills, poi, routes_ed, near_ic_pc_rooms, cf_process, pickup_ihtn, get_position_of_poi
 
-from evaluation.lab_samples.baseline_plan import append_baseline_trial, get_baseline_plan
+from evaluation.experiment_gen_lab_samples.baseline_plan import append_baseline_trial
 
-def gen_requests(times, locations, rand):
-    selected_locations = draw_without_repetition(locations, len(times), rand)
-    for time, location in zip(times, selected_locations):
-        task, ihtn = pickup_ihtn(location)
+# def randomly_gen_requests(times, locations, rand):
+#     selected_locations = draw_without_repetition(locations, len(times), rand)
+#     for time, location in zip(times, selected_locations):
+#         task, _ = pickup_ihtn(location)
+#         yield location, Request(task=task, timestamp=time)
+#     return
+
+def gen_requests(times, locations):
+    for time, location in zip(times, locations):
+        task, _ = pickup_ihtn(location)
         yield location, Request(task=task, timestamp=time)
     return
 
@@ -26,6 +30,7 @@ def main():
     random = Random()
     random.seed(42)
     number_of_robots = 5
+    number_of_nurses = 1
     
     # times in which a new request will appear in the trial
     request_times = [ 4000 ] # single request
@@ -48,9 +53,9 @@ def main():
 
     # three selections of positions for each robot
     locations = [ 
-        draw_without_repetition(near_ic_pc_rooms, number_of_robots, random),
-        draw_without_repetition(near_ic_pc_rooms, number_of_robots, random),
-        draw_without_repetition(near_ic_pc_rooms, number_of_robots, random)
+        draw_without_repetition(near_ic_pc_rooms, number_of_robots + number_of_nurses, random),
+        draw_without_repetition(near_ic_pc_rooms, number_of_robots + number_of_nurses, random),
+        draw_without_repetition(near_ic_pc_rooms, number_of_robots + number_of_nurses, random)
     ]
 
     # three selections of starting battery level for each robot
@@ -74,7 +79,7 @@ def main():
     # Design - total combination of robot factors
     ######
 
-    robots_factors_combinatios = total_combinations({
+    factors_combinatios = total_combinations({
         'skills': skills,
         'location': locations,
         'battery_charge': battery_charges,
@@ -87,8 +92,8 @@ def main():
     trials = []
     requests = None
     baseline_trials = []
-    for trial_robots_factors in robots_factors_combinatios:
-        trial_robots = []
+    for trial_robots_factors in factors_combinatios:
+        set_of_robot_factors = []
         for robot_id in range(0, number_of_robots):
             #each robot
             robot_facotrs = { 'id': robot_id }
@@ -96,24 +101,25 @@ def main():
                 # each factor
                 robot_facotrs[key] = values_set[robot_id]
             
-            trial_robots.append(robot_facotrs)
+            set_of_robot_factors.append(robot_facotrs)
         
-        locations_without_robot = list(set(near_ic_pc_rooms) - set(trial_robots_factors['location']))
+        # trailing positions are the position of nurses
+        nurse_locations = trial_robots_factors['location'][number_of_robots: number_of_robots + number_of_nurses]
 
         # generate a request for each time
         requests = []
         nurses = []
         nurses_locations = []
-        for location, request in gen_requests(request_times, locations_without_robot, random):
+        for location, request in gen_requests(request_times, nurse_locations):
             requests.append(request)
             nurses.append({ 'position': get_position_of_poi(location), 'location': location.label})
             nurses_locations.append(location)
 
-        trial = Trial(id=trial_id, robots=trial_robots, requests=requests)
+        trial = Trial(id=trial_id, robots=set_of_robot_factors, requests=requests)
             
         trial.nurses = nurses
         trials.append(trial)
-        append_baseline_trial(baseline_trials, id=trial_id, robots=trial_robots, 
+        append_baseline_trial(baseline_trials, id=trial_id, robots=set_of_robot_factors, 
             nurses_locations=nurses_locations, nurses=nurses, routes_ed=routes_ed, random=random)
         
         trial_id += 1

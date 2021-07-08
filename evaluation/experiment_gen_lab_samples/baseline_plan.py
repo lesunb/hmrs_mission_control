@@ -1,7 +1,7 @@
 
 from copy import deepcopy
+from evaluation.experiment_gen_base.trial_design import draw_without_repetition
 from resources.world_lab_samples import get_position_of_poi, poi
-from evaluation.framework.trial import draw_with_repetition
 from typing import List
 
 
@@ -10,7 +10,7 @@ def append_baseline_trial(baseline_trials: List, id, robots, nurses_locations, n
     _robots = deepcopy(robots)
 
     # randomly select the robot
-    selected = draw_with_repetition(_robots, 1, random)
+    selected = draw_without_repetition(_robots, 1, random)
     selected_robot = selected[0]
 
     # set empty plan

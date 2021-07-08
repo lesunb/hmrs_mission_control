@@ -13,9 +13,9 @@ def mc_task_to_exeuctor(elementary_task):
         parameters.append(elementary_task.destination.label)
     if getattr(elementary_task, 'target', None) is not None:
         parameters.append(elementary_task.target.label)
-    if getattr(elementary_task, 'to_', None) is not None:
+    if getattr(elementary_task, 'to_', None):
         parameters.append(elementary_task.to_.pop().label)
-    if getattr(elementary_task, 'from_', None) is not None:
+    if getattr(elementary_task, 'from_', None):
         parameters.append(elementary_task.from_.pop().label)
     if getattr(elementary_task, 'assignment', None) is not None and \
         getattr(elementary_task.assignment, 'plan', None) is not None:

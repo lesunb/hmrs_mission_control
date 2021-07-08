@@ -1,13 +1,28 @@
-from copy import copy
+from copy import deepcopy
 from typing import List
 from collections.abc import MutableMapping
 
-from mission_control.core import Request
+class TrialDesign(dict):
+    ''''
+    Dict of factor:level with two fields
+    id: a code of levels selected
+    factors_map: a map with the levels selected
+    '''
+    def __init__(self):
+        self.__id = None
+        self.factors_map = {}
 
-class Trial:
-    def __init__(self, id, robots, requests: List[Request]):
-        self.id, self.robots, self.requests = id, robots, requests
-        
+    def add_factor(self, factor, level, level_code):
+        self[factor] = level
+        self.factors_map[factor] = level_code
+    
+    def get_id(self):
+        if self.__id == None:
+            code = ''
+            for _, level_code in self.factors_map:
+                code += level_code
+            self.__id = code
+        return self.__id
 
 class Factor:
     def __init__(self, property, levels):
@@ -27,16 +42,27 @@ def flatten(d, parent_key='', sep='_'):
     return dict(items)
 
 def total_combinations(factors):
+    # starting with a empty 'seed_trial' that is further 'forked'
+    # with possible levels of factors
     factors = flatten(factors)
-    all_combinations = [{}]
+    seed_trial = TrialDesign()
+
+    all_combinations = [seed_trial]
+    
     for factor, levels in factors.items():
+        # for each factor, recombine the combinations up to now
+        # with each level of the here selected factor
         last_combination = all_combinations
         all_combinations = []
         for trial in last_combination:
+            level_code = 'A'
             for level in levels:
-                new_trial = copy(trial)
-                new_trial[factor]= level
+                
+                new_trial = deepcopy(trial)
+                new_trial.add_factor(factor, level, level_code)
                 all_combinations.append(new_trial)
+                level_code = chr(ord(level_code) + 1) # increment code
+                
     return all_combinations
         
 
