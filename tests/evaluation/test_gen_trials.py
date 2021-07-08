@@ -1,7 +1,7 @@
 
 from mission_control.core import POI
 
-from evaluation.framework.trial import draw_without_repetition, total_combinations
+from evaluation.experiment_gen_base.trial_design import draw_without_repetition, total_combinations
 
 from random import Random
 
