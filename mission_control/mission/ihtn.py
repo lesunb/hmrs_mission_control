@@ -47,14 +47,10 @@ class Task:
     def __hash__(self):
         return hash(self.__str__())
 
-class TaskExternalStatus(str, Enum):
-    IN_PROGRESS = 'IN_PROGRESS'
-    COMPLETED_WITH_SUC = 'COMPLETED_WITH_SUC'
-    FAILED = 'FAILED'
-    CANCELED = 'CANCELED'
 
 class TaskStatus(str, Enum):
     NOT_ASSIGNED = 'NOT_ASSIGNED'
+    NOT_STARTED = 'NOT_STARTED'
     IN_PROGRESS = 'IN_PROGRESS'
     PLAN_RECOVERY = 'PLAN_RECOVERY'
     COMPLETED_WITH_SUC = 'COMPLETED_WITH_SUC'
