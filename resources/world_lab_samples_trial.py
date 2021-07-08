@@ -1,5 +1,5 @@
 from mission_control.core import Request
-from evaluation.framework.trial import Trial
+from evaluation.experiment_gen_base.trial import Trial
 from .world_lab_samples import pickup_ihtn, poi
 
 
