@@ -1,14 +1,13 @@
-cp azuervps_key.pem ~/.ssh/remotes/azuervps_key.pem 
-
-cd labtunnel
-./install.sh
-
-# Automatic start-up of systemd user instances
-## otherwise the labtunnel with be only run when labvirtual has an active session
-loginctl enable-linger labvirtual 
+cp labaccessvps_key.pem ~/.ssh/remotes/labaccessvps_key.pem 
+chmod 400 ~/.ssh/remotes/labaccessvps_key.pem
 
 # append configs
 cat ./.ssh/config >> ~/.ssh/config
+
+# test
+#ssh labaccessvps 
+
+./labtunnel/install.sh
 
 # test/debug
 # ssh labaccessvpstunnel
@@ -17,4 +16,7 @@ cat ./.ssh/config >> ~/.ssh/config
 #systemctl --user stop labtunnel@labaccessvpstunnel
 
 
+# Automatic start-up of systemd user instances
+## otherwise the labtunnel with be only run when labvirtual has an active session
+loginctl enable-linger labvirtual 
 
