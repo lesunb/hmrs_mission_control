@@ -1,4 +1,5 @@
 from copy import deepcopy
+import functools
 from typing import List
 from collections.abc import MutableMapping
 
@@ -9,20 +10,28 @@ class TrialDesign(dict):
     factors_map: a map with the levels selected
     '''
     def __init__(self):
-        self.__id = None
-        self.factors_map = {}
+        self._code = None
+        self._factors_list = []
 
     def add_factor(self, factor, level, level_code):
         self[factor] = level
-        self.factors_map[factor] = level_code
+        self._factors_list.append((factor, level_code))
     
-    def get_id(self):
-        if self.__id == None:
+    @property
+    def code(self) -> str:
+        if self._code == None:
             code = ''
-            for _, level_code in self.factors_map:
+            for _, level_code in self._factors_list:
                 code += level_code
-            self.__id = code
-        return self.__id
+            self._code = code
+        return self._code
+    
+    @property
+    def factor_map(self):
+        def set_pair_on_map(map, elem):
+            map[ elem[0] ] = elem[1]; 
+            return map
+        return functools.reduce(set_pair_on_map,self._factors_list,{})
 
 class Factor:
     def __init__(self, property, levels):
@@ -41,7 +50,7 @@ def flatten(d, parent_key='', sep='_'):
             items.append((new_key, v))
     return dict(items)
 
-def total_combinations(factors):
+def total_combinations(factors) -> List[TrialDesign]:
     # starting with a empty 'seed_trial' that is further 'forked'
     # with possible levels of factors
     factors = flatten(factors)

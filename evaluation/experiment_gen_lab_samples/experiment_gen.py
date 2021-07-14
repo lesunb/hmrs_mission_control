@@ -79,7 +79,7 @@ def main():
     # Design - total combination of robot factors
     ######
 
-    factors_combinatios = total_combinations({
+    trial_designs = total_combinations({
         'skills': skills,
         'location': locations,
         'battery_charge': battery_charges,
@@ -87,24 +87,23 @@ def main():
         'avg_speed': avg_speed
     })
 
-    # set of requests    
-    trial_id = 0
+    # set of requests
     trials = []
     requests = None
     baseline_trials = []
-    for trial_robots_factors in factors_combinatios:
+    for trial_design in trial_designs:
         set_of_robot_factors = []
         for robot_id in range(0, number_of_robots):
             #each robot
             robot_facotrs = { 'id': robot_id }
-            for key, values_set in trial_robots_factors.items():
+            for factor_key, values_set in trial_design.items():
                 # each factor
-                robot_facotrs[key] = values_set[robot_id]
+                robot_facotrs[factor_key] = values_set[robot_id]
             
             set_of_robot_factors.append(robot_facotrs)
         
         # trailing positions are the position of nurses
-        nurse_locations = trial_robots_factors['location'][number_of_robots: number_of_robots + number_of_nurses]
+        nurse_locations = trial_design['location'][number_of_robots: number_of_robots + number_of_nurses]
 
         # generate a request for each time
         requests = []
@@ -115,15 +114,13 @@ def main():
             nurses.append({ 'position': get_position_of_poi(location), 'location': location.label})
             nurses_locations.append(location)
 
-        trial = Trial(id=trial_id, robots=set_of_robot_factors, requests=requests)
+        trial = Trial(id=trial_design.code, robots=set_of_robot_factors, requests=requests)
             
         trial.nurses = nurses
         trials.append(trial)
-        append_baseline_trial(baseline_trials, id=trial_id, robots=set_of_robot_factors, 
+        append_baseline_trial(baseline_trials, id=trial_design.code, robots=set_of_robot_factors, 
             nurses_locations=nurses_locations, nurses=nurses, routes_ed=routes_ed, random=random)
         
-        trial_id += 1
-    
         planned_trials = []
         no_plan_trials = []
 
