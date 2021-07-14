@@ -5,7 +5,9 @@ from resources.world_lab_samples import get_position_of_poi, poi
 from typing import List
 
 
-def append_baseline_trial(baseline_trials: List, id, robots, nurses_locations, nurses, routes_ed, random):
+
+
+def append_baseline_trial(baseline_trials: List, id, code, factors, robots, nurses_locations, nurses, routes_ed, random):
     # create baseline
     _robots = deepcopy(robots)
 
@@ -29,7 +31,7 @@ def append_baseline_trial(baseline_trials: List, id, robots, nurses_locations, n
         robot['location'] = robot['location'].label
         robot['skills'].sort()
 
-    baseline_trials.append({'id': id, 'robots': _robots, 'nurses': nurses })
+    baseline_trials.append({'id': id, 'code': code, 'factors': factors, 'robots': _robots, 'nurses': nurses })
     
 def get_baseline_plan(origin, nurse_location, lab, routes_ed):
     waypoints_to_nurse = routes_ed.get(origin, nurse_location).get_all_waypoints()

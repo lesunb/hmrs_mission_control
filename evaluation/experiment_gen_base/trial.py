@@ -1,3 +1,3 @@
 class Trial:
-    def __init__(self, id, robots, requests):
-        self.id, self.robots, self.requests = id, robots, requests
+    def __init__(self, id, code, robots, nurses, requests, factors):
+        self.id, self.code, self.robots, self.nurses, self.requests, self.factors = id, code, robots, nurses, requests, factors

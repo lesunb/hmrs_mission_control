@@ -17,6 +17,9 @@ class POI:
     
     def __str__(self):
         return self.label
+    
+    def to_str(self):
+        return self.__str__()
 
 class Capability:
     class Property:

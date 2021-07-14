@@ -13,7 +13,7 @@ def test_total_combinations():
         'skills': ['a']
     }
 
-    trials = total_combinations(robot_factors)
+    trials, code_map = total_combinations(robot_factors)
     assert len(trials) == 8
 
 

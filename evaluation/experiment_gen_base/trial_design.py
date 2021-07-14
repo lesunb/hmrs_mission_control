@@ -1,7 +1,8 @@
 from copy import deepcopy
 import functools
-from typing import List
+from typing import List, Tuple
 from collections.abc import MutableMapping
+from utils.to_string import obj_to_string
 
 class TrialDesign(dict):
     ''''
@@ -27,7 +28,7 @@ class TrialDesign(dict):
         return self._code
     
     @property
-    def factor_map(self):
+    def factors_map(self):
         def set_pair_on_map(map, elem):
             map[ elem[0] ] = elem[1]; 
             return map
@@ -50,29 +51,32 @@ def flatten(d, parent_key='', sep='_'):
             items.append((new_key, v))
     return dict(items)
 
-def total_combinations(factors) -> List[TrialDesign]:
+def total_combinations(factors) -> Tuple[List[TrialDesign], dict]:
     # starting with a empty 'seed_trial' that is further 'forked'
     # with possible levels of factors
-    factors = flatten(factors)
+    #factors = flatten(factors)
     seed_trial = TrialDesign()
 
     all_combinations = [seed_trial]
-    
-    for factor, levels in factors.items():
+
+    code_map = {}
+    next_code_index = 0
+    for factor, levels in factors:
         # for each factor, recombine the combinations up to now
         # with each level of the here selected factor
         last_combination = all_combinations
         all_combinations = []
+        code_map[next_code_index] = {'factor': factor}
         for trial in last_combination:
             level_code = 'A'
             for level in levels:
-                
+                code_map[next_code_index][level_code] = list(map(obj_to_string, level))
                 new_trial = deepcopy(trial)
                 new_trial.add_factor(factor, level, level_code)
                 all_combinations.append(new_trial)
                 level_code = chr(ord(level_code) + 1) # increment code
-                
-    return all_combinations
+        next_code_index = next_code_index + 1
+    return all_combinations, code_map
         
 
 def draw_without_repetition(source: List, number_of_draw:int, rand):

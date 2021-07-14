@@ -41,6 +41,8 @@ def obj_to_string(obj, base_ident='', ident='  ', parents=RefPath()):
     if isinstance(obj, dict):
         return key_value_to_string_base(get_keys=lambda o:o.keys(), get_values=lambda o,k:o[k])(obj, parents)
         #return dict_to_string(obj, internal_ident, parents=parents)
+    if hasattr(obj, 'to_str'):
+        return obj.to_str()
     if not hasattr(obj, '__dict__'):
         raise(f'non primitive not listed:{obj.__class__}')
     # object

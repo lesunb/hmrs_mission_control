@@ -3,11 +3,13 @@ import json
 from typing import List
 from __init__ import *
 from random import Random
+from datetime import datetime
 
 from mission_control.core import Request
 from evaluation.experiment_gen_base.exec_sim import SimExec
 from evaluation.experiment_gen_base.trial import Trial
-from evaluation.experiment_gen_base.trial_design import total_combinations, draw_without_repetition, draw_with_repetition
+from evaluation.experiment_gen_base.trial_design import draw_without_repetition, draw_with_repetition, total_combinations
+
 
 from resources.world_lab_samples import task_type, all_skills, poi, routes_ed, near_ic_pc_rooms, cf_process, pickup_ihtn, get_position_of_poi
 
@@ -26,9 +28,19 @@ def gen_requests(times, locations):
         yield location, Request(task=task, timestamp=time)
     return
 
+def simp_factors_map(map):
+    return map
+
+
+def exp_gen_id():
+    now = datetime.now()
+    current_time = now.strftime("%Y_%m_%d_%H_%M_%S")
+    print("Current Time =", current_time)
+    return current_time
+
 def main():
     random = Random()
-    random.seed(42)
+    random.seed(44)
     number_of_robots = 5
     number_of_nurses = 1
     
@@ -79,20 +91,26 @@ def main():
     # Design - total combination of robot factors
     ######
 
-    trial_designs = total_combinations({
-        'skills': skills,
-        'location': locations,
-        'battery_charge': battery_charges,
-        'battery_discharge_rate': battery_discharge_rates,
-        'avg_speed': avg_speed
-    })
+    factors_levels_list = [
+        ('avg_speed', avg_speed),
+        ('battery_charge', battery_charges),
+        ('battery_discharge_rate', battery_discharge_rates),
+        ('skills', skills),
+        ('location', locations)
+    ]
 
+    trial_designs, code_map = total_combinations(factors_levels_list)
+ 
     # set of requests
-    trials = []
+    trials: List[Trial] = []
     requests = None
     baseline_trials = []
+    trial_id = 1
     for trial_design in trial_designs:
         set_of_robot_factors = []
+        code = trial_design.code
+        factors = trial_design.factors_map
+
         for robot_id in range(0, number_of_robots):
             #each robot
             robot_facotrs = { 'id': robot_id }
@@ -109,24 +127,33 @@ def main():
         requests = []
         nurses = []
         nurses_locations = []
+
+        # append approach trial
         for location, request in gen_requests(request_times, nurse_locations):
             requests.append(request)
             nurses.append({ 'position': get_position_of_poi(location), 'location': location.label})
             nurses_locations.append(location)
 
-        trial = Trial(id=trial_design.code, robots=set_of_robot_factors, requests=requests)
-            
-        trial.nurses = nurses
+        trial = Trial(id=trial_id, code=code, factors=factors,
+            robots=set_of_robot_factors, 
+            nurses= nurses,
+            requests=requests)
+        
         trials.append(trial)
-        append_baseline_trial(baseline_trials, id=trial_design.code, robots=set_of_robot_factors, 
+        # append baseline trial
+        append_baseline_trial(baseline_trials, id=trial_id, code=code, factors=factors, robots=set_of_robot_factors, 
             nurses_locations=nurses_locations, nurses=nurses, routes_ed=routes_ed, random=random)
         
         planned_trials = []
         no_plan_trials = []
+        trial_id = trial_id + 1
 
+    exp_id = exp_gen_id()
+    with open(f'design_{exp_id}.json', 'w') as outfile:
+        json.dump(code_map, outfile, indent=4, sort_keys=True)
 
     # dump baseline trials
-    with open('experiment_baseline_trials.json', 'w') as outfile:
+    with open(f'experiment_baseline_trials_{exp_id}.json', 'w') as outfile:
         json.dump(baseline_trials, outfile, indent=4, sort_keys=True)
 
     # batch exec for trials
@@ -145,7 +172,6 @@ def main():
             robot['location'] = robot['location'].label
             robot['skills'].sort()
 
-
         # delete non dict
         delattr(trial, 'requests')
 
@@ -155,15 +181,12 @@ def main():
             no_plan_trials.append(trial.__dict__)
     
     # dump trials
-    with open('experiment_planned_trials.json', 'w') as outfile:
+    with open(f'experiment_planned_trials_{exp_id}.json', 'w') as outfile:
         json.dump(planned_trials, outfile, indent=4, sort_keys=True)
 
-    if no_plan_trials:
-        with open('experiment_no_plan_trials.json', 'w') as outfile:
-            json.dump(no_plan_trials, outfile, indent=4, sort_keys=True)
-
-
-
+    # dump trials
+    with open(f'experiment_no_plan_trials_{exp_id}.json', 'w') as outfile:
+        json.dump(no_plan_trials, outfile, indent=4, sort_keys=True)
 
 def get_sim_exec():
     return SimExec(cf_process)
