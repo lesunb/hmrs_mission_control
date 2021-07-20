@@ -19,3 +19,6 @@ ssh-copy-id -i $HOME/.ssh/id_rsa.pub lap-03
 ssh-copy-id -i $HOME/.ssh/id_rsa.pub lap-04
 ssh-copy-id -i $HOME/.ssh/id_rsa.pub lap-05
 ssh-copy-id -i $HOME/.ssh/id_rsa.pub lap-06
+ssh-copy-id -i $HOME/.ssh/id_rsa.pub lap-07
+ssh-copy-id -i $HOME/.ssh/id_rsa.pub lap-08
+

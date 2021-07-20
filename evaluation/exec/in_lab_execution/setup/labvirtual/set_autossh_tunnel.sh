@@ -6,8 +6,8 @@ cat ./.ssh/config >> ~/.ssh/config
 
 # test
 #ssh labaccessvps 
-
-./labtunnel/install.sh
+cd ./labtunnel/ 
+install.sh
 
 # test/debug
 # ssh labaccessvpstunnel

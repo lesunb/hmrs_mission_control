@@ -14,5 +14,7 @@ set ADD_TO_HOSTS_SCRIPT="echo '$hostname $LAB_ADDRESS_BASE' >> /etc/hosts'"
 ssh $LABACCESS_SSH ""
 
 #sudo visudo
+
 # no passw for sudo 
 # labpos ALL=(ALL) NOPASSWD:ALL
+

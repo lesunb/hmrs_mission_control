@@ -1,5 +1,7 @@
 
 import json
+from pathlib import Path
+
 from typing import List
 from __init__ import *
 from random import Random
@@ -37,6 +39,10 @@ def exp_gen_id():
     current_time = now.strftime("%Y_%m_%d_%H_%M_%S")
     print("Current Time =", current_time)
     return current_time
+
+def trial_key_to_sort(trial):
+    id_str = '{:02d}'.format(trial['id'])
+    return f'{id_str}_{trial["code"]}'
 
 def main():
     random = Random()
@@ -100,7 +106,7 @@ def main():
     ]
 
     trial_designs, code_map = total_combinations(factors_levels_list)
- 
+
     # set of requests
     trials: List[Trial] = []
     requests = None
@@ -133,30 +139,31 @@ def main():
             requests.append(request)
             nurses.append({ 'position': get_position_of_poi(location), 'location': location.label})
             nurses_locations.append(location)
-
-        trial = Trial(id=trial_id, code=code, factors=factors,
+        planned_code = code + 'p' # at 'p', for _p_lanned variant
+        trial = Trial(id=trial_id, code=planned_code, factors=factors,
             robots=set_of_robot_factors, 
             nurses= nurses,
             requests=requests)
         
         trials.append(trial)
         # append baseline trial
-        append_baseline_trial(baseline_trials, id=trial_id, code=code, factors=factors, robots=set_of_robot_factors, 
+        baseline_code = code + 'b'
+        append_baseline_trial(baseline_trials, id=trial_id, code=baseline_code, factors=factors, robots=set_of_robot_factors, 
             nurses_locations=nurses_locations, nurses=nurses, routes_ed=routes_ed, random=random)
         
-        planned_trials = []
-        no_plan_trials = []
         trial_id = trial_id + 1
 
     exp_id = exp_gen_id()
-    with open(f'design_{exp_id}.json', 'w') as outfile:
+    with open(f'tmp/design_{exp_id}.json', 'w') as outfile:
         json.dump(code_map, outfile, indent=4, sort_keys=True)
 
     # dump baseline trials
-    with open(f'experiment_baseline_trials_{exp_id}.json', 'w') as outfile:
+    with open(f'tmp/experiment_baseline_trials_{exp_id}.json', 'w') as outfile:
         json.dump(baseline_trials, outfile, indent=4, sort_keys=True)
 
     # batch exec for trials
+    planned_trials = []
+    no_plan_trials = []
     for trial in trials:
         # run in deeco env
         ########
@@ -181,12 +188,26 @@ def main():
             no_plan_trials.append(trial.__dict__)
     
     # dump trials
-    with open(f'experiment_planned_trials_{exp_id}.json', 'w') as outfile:
-        json.dump(planned_trials, outfile, indent=4, sort_keys=True)
-
-    # dump trials
-    with open(f'experiment_no_plan_trials_{exp_id}.json', 'w') as outfile:
+    with open(f'tmp/experiment_no_plan_trials_{exp_id}.json', 'w') as outfile:
         json.dump(no_plan_trials, outfile, indent=4, sort_keys=True)
+
+
+
+    trials = []
+    trials.extend(planned_trials)
+    trials.extend(baseline_trials)
+    trials.sort(key=trial_key_to_sort)
+    # finally, write the experiment gen to the final folder
+    new_experiment_path = f'new_experiments/experiment_{exp_id}_run_1/step1_experiment_generation'
+    path = Path(new_experiment_path)
+    path.mkdir(parents=True, exist_ok=True)
+
+    with open(f'{new_experiment_path}/design.json', 'w') as outfile:
+        json.dump(code_map, outfile, indent=4, sort_keys=True)
+
+    with open(f'{new_experiment_path}/trials.json', 'w') as outfile:
+        json.dump(trials, outfile, indent=4, sort_keys=True)
+
 
 def get_sim_exec():
     return SimExec(cf_process)

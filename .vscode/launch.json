@@ -5,17 +5,10 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "MC Runner",
+            "name": "Lab Samples Experiment Gen",
             "type": "python",
             "request": "launch",
-            "program": "tests/runner.py",
-            "console": "integratedTerminal"
-        },
-        {
-            "name": "Trials Runner",
-            "type": "python",
-            "request": "launch",
-            "program": "evaluation/lab_samples/trials_pipeline.py",
+            "program": "evaluation/experiment_gen_lab_samples/experiment_gen.py",
             "console": "integratedTerminal"
         },
         {
@@ -24,6 +17,13 @@
             "request": "launch",
             "program": "${file}",
             "console": "integratedTerminal"
-        }
+        },
+        {
+            "name": "MC Runner",
+            "type": "python",
+            "request": "launch",
+            "program": "tests/runner.py",
+            "console": "integratedTerminal"
+        },
     ]
 }

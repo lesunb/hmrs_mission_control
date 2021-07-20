@@ -68,7 +68,7 @@ def total_combinations(factors) -> Tuple[List[TrialDesign], dict]:
         all_combinations = []
         code_map[next_code_index] = {'factor': factor}
         for trial in last_combination:
-            level_code = 'A'
+            level_code = 'a'
             for level in levels:
                 code_map[next_code_index][level_code] = list(map(obj_to_string, level))
                 new_trial = deepcopy(trial)
@@ -76,6 +76,12 @@ def total_combinations(factors) -> Tuple[List[TrialDesign], dict]:
                 all_combinations.append(new_trial)
                 level_code = chr(ord(level_code) + 1) # increment code
         next_code_index = next_code_index + 1
+
+    code_map[next_code_index] = {
+        "b": "baseline",
+        "p": "planned",
+        "factor": "treatment"
+    } # finally, append 'factor' related to the treatment
     return all_combinations, code_map
         
 
