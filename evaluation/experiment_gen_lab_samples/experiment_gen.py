@@ -61,20 +61,9 @@ def main():
         all_skills, # all skills
         list(set(all_skills) - set([task_type.OPERATE_DRAWER])) # all skills but operate drawer
     ]
-    
-    # three random selections for each robot
-    skills = [
-        draw_with_repetition(skills_levels, number_of_robots, random),
-        draw_with_repetition(skills_levels, number_of_robots, random),
-        draw_with_repetition(skills_levels, number_of_robots, random)
-    ]
 
-    # three selections of positions for each robot
-    locations = [ 
-        draw_without_repetition(near_ic_pc_rooms, number_of_robots + number_of_nurses, random),
-        draw_without_repetition(near_ic_pc_rooms, number_of_robots + number_of_nurses, random),
-        draw_without_repetition(near_ic_pc_rooms, number_of_robots + number_of_nurses, random)
-    ]
+    # constant for all robots
+    avg_speed = [[0.15, 0.15, 0.15, 0.15, 0.15]]
 
     # three selections of starting battery level for each robot
     # starting from 10 to 90
@@ -89,9 +78,21 @@ def main():
         draw_without_repetition([x * 0.00001 for x in range(10, 20)], number_of_robots, random),
         draw_without_repetition([x * 0.00001 for x in range(10, 20)], number_of_robots, random),
     ]
+        
+    # three random selections for each robot
+    skills = [
+        draw_with_repetition(skills_levels, number_of_robots, random),
+        draw_with_repetition(skills_levels, number_of_robots, random),
+        draw_with_repetition(skills_levels, number_of_robots, random)
+    ]
 
-    # constant for all robots
-    avg_speed = [[0.15, 0.15, 0.15, 0.15, 0.15]]
+    # three selections of positions for each robot
+    locations = [ 
+        draw_without_repetition(near_ic_pc_rooms, number_of_robots + number_of_nurses, random),
+        draw_without_repetition(near_ic_pc_rooms, number_of_robots + number_of_nurses, random),
+        draw_without_repetition(near_ic_pc_rooms, number_of_robots + number_of_nurses, random)
+    ]
+
     
     
     # Design - total combination of robot factors

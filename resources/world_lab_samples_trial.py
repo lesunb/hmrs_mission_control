@@ -23,6 +23,9 @@ pickup_sample, _ =  pickup_ihtn(poi.pc_room_3.value)
 
 fetch_sample_trial = Trial(
     id=0,
+    code='',
+    nurses=[],
+    factors=[],
     robots=robot_facotrs,
     requests= [
         Request(
