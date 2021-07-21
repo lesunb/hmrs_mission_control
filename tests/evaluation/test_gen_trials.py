@@ -6,36 +6,27 @@ from evaluation.experiment_gen_base.trial_design import draw_without_repetition,
 from random import Random
 
 def test_total_combinations():
-    robot_factors =  {
-        'battery_charge': range(0, 100, 50),
-        'battery_rate': [0.05, 0.10],
-        'initial_position': [ POI('a'), POI('b')],
-        'skills': ['a']
-    }
+    random = Random()
+    random.seed(1)
+    number_of_robots = 1
+    draw_without_repetition([x * 0.01 for x in range(10, 90)], number_of_robots, random),
+    robot_factors =  [
+        ('battery_charge', [
+            draw_without_repetition([x for x in range(10, 90)], number_of_robots, random),
+            draw_without_repetition([x for x in range(10, 90)], number_of_robots, random)]),
+        ('battery_rate', [
+            draw_without_repetition([x * 0.01 for x in range(10, 90)], number_of_robots, random),
+            draw_without_repetition([x * 0.01 for x in range(10, 90)], number_of_robots, random)]),
+        ('initial_position', [[ POI('a')], [POI('b')]]),
+        ('skills', [['a'], ['b']])
+    ]
 
     trials, code_map = total_combinations(robot_factors)
-    assert len(trials) == 8
+    assert len(trials) == 16
+    assert code_map[0]['factor'] == 'battery_charge'
+    assert code_map[0]['a']
+    assert code_map[0]['b']
 
-
-def test_gen_trials_with_nest():
-    robot_factors =  {
-        'robots.[1]': {
-            'battery_charge': range(0, 100, 50),
-            'battery_rate': [0.05, 0.10],
-            'initial_position': [ POI('a'), POI('b')],
-            'skills': [1, 2]
-        },
-        'robots.[2]': {
-            'battery_charge': range(0, 100, 50),
-            'battery_rate': [0.05, 0.10],
-            'initial_position': [ POI('a'), POI('b')],
-            'skills': [1, 2]
-        }
-
-    }
-
-    trials = total_combinations(robot_factors)
-    assert len(trials) == 256
 
 def test_draw_without_repetition():
     random = Random(1)

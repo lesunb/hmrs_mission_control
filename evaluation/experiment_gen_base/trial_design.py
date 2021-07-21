@@ -38,23 +38,10 @@ class Factor:
     def __init__(self, property, levels):
         self.property, self.levels = property, levels
 
-def flatten(d, parent_key='', sep='_'):
-    ''' 
-    Transform a nested dictionary into a flat one
-    '''
-    items = []
-    for k, v in d.items():
-        new_key = parent_key + sep + k if parent_key else k
-        if isinstance(v, MutableMapping):
-            items.extend(flatten(v, new_key, sep=sep).items())
-        else:
-            items.append((new_key, v))
-    return dict(items)
 
 def total_combinations(factors) -> Tuple[List[TrialDesign], dict]:
     # starting with a empty 'seed_trial' that is further 'forked'
     # with possible levels of factors
-    #factors = flatten(factors)
     seed_trial = TrialDesign()
 
     all_combinations = [seed_trial]
@@ -83,6 +70,7 @@ def total_combinations(factors) -> Tuple[List[TrialDesign], dict]:
         "factor": "treatment"
     } # finally, append 'factor' related to the treatment
     return all_combinations, code_map
+
         
 
 def draw_without_repetition(source: List, number_of_draw:int, rand):
