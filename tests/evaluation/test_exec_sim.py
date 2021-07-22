@@ -1,13 +1,13 @@
 from __init__ import *
 from evaluation.experiment_gen_base.exec_sim import SimExec
 
-from resources.world_lab_samples import cf_process, get_position_of_poi
-from resources.world_lab_samples_trial import *
+from resources.world_lab_samples import container, get_position_of_poi
+from resources.world_lab_samples_scenario import *
 
 def test_exec_sim():
     # run in deeco env
     ########
-    sim_exec = SimExec(cf_process)
+    sim_exec = SimExec(container)
     fetch_sample_trial.requests[0].task.attributes['max_time'] = 5*60
 
     final_state = sim_exec.run(fetch_sample_trial, limit_ms=10000)

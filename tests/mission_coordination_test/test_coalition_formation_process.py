@@ -6,7 +6,7 @@ from mission_control.mission.ihtn import Task
 from mission_control.core import MissionContext, MissionStatus
 
 def test_coalition_formation_process(cf_process: CoalitionFormationProcess, ihtn_collect: Task, collection_robots):
-    mission_context = MissionContext(global_plan = ihtn_collect)
+    mission_context = MissionContext(request_id=0, global_plan = ihtn_collect)
     cf_process.do_run(mission_context, collection_robots, MissionHandlerMock())
     expected_robot = collection_robots[1] # robot B that is the fastest that have the skills
     assert mission_context.local_missions[0].worker == expected_robot

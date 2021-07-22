@@ -147,9 +147,9 @@ class MissionStatus(str, Enum):
     CANCELED = 'CANCELED'
 
 class MissionContext:
-    def __init__(self, global_plan: Task = None, mission_type: str = None):
+    def __init__(self, request_id, global_plan: Task = None, mission_type: str = None):
         self.status:MissionStatus = MissionStatus.NEW
-        self.global_plan: Task = global_plan
+        self.request_id, self.global_plan = request_id, global_plan
         self.mission_type = mission_type
         self.local_missions: List[LocalMission] = []
         self.occurances = []

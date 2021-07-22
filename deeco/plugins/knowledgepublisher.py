@@ -14,7 +14,7 @@ class KnowledgePublisher(NodePlugin):
 		scheduler.set_periodic_timer(self.publish, period_ms=self.publishing_period_ms)
 
 	def publish(self, time_ms):
-		print("Publishing knowledge on " + str(self.node.id))
+		# print("Publishing knowledge on " + str(self.node.id))
 
 		for component in self.node.components:
 			self.node.networkDevice.broadcast(KnowledgePacket(component.uuid, component.knowledge, time_ms, from_node_id=self.node.id))

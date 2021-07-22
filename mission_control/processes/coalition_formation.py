@@ -1,12 +1,14 @@
 
 from mission_control.mission.ihtn import TaskStatus, transverse_ihtn_apply_for_task
 from typing import Generator, Dict, List, Sequence
+from utils.logger import ContextualLogger
 
 from mission_control.mission.ihtn import Assignment, ElementaryTask, Task
 from mission_control.mission.planning import distribute, flat_plan
 from .integration import MissionHandler, MissionUnnexpectedError
 from ..core import MissionContext, MissionStatus, Worker, LocalMission, Role
 from ..estimate.estimate import EstimationManager, Bid
+
 
 def coalitionFormationError(e, mission_context):
     message = f'Unexpected error forming coalition for {mission_context}'
@@ -18,17 +20,20 @@ class CoalitionFormationProcess:
     """ Service of creating coalitions. It receives an ihtn with tasks 
     assigned to roles an return a selection of robots to execute the plan """
 
-    def __init__(self, estimate_manager: EstimationManager):
+    def __init__(self, estimate_manager: EstimationManager, cl: ContextualLogger):
         self.individual_plans = []
         self.estimate_manager: EstimationManager = estimate_manager
+        self.cl = cl
         
 
     def run(self, mission_context: MissionContext, workers: List[Worker], mission_handler: MissionHandler):
         #try:
         self.do_run(mission_context, workers, mission_handler)
         # except Exception as e:
+        #   if policy == try handle unnexected error
         #     mission_handler.handle_unnexpected_error(coalitionFormationError(e, mission_context))
-
+        #   else:
+        #     raise e
     def do_run(self, mission_context: MissionContext, workers: List[Worker], mission_handler: MissionHandler):
         if mission_context.status == MissionStatus.NEW:
             mission_context.local_missions = list(self.initialize_local_missions(mission_context))
@@ -43,17 +48,21 @@ class CoalitionFormationProcess:
             mission_handler.no_coalition_available(mission_context)
 
     def create_coalition(self, mission_context: MissionContext, workers: List[Worker]) -> bool:
+        l = self.cl.get_logger(f'cf_request_{mission_context.request_id}')
         plan_rank_map = {}
         for local_mission in self.get_pending_assignments(mission_context):
             mission_context.occurances.append(f'evaluating local mission for {local_mission.role}')
             task_list = self.flat_plan(local_mission.plan)
             bids = []
-            candidates = self.get_compatible_workers(task_list, workers)
+            candidates = list(self.get_compatible_workers(task_list, workers))
+            l.log(local_mission, entity='local_mission')
             for worker in candidates:
+                l.log(worker, entity='workers')             
                 mission_context.occurances.append(f'evaluating robot {worker.uuid}')
                 bid = self.estimate(worker, task_list)
                 is_viable = self.check_viable(bid, mission_context)
                 mission_context.occurances.append(f'evaluating robot {worker.uuid}: bid is viable:{is_viable}')
+                l.log(bid, entity='bid')
                 if is_viable:
                     bids.append(bid)
                 else:
@@ -63,6 +72,7 @@ class CoalitionFormationProcess:
                 mission_context.occurances.append(f'no viable assignment for {local_mission.role}')
                 return False
             bids = self.rank_bids(bids)
+            l.log(bids, entity='rank')
             plan_rank_map[local_mission] = bids
             local_mission.bids = bids
 
@@ -126,6 +136,7 @@ class CoalitionFormationProcess:
         for local_mission, bid in selected_bids.items():
             local_mission.worker = bid.worker
             local_mission.plan.assignment.estimate = selected_bids[local_mission].estimate
+            local_mission.assignment_status = LocalMission.AssignmentStatus.ASSIGNED
             # set assignment on global plan
             global_plan = mission_context.global_plan
 

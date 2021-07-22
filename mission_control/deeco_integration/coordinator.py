@@ -54,7 +54,6 @@ class Coordinator(Component, MissionHandler):
 
     def get_missions_with_pending_assignments(self):
         for mission_context in self.knowledge.missions:
-            print('some pending assignments')
             if self.has_pending_assignment(mission_context):
                 yield mission_context
         
@@ -69,8 +68,8 @@ class Coordinator(Component, MissionHandler):
 
     def handle_requests(self):
         while self.node.requests_queue:
-            request = self.node.requests_queue.pop()
-            mission_context = MissionContext(request.task)
+            request = self.node.requests_queue.pop(0)
+            mission_context = MissionContext(request_id = request.id, global_plan=request.task)
             print(f'coordinator {self.uuid} got has a new mission {mission_context}')
             self.knowledge.missions.append(mission_context)
             yield mission_context

@@ -167,8 +167,8 @@ class EnsembleReactor(NodePlugin):
 
         self.run_ensembles(time_ms)
 
-        for instance in self.instances:
-            print("### Node " + str(self.node.id) + " ensemble instance " + str(instance) + " with components: " )
+        # for instance in self.instances:
+        #     print("### Node " + str(self.node.id) + " ensemble instance " + str(instance) + " with components: " )
 
     def run_ensembles(self, time_ms: int):
         # advertise existing ensembles? 
@@ -208,7 +208,7 @@ class EnsembleReactor(NodePlugin):
 
     def process_knowledge(self, knowledge_packet: KnowledgePacket):
 #		print("Reactor processing knowledge packet")
-        print(f'{self.node.id} recieved a package of type {knowledge_packet.knowledge.__class__}')
+        # print(f'{self.node.id} recieved a package of type {knowledge_packet.knowledge.__class__}')
         if not hasattr(knowledge_packet.knowledge, 'assignment'):
             return 
         
@@ -259,7 +259,7 @@ class EnsembleReactor(NodePlugin):
                     knowledge_packet.knowledge.assignment.node_id,
                     impact,
                     self.node.id):
-                print("Demanding to upgrade ensemble instance, add impact: " + str(impact))
+                # print("Demanding to upgrade ensemble instance, add impact: " + str(impact))
                 demand = DemandRecord(knowledge_packet.component_uuid, impact, instance)
                 proposals.append(demand)
     
@@ -299,7 +299,7 @@ class EnsembleReactor(NodePlugin):
 
     def process_demand(self, demand: DemandPacket):
         """ Process external demands to assign reactor managed components """
-        print("Reactor processing demand packet")
+        # print("Reactor processing demand packet")
         comp = self.node.get_component(demand.component_uuid)
         if not comp:
             return

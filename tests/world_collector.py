@@ -231,7 +231,7 @@ class MissionHandlerMock(MissionHandler):
 
 @pytest.fixture
 def collection_mission():
-    mission_context = MissionContext(global_plan = deepcopy(_collection_ihtn.collect.value.clone()), mission_type=collection_mission_type)
+    mission_context = MissionContext(request_id=0, global_plan = deepcopy(_collection_ihtn.collect.value.clone()), mission_type=collection_mission_type)
     cfp.do_run(mission_context, robots, MissionHandlerMock())
     robot_b = robots[1] # robot B that is the fastest that have the skills
     cmission = {"mission": mission_context, 'robot': robot_b}

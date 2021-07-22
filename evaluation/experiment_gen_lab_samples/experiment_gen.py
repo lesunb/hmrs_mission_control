@@ -7,13 +7,15 @@ from __init__ import *
 from random import Random
 from datetime import datetime
 
+from utils.logger import LogDir
+
 from mission_control.core import Request
 from evaluation.experiment_gen_base.exec_sim import SimExec
-from evaluation.experiment_gen_base.trial import Trial
+from evaluation.experiment_gen_base.scenario import Scenario
 from evaluation.experiment_gen_base.trial_design import draw_without_repetition, draw_with_repetition, total_combinations
 
-
-from resources.world_lab_samples import task_type, all_skills, poi, routes_ed, near_ic_pc_rooms, cf_process, pickup_ihtn, get_position_of_poi
+from verification import verify_trials
+from resources.world_lab_samples import task_type, all_skills, routes_ed, near_ic_pc_rooms, pickup_ihtn, get_position_of_poi, container
 
 from evaluation.experiment_gen_lab_samples.baseline_plan import append_baseline_trial
 
@@ -45,9 +47,16 @@ def trial_key_to_sort(trial):
     return f'{id_str}_{trial["code"]}'
 
 def main():
+    exp_id = exp_gen_id()
+    new_experiment_path = f'new_experiments/experiment_{exp_id}_run_1/step1_experiment_generation'
+    path = Path(new_experiment_path + '/tmp')
+    path.mkdir(parents=True, exist_ok=True)
+    LogDir.default_path = new_experiment_path + '/logs'
+
+
     random = Random()
-    random.seed(44)
-    number_of_robots = 5
+    random.seed(45)
+    number_of_robots = 6
     number_of_nurses = 1
     
     # times in which a new request will appear in the trial
@@ -63,7 +72,7 @@ def main():
     ]
 
     # constant for all robots
-    avg_speed = [[0.15, 0.15, 0.15, 0.15, 0.15]]
+    avg_speed = [[0.15]*number_of_robots]
 
     # three selections of starting battery level for each robot
     # starting from 10 to 90
@@ -93,8 +102,6 @@ def main():
         draw_without_repetition(near_ic_pc_rooms, number_of_robots + number_of_nurses, random)
     ]
 
-    
-    
     # Design - total combination of robot factors
     ######
 
@@ -109,21 +116,21 @@ def main():
     trial_designs, code_map = total_combinations(factors_levels_list)
 
     # set of requests
-    trials: List[Trial] = []
+    scenarios: List[Scenario] = []
     requests = None
     baseline_trials = []
-    trial_id = 1
+    scenario_id = 1
     for trial_design in trial_designs:
         set_of_robot_factors = []
         code = trial_design.code
         factors = trial_design.factors_map
 
-        for robot_id in range(0, number_of_robots):
+        for robot_index in range(0, number_of_robots):
             #each robot
-            robot_facotrs = { 'id': robot_id }
+            robot_facotrs = { 'id': (robot_index + 1) }
             for factor_key, values_set in trial_design.items():
                 # each factor
-                robot_facotrs[factor_key] = values_set[robot_id]
+                robot_facotrs[factor_key] = values_set[robot_index]
             
             set_of_robot_factors.append(robot_facotrs)
         
@@ -134,74 +141,72 @@ def main():
         requests = []
         nurses = []
         nurses_locations = []
-
-        # append approach trial
         for location, request in gen_requests(request_times, nurse_locations):
             requests.append(request)
             nurses.append({ 'position': get_position_of_poi(location), 'location': location.label})
             nurses_locations.append(location)
+
+        ##
+        # append baseline trial
+        ##
+        baseline_code = code + 'b'
+        append_baseline_trial(baseline_trials, id=scenario_id, code=baseline_code, factors=factors, robots=set_of_robot_factors, 
+            nurses_locations=nurses_locations, nurses=nurses, routes_ed=routes_ed, random=random)
+        
+
+        ##
+        # append approach trial
+        ##
         planned_code = code + 'p' # at 'p', for _p_lanned variant
-        trial = Trial(id=trial_id, code=planned_code, factors=factors,
+        scenario = Scenario(id=scenario_id, code=planned_code, factors=factors,
             robots=set_of_robot_factors, 
             nurses= nurses,
             requests=requests)
         
-        trials.append(trial)
-        # append baseline trial
-        baseline_code = code + 'b'
-        append_baseline_trial(baseline_trials, id=trial_id, code=baseline_code, factors=factors, robots=set_of_robot_factors, 
-            nurses_locations=nurses_locations, nurses=nurses, routes_ed=routes_ed, random=random)
-        
-        trial_id = trial_id + 1
+        scenarios.append(scenario)
 
-    exp_id = exp_gen_id()
-    with open(f'tmp/design_{exp_id}.json', 'w') as outfile:
+        scenario_id += 1
+
+
+    with open(f'{new_experiment_path}/tmp/design_{exp_id}.json', 'w') as outfile:
         json.dump(code_map, outfile, indent=4, sort_keys=True)
 
     # dump baseline trials
-    with open(f'tmp/experiment_baseline_trials_{exp_id}.json', 'w') as outfile:
+    with open(f'{new_experiment_path}/tmp/experiment_baseline_trials_{exp_id}.json', 'w') as outfile:
         json.dump(baseline_trials, outfile, indent=4, sort_keys=True)
 
-    # batch exec for trials
+    # batch exec for planned scenarios
     planned_trials = []
     no_plan_trials = []
-    for trial in trials:
+    for scenario in scenarios:
         # run in deeco env
-        ########
         sim_exec = get_sim_exec()
-        final_state = sim_exec.run(trial, limit_ms=10000)
+        final_state = sim_exec.run(scenario, limit_ms=10000)
         # inspect end state
         print(final_state['missions'][0].occurances)
-        # prep exec sim
-        ####### 
-
-        for robot in trial.robots:
+        for robot in scenario.robots:
             robot['position'] = get_position_of_poi(robot['location'])
             robot['location'] = robot['location'].label
             robot['skills'].sort()
 
-        # delete non dict
-        delattr(trial, 'requests')
+        # delete non dict before writing to json
+        delattr(scenario, 'requests')
 
         if any(final_state['local_plans']):
-            planned_trials.append(trial.__dict__)
+            planned_trials.append(scenario.__dict__)
         else:
-            no_plan_trials.append(trial.__dict__)
+            no_plan_trials.append(scenario.__dict__)
     
-    # dump trials
-    with open(f'tmp/experiment_no_plan_trials_{exp_id}.json', 'w') as outfile:
-        json.dump(no_plan_trials, outfile, indent=4, sort_keys=True)
-
-
+    # dump no planned trials for debug (ideally it is empty)
+    if no_plan_trials:
+        with open(f'{new_experiment_path}/no_plan_trials.json', 'w') as outfile:
+            json.dump(no_plan_trials, outfile, indent=4, sort_keys=True)
 
     trials = []
     trials.extend(planned_trials)
     trials.extend(baseline_trials)
     trials.sort(key=trial_key_to_sort)
     # finally, write the experiment gen to the final folder
-    new_experiment_path = f'new_experiments/experiment_{exp_id}_run_1/step1_experiment_generation'
-    path = Path(new_experiment_path)
-    path.mkdir(parents=True, exist_ok=True)
 
     with open(f'{new_experiment_path}/design.json', 'w') as outfile:
         json.dump(code_map, outfile, indent=4, sort_keys=True)
@@ -209,9 +214,12 @@ def main():
     with open(f'{new_experiment_path}/trials.json', 'w') as outfile:
         json.dump(trials, outfile, indent=4, sort_keys=True)
 
+    verification_of_plans = verify_trials(trial_designs, scenarios)
+    with open(f'{new_experiment_path}/verification.json', 'w') as outfile:
+        json.dump(verification_of_plans, outfile, indent=4, sort_keys=True)
 
 def get_sim_exec():
-    return SimExec(cf_process)
+    return SimExec(container)
 
 
 

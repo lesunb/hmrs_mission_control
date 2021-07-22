@@ -5,9 +5,5 @@ class Timer:
         pass
 
     @abstractmethod
-    def get_time(self):
-        pass
-
-    @abstractmethod
     def now(self):
         pass

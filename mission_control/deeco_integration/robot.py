@@ -14,6 +14,7 @@ from mission_control.core import Battery, LocalMission, POI
 class Worker(ComponentRole):
 	def __init__(self):
 		super().__init__()
+		self.name = None
 		self.skills = None
 		self.local_mission: LocalMission = None
 		self.location: POI = None
@@ -46,6 +47,7 @@ class Robot(Component):
 
 		# Initialize knowledge
 		self.name = name
+		self.knowledge.name = name
 		self.knowledge.skills = skills
 		self.knowledge.location = location
 		self.knowledge.battery = battery

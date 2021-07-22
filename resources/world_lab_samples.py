@@ -1,9 +1,13 @@
 from copy import deepcopy
+from utils.logger import ContextualLogger
 import pytest
 from enum import Enum
 from typing import List
 
 from lagom.container import Container
+
+from utils.timer import Timer
+from mission_control.deeco_integration.deeco_timer import DeecoTimer
 
 from mission_control.estimate.estimate import EnergyEstimatorConstantDischarge, EstimationManager, Estimator, TimeEstimator
 from mission_control.estimate.core import SkillDescriptorRegister
@@ -153,16 +157,28 @@ container[Map] = hospital_map = create_hospital_scenario_map()
 
 routes_ed = container[RoutesEnvironmentDescriptor]
 
+nav_sd = container[NavigationSkillDescriptor]
+
+# constant estimatives
+approach_person_time = 2
+authenticate_person_time = 2
+operate_drawer_time = 2
+approach_robot_time = 2
+pick_up_time = 2
+send_message_time = 2
+wait_message_time = 2
+
+
 # skill desc
 nav_sd = container[NavigationSkillDescriptor]
-approach_person_sd = generic_skill_descriptor_constant_cost_factory('approach_person', 2)
-authenticate_person_sd = generic_skill_descriptor_constant_cost_factory('authenticate_person', 2)
-operate_drawer_sd = generic_skill_descriptor_constant_cost_factory('operate_drawer', 2)
-approach_robot_sd = generic_skill_descriptor_constant_cost_factory('approach_robot', 2)
-pick_up_sd = generic_skill_descriptor_constant_cost_factory('pick_up', 2)
+approach_person_sd = generic_skill_descriptor_constant_cost_factory('approach_person', approach_person_time)
+authenticate_person_sd = generic_skill_descriptor_constant_cost_factory('authenticate_person', authenticate_person_time)
+operate_drawer_sd = generic_skill_descriptor_constant_cost_factory('operate_drawer', operate_drawer_time)
+approach_robot_sd = generic_skill_descriptor_constant_cost_factory('approach_robot', approach_robot_time)
+pick_up_sd = generic_skill_descriptor_constant_cost_factory('pick_up', pick_up_time)
 
-send_message_sd = generic_skill_descriptor_constant_cost_factory('send_message', 2)
-wait_message_sd = generic_skill_descriptor_constant_cost_factory('wait_message', 2)
+send_message_sd = generic_skill_descriptor_constant_cost_factory('send_message', send_message_time)
+wait_message_sd = generic_skill_descriptor_constant_cost_factory('wait_message', wait_message_time)
 
 
 
@@ -181,7 +197,8 @@ sd_register = SkillDescriptorRegister(
     )
 
 container[SkillDescriptorRegister] = sd_register
-
+container[Timer] = DeecoTimer()
+container[ContextualLogger] = container[ContextualLogger]
 # estimate manager
 # estimate manager
 time_estimator = container[TimeEstimator]
@@ -190,3 +207,4 @@ container[List[Estimator]] = [time_estimator, energy_estimator]
 
 em: EstimationManager = container[EstimationManager]
 cf_process: CoalitionFormationProcess = container[CoalitionFormationProcess]
+

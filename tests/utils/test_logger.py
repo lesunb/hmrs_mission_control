@@ -34,7 +34,7 @@ def test_logger():
     # check file creating was delayed
     assert not os.path.isfile('tmp/test_logger.log')
     
-    l.__del__() # force a flush
+    l.flush() # force a flush
     # assert file was created
     assert os.path.isfile('tmp/test_logger.log')
 
@@ -42,20 +42,23 @@ def test_logger():
 def test_contextual_logger():
     container = Container()
     cl = container[ContextualLogger]
-    LogDir.default_path = 'tmp/'
-    
+    LogDir.default_path = 'tmp'
+
+    FIB1_FILE_PATH = os.path.join('tmp', 'fib1.log')
+    FIB2_FILE_PATH = os.path.join('tmp', 'fib2.log')
+
     lfib1 = cl.get_logger('fib1', 'init context!')
     fib(lfib1)
     lfib1 = cl.get_logger('fib1', 'init context!')
     fib(lfib1)
     
-    assert not os.path.isfile('tmp/fib1.log')
+    assert not os.path.isfile(FIB1_FILE_PATH)
     cl.end_logger_context('fib1')
-    assert os.path.isfile('tmp/fib1.log')
+    assert os.path.isfile(FIB1_FILE_PATH)
 
     lfib2 = cl.get_logger('fib2')
     fib(lfib2)
     cl.end_logger_context('fib2')
-    assert os.path.isfile('tmp/fib2.log')
+    assert os.path.isfile(FIB2_FILE_PATH)
 
     

@@ -1,5 +1,5 @@
+from evaluation.experiment_gen_base.scenario import Scenario
 from mission_control.core import Request
-from evaluation.experiment_gen_base.trial import Trial
 from .world_lab_samples import pickup_ihtn, poi
 
 
@@ -21,7 +21,7 @@ robot_facotrs = [{
 
 pickup_sample, _ =  pickup_ihtn(poi.pc_room_3.value)
 
-fetch_sample_trial = Trial(
+fetch_sample_trial = Scenario(
     id=0,
     code='',
     nurses=[],
