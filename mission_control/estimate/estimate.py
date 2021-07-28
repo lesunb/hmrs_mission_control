@@ -1,3 +1,4 @@
+from mission_control.utils.contants import ConstantsProvider
 import traceback
 
 from typing import Callable, List, Tuple, Any
@@ -6,6 +7,8 @@ from mission_control.mission.ihtn import ElementaryTask, Task
 from .core import SkillDescriptor, TaskContext, create_context_gen, SkillDescriptorRegister
 from ..core import BatteryTimeConstantDischarge, MissionContext, Worker, Estimate, InviableEstimate
 
+
+PLAN_MINIMUM_TARGET_BATTERTY_CHARGE_CONST = 'PLAN_MINIMUM_TARGET_BATTERTY_CHARGE_CONST'
 
 class Partial:
     def __init__(self, task: Task, estimate:Estimate, plan: object):
@@ -19,7 +22,7 @@ class Bid:
 
 
 class Estimator:
-    def estimation(self, task_context: TaskContext, estimate:Estimate, next:Callable, invalid:Callable, **plans ) -> Tuple[Estimate, Any]:
+    def estimation(self, task_context: TaskContext, estimate: Estimate, next: Callable, invalid: Callable, **plans ) -> Tuple[Estimate, Any]:
         pass
 
     def check_viable(self, bid: Bid, next, invalid):
@@ -58,6 +61,9 @@ class TimeEstimator(Estimator):
 
 
 class EnergyEstimatorConstantDischarge(Estimator):
+    def __init__(self, constant_config_provider: ConstantsProvider):
+        self.min_target_battery_chage = constant_config_provider.get(PLAN_MINIMUM_TARGET_BATTERTY_CHARGE_CONST, 0)
+
     def estimation(self, task_context: TaskContext, estimate:Estimate, next:Callable, invalid:Callable) -> Tuple[Estimate, Any]:
         energy_model = task_context.worker.get_resource(BatteryTimeConstantDischarge)
         if isinstance(energy_model, BatteryTimeConstantDischarge):
@@ -67,7 +73,10 @@ class EnergyEstimatorConstantDischarge(Estimator):
     
     def check_viable(self, bid: Bid, mission_context: MissionContext, next, invalid):
         energy_model: BatteryTimeConstantDischarge = bid.worker.get_resource(BatteryTimeConstantDischarge)
-        if energy_model.battery.charge - bid.estimate.energy > energy_model.minimum_useful_level:
+        remaining_battery = energy_model.battery.charge - bid.estimate.energy
+        bid.remaining_battery = remaining_battery
+        if remaining_battery > energy_model.minimum_useful_level and \
+            remaining_battery > self.min_target_battery_chage:
             next()
         else:
             invalid('Not enough battery')

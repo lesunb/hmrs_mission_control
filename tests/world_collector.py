@@ -1,4 +1,6 @@
 from copy import deepcopy
+from mission_control.log.formatters import CoalitionFormationLogger
+from utils.logger import ContextualLogger, LogFormatterManager
 from mission_control.mission.repair import MissionRepairPlannerRegister, MissionRepairStatus, RepairPlanner
 from mission_control.processes.integration import MissionHandler
 from mission_control.processes.sequencing import SkillImplementation, SkillLibrary, TickStatus
@@ -12,7 +14,7 @@ from enum import Enum
 from mission_control.core import Battery, BatteryTimeConstantDischarge, LocalMission, MissionContext, Role, Worker, POI
 from mission_control.estimate.core import SkillDescriptorRegister
 from mission_control.estimate.estimate import EnergyEstimatorConstantDischarge, EstimationManager, Estimator, TimeEstimator
-from mission_control.processes.coalition_formation import CoalitionFormationProcess
+from mission_control.processes.coalition_formation import CoalitionFormationProcess, coalitionFormationError
 from mission_control.mission.ihtn import Method, ElementaryTask, AbstractTask, Task, TaskState
 
 from mission_control.common_descriptors.routes_ed import RoutesEnvironmentDescriptor, Map, Nodes
@@ -174,11 +176,19 @@ sd_register = SkillDescriptorRegister( (task_type.NAV_TO.value, nav_sd), (task_t
 container[SkillDescriptorRegister] = sd_register
 
 
+# logs
+
+lfm = container[LogFormatterManager]
+container[LogFormatterManager] = lfm
+CoalitionFormationLogger.register(lfm)
+container[ContextualLogger] = container[ContextualLogger]
+# end logs
+
 
 # estimate manager
 container[List[Worker]] = robots
 time_estimator = container[TimeEstimator]
-energy_estimator = EnergyEstimatorConstantDischarge()
+energy_estimator = container[EnergyEstimatorConstantDischarge]
 container[List[Estimator]] = [time_estimator, energy_estimator]
 
 em:EstimationManager = container[EstimationManager]

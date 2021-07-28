@@ -42,80 +42,93 @@ def get_baseline_plan(origin, nurse_location, lab, routes_ed):
                 [ 
                     nurse_location.label,
                     waypoints_to_nurse
-                ]
+                ],
+                "navto_room"
             ],
             [
                 "approach_person",
                 [
                     "nurse"
-                ]
+                ],
+                "approach_nurse"
             ],
             [
                 "authenticate_person",
                 [
                     "nurse"
-                ]
+                ],
+                "authenticate_nurse"
             ],
             [
                 "operate_drawer",
                 [
                     "open"
-                ]
+                ],
+                "open_drawer_nurse"
             ],
             [
                 "send_message",
                 [
                     "nurse"
-                ]
+                ],
+                "send_message"
             ],
             [
                 "wait_message",
                 [
                     "r1"
-                ]
+                ],
+                "wait_message"
             ],
             [
                 "operate_drawer",
                 [
                     "close"
-                ]
+                ],
+                "close_drawer_nurse"
             ],
             [
                 "navigation",
                 [
                     lab.label,
                     waypoints_to_lab
-                ]
+                ],
+                "navto_lab"
             ],
             [
                 "approach_robot",
                 [
                     "lab_arm"
-                ]
+                ],
+                "approach_arm"
             ],
             [
                 "operate_drawer",
                 [
                     "open"
-                ]
+                ],
+                "open_drawer_lab"
             ],
             [
                 "send_message",
                 [
                     "lab_arm"
-                ]
+                ],
+                "send_message"
             ],
             [
                 "wait_message",
                 [
                     "r1"
-                ]
+                ],
+                "wait_message"
             ],
             [
                 "operate_drawer",
                 [
                     "close"
-                ]
+                ],
+                "close_drawer_lab"
             ]
         ]
 

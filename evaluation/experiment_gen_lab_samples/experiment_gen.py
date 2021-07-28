@@ -12,10 +12,10 @@ from utils.logger import LogDir
 from mission_control.core import Request
 from evaluation.experiment_gen_base.exec_sim import SimExec
 from evaluation.experiment_gen_base.scenario import Scenario
-from evaluation.experiment_gen_base.trial_design import draw_without_repetition, draw_with_repetition, total_combinations
+from evaluation.experiment_gen_base.trial_design import draw_without_repetition, draw_from_distribution, selection, total_combinations
 
 from verification import verify_trials
-from resources.world_lab_samples import task_type, all_skills, routes_ed, near_ic_pc_rooms, pickup_ihtn, get_position_of_poi, container
+from resources.world_lab_samples import task_type, carry_robot_skills, routes_ed, near_ic_pc_rooms, pickup_ihtn, get_position_of_poi, container
 
 from evaluation.experiment_gen_lab_samples.baseline_plan import append_baseline_trial
 
@@ -55,7 +55,7 @@ def main():
 
 
     random = Random()
-    random.seed(45)
+    random.seed(42)
     number_of_robots = 6
     number_of_nurses = 1
     
@@ -67,8 +67,8 @@ def main():
 
     # robot can have or not a secure drawer
     skills_levels = [
-        all_skills, # all skills
-        list(set(all_skills) - set([task_type.OPERATE_DRAWER])) # all skills but operate drawer
+        carry_robot_skills, # all skills
+        list(set(carry_robot_skills) - set([task_type.OPERATE_DRAWER])) # all skills but operate drawer
     ]
 
     # constant for all robots
@@ -77,22 +77,22 @@ def main():
     # three selections of starting battery level for each robot
     # starting from 10 to 90
     battery_charges = [
-        draw_without_repetition([x * 0.01 for x in range(10, 90)], number_of_robots, random),
-        draw_without_repetition([x * 0.01 for x in range(10, 90)], number_of_robots, random),
-        draw_without_repetition([x * 0.01 for x in range(10, 90)], number_of_robots, random),
+        draw_from_distribution('betavariate', alpha=2, beta=2, number_of_draws=number_of_robots, rand=random),
+        draw_from_distribution('betavariate', alpha=2, beta=2, number_of_draws=number_of_robots, rand=random),
+        draw_from_distribution('betavariate', alpha=2, beta=2, number_of_draws=number_of_robots, rand=random)
     ]
 
     battery_discharge_rates = [
-        draw_without_repetition([x * 0.00001 for x in range(10, 20)], number_of_robots, random),
-        draw_without_repetition([x * 0.00001 for x in range(10, 20)], number_of_robots, random),
-        draw_without_repetition([x * 0.00001 for x in range(10, 20)], number_of_robots, random),
+        draw_without_repetition([x * 0.00002 for x in range(10, 40)], number_of_robots, random),
+        draw_without_repetition([x * 0.00002 for x in range(10, 40)], number_of_robots, random),
+        draw_without_repetition([x * 0.00002 for x in range(10, 40)], number_of_robots, random),
     ]
         
     # three random selections for each robot
     skills = [
-        draw_with_repetition(skills_levels, number_of_robots, random),
-        draw_with_repetition(skills_levels, number_of_robots, random),
-        draw_with_repetition(skills_levels, number_of_robots, random)
+        [ selection(carry_robot_skills, 0.94, random) for x in range(0, number_of_robots) ],
+        [ selection(carry_robot_skills, 0.94, random) for x in range(0, number_of_robots) ],
+        [ selection(carry_robot_skills, 0.94, random) for x in range(0, number_of_robots) ],
     ]
 
     # three selections of positions for each robot

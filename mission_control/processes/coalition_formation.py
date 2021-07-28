@@ -1,7 +1,7 @@
 
 from mission_control.mission.ihtn import TaskStatus, transverse_ihtn_apply_for_task
 from typing import Generator, Dict, List, Sequence
-from utils.logger import ContextualLogger
+from utils.logger import ContextualLogger, Logger
 
 from mission_control.mission.ihtn import Assignment, ElementaryTask, Task
 from mission_control.mission.planning import distribute, flat_plan
@@ -24,6 +24,7 @@ class CoalitionFormationProcess:
         self.individual_plans = []
         self.estimate_manager: EstimationManager = estimate_manager
         self.cl = cl
+        self.l: Logger = cl.get_logger('cf_process')
         
 
     def run(self, mission_context: MissionContext, workers: List[Worker], mission_handler: MissionHandler):
@@ -48,21 +49,20 @@ class CoalitionFormationProcess:
             mission_handler.no_coalition_available(mission_context)
 
     def create_coalition(self, mission_context: MissionContext, workers: List[Worker]) -> bool:
-        l = self.cl.get_logger(f'cf_request_{mission_context.request_id}')
+        self.l = self.cl.get_logger(f'cf_request_{mission_context.request_id}')
         plan_rank_map = {}
         for local_mission in self.get_pending_assignments(mission_context):
             mission_context.occurances.append(f'evaluating local mission for {local_mission.role}')
             task_list = self.flat_plan(local_mission.plan)
+            self.l.log(task_list, entity='local_mission')
             bids = []
-            candidates = list(self.get_compatible_workers(task_list, workers))
-            l.log(local_mission, entity='local_mission')
+            candidates = self.get_compatible_workers(task_list, workers)
             for worker in candidates:
-                l.log(worker, entity='workers')             
                 mission_context.occurances.append(f'evaluating robot {worker.uuid}')
                 bid = self.estimate(worker, task_list)
                 is_viable = self.check_viable(bid, mission_context)
                 mission_context.occurances.append(f'evaluating robot {worker.uuid}: bid is viable:{is_viable}')
-                l.log(bid, entity='bid')
+                self.l.log(bid, entity='bid')
                 if is_viable:
                     bids.append(bid)
                 else:
@@ -71,12 +71,13 @@ class CoalitionFormationProcess:
             if not bids: # empty list of viable bids
                 mission_context.occurances.append(f'no viable assignment for {local_mission.role}')
                 return False
-            bids = self.rank_bids(bids)
-            l.log(bids, entity='rank')
-            plan_rank_map[local_mission] = bids
-            local_mission.bids = bids
+            rank = self.rank_bids(bids)
+            self.l.log(rank, entity='rank')
+            plan_rank_map[local_mission] = rank
+            local_mission.bids = rank
 
         selected_bids =  self.select_bids(plan_rank_map)
+        self.l.log_each_in_map(selected_bids, entity='selected_bid')
         self.set_assignment_from_selected_bids(mission_context, selected_bids)
         return True
 
@@ -104,7 +105,10 @@ class CoalitionFormationProcess:
         required_skills = set([ task.type for task in task_list if isinstance(task, ElementaryTask)])
     
         for worker in workers:
-            if not required_skills.difference(worker.skills):
+            missing_skills = required_skills.difference(worker.skills)
+            if missing_skills:
+                self.l.log(worker, missing_skills=missing_skills, entity='incompatible_workers')
+            else:
                 yield worker
         return
 

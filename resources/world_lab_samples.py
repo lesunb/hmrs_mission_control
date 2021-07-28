@@ -1,5 +1,7 @@
 from copy import deepcopy
-from utils.logger import ContextualLogger
+from mission_control.utils.contants import ConstantsProvider
+from mission_control.log.formatters import CoalitionFormationLogger
+from utils.logger import ContextualLogger, LogFormatterManager
 import pytest
 from enum import Enum
 from typing import List
@@ -9,7 +11,7 @@ from lagom.container import Container
 from utils.timer import Timer
 from mission_control.deeco_integration.deeco_timer import DeecoTimer
 
-from mission_control.estimate.estimate import EnergyEstimatorConstantDischarge, EstimationManager, Estimator, TimeEstimator
+from mission_control.estimate.estimate import EnergyEstimatorConstantDischarge, EstimationManager, Estimator, PLAN_MINIMUM_TARGET_BATTERTY_CHARGE_CONST, TimeEstimator
 from mission_control.estimate.core import SkillDescriptorRegister
 from mission_control.common_descriptors.generic_constant_cost_sd import generic_skill_descriptor_constant_cost_factory
 from mission_control.common_descriptors.navigation_sd import NavigationSkillDescriptor
@@ -30,6 +32,9 @@ class Defs(object):
             yield getattr(self, attr)
     def all(self):
         return list(self)
+    
+    def all_but(self, *exclusion):
+        return list( set(self.all()) - set(exclusion))
 
 
 class task_type(Defs):
@@ -42,6 +47,7 @@ class task_type(Defs):
     DEPOSIT = 'deposit'
     
 all_skills = task_type().all()
+carry_robot_skills = task_type().all_but(task_type.PICK_UP, task_type.DEPOSIT)
 
 class poi(Enum):
     respiratory_control = POI("Respiratory Control")
@@ -169,6 +175,10 @@ send_message_time = 2
 wait_message_time = 2
 
 
+cp = ConstantsProvider()
+container[ConstantsProvider] = cp
+cp.set(PLAN_MINIMUM_TARGET_BATTERTY_CHARGE_CONST, 0.08)
+
 # skill desc
 nav_sd = container[NavigationSkillDescriptor]
 approach_person_sd = generic_skill_descriptor_constant_cost_factory('approach_person', approach_person_time)
@@ -198,11 +208,17 @@ sd_register = SkillDescriptorRegister(
 
 container[SkillDescriptorRegister] = sd_register
 container[Timer] = DeecoTimer()
+
+
+lfm = container[LogFormatterManager]
+container[LogFormatterManager] = lfm
+CoalitionFormationLogger.register(lfm)
+
 container[ContextualLogger] = container[ContextualLogger]
 # estimate manager
 # estimate manager
 time_estimator = container[TimeEstimator]
-energy_estimator = EnergyEstimatorConstantDischarge()
+energy_estimator = container[EnergyEstimatorConstantDischarge]
 container[List[Estimator]] = [time_estimator, energy_estimator]
 
 em: EstimationManager = container[EstimationManager]

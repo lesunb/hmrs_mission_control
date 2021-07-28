@@ -1,7 +1,7 @@
 from copy import deepcopy
+from random import Random
 import functools
 from typing import List, Tuple
-from collections.abc import MutableMapping
 from utils.to_string import obj_to_string
 
 class TrialDesign(dict):
@@ -87,3 +87,16 @@ def draw_with_repetition(source: List, number_of_draw:int, rand):
         return [drawn] + draw_with_repetition(source, number_of_draw - 1, rand)
     else:
         return [drawn]
+
+def draw_from_distribution(distribution, number_of_draws, rand: Random, **distr_params):
+    distr = getattr(rand, distribution)
+    return [distr(**distr_params) for i in range(0, number_of_draws)]
+
+
+def selection(source: List, prob_of_selection:float, rand):
+    output = []
+    for elem in source:
+        num = rand.random()
+        if num < prob_of_selection:
+            output.append(elem)
+    return output

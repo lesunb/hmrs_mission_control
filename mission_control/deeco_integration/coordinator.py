@@ -126,6 +126,7 @@ class Coordinator(Component, MissionHandler):
         uuid, worker_knowledge = uuid_worker
         worker = Worker(
             uuid=uuid,
+            name=worker_knowledge.name,
             location=worker_knowledge.location,
             skills=worker_knowledge.skills,
             capabilities=[

@@ -7,6 +7,7 @@ def mc_task_to_exeuctor(elementary_task):
     """ Convert to format understood by the executor """
     command = elementary_task.type
     parameters = []
+    label = elementary_task.name
     if getattr(elementary_task, 'action', None) is not None:
         parameters.append(elementary_task.action)
     if getattr(elementary_task, 'destination', None) is not None:
@@ -23,7 +24,7 @@ def mc_task_to_exeuctor(elementary_task):
             route = elementary_task.assignment.plan['route']
             waypoints = route.get_all_waypoints()
             parameters.append(waypoints)
-    return (command, parameters)
+    return (command, parameters, label)
 
 def prep_plan(robot):
     knowledge = robot.knowledge

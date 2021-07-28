@@ -2,6 +2,7 @@ import os
 import atexit
 from enum import Enum
 from collections import namedtuple
+from typing import Any, Callable, List
 from .timer import Timer
 from utils.to_string import obj_to_string
 
@@ -47,7 +48,18 @@ class LogWriter:
         self.file.close()
         if exception_type:
             print(exception_type, exception_value, traceback)
-        
+
+
+class LogFormatterManager:
+    def __init__(self):
+        self.formatters = {}
+
+    def register_formatter(self, entity, formatter):
+        self.formatters[entity] = formatter
+
+    def get(self, entity) -> Callable:
+        f = self.formatters.get(entity)
+        return f if f else obj_to_string
 
 class Logger:
     '''  
@@ -58,14 +70,20 @@ class Logger:
     
     default_level = LogLevel.DEBUG
 
-    def __init__(self, log_writer: LogWriter, timer: Timer, default_level = LogLevel.DEBUG):
+    def __init__(self, log_writer: LogWriter, timer: Timer, lfm: LogFormatterManager, default_level = LogLevel.DEBUG):
         self.log_queue = []
-        self.timer, self.log_writer, self.default_level = timer, log_writer, default_level
+        self.timer, self.log_writer, self.lfm, self.default_level = timer, log_writer, lfm, default_level
         
-    def log(self, content, entity = None, level=None):
+    def log(self, content, entity = None, level=None, **other_params):
         level = level if level else self.default_level
         time = self.timer.now()
-        self.log_queue.append(LogEntry(time, level, entity, obj_to_string(content)))
+        formatter = self.lfm.get(entity)
+        content = formatter(content, **other_params)
+        self.log_queue.append(LogEntry(time, level, entity, content))
+
+    def log_each_in_map(self, map_content:dict, **other_params):
+        for key, content in map_content.items():
+            self.log(content, key=key, **other_params)
 
     def flush(self):
         if not self.log_queue:
@@ -87,8 +105,8 @@ class Logger:
                 raise Exception('not flushed log')
 
 class ContextualLogger:
-    def __init__(self, timer: Timer, default_level = LogLevel.DEBUG):
-        self.timer = timer
+    def __init__(self, timer: Timer, lfm: LogFormatterManager, default_level = LogLevel.DEBUG):
+        self.timer, self.lfm = timer, lfm
         self.default_level = default_level
         self.loggers_map: dict[str, Logger] = {}
         self.group_context = None
@@ -98,7 +116,7 @@ class ContextualLogger:
         
         if not self.loggers_map.get(context_name):
             file_path = LogDir.get_path(f'{context_name}.log', self.group_context)
-            logger = Logger(log_writer=LogWriter(file_path), timer=self.timer)
+            logger = Logger(log_writer=LogWriter(file_path), timer=self.timer, lfm=self.lfm)
             self.loggers_map[context_name] = logger
             if init_message:
                 logger.log(init_message, level=LogLevel.INFO)
