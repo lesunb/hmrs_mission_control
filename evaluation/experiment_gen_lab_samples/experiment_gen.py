@@ -8,6 +8,7 @@ from random import Random
 from datetime import datetime
 
 from utils.logger import LogDir
+from utils.to_string import obj_to_string
 
 from mission_control.core import Request
 from evaluation.experiment_gen_base.exec_sim import SimExec
@@ -18,6 +19,8 @@ from verification import verify_trials
 from resources.world_lab_samples import task_type, carry_robot_skills, routes_ed, near_ic_pc_rooms, pickup_ihtn, get_position_of_poi, container
 
 from evaluation.experiment_gen_lab_samples.baseline_plan import append_baseline_trial
+from collections import namedtuple
+
 
 # def randomly_gen_requests(times, locations, rand):
 #     selected_locations = draw_without_repetition(locations, len(times), rand)
@@ -127,7 +130,7 @@ def main():
 
         for robot_index in range(0, number_of_robots):
             #each robot
-            robot_facotrs = { 'id': (robot_index + 1) }
+            robot_facotrs = { 'id': (robot_index + 1), 'name': f'r{(robot_index + 1)}'}
             for factor_key, values_set in trial_design.items():
                 # each factor
                 robot_facotrs[factor_key] = values_set[robot_index]
@@ -164,12 +167,14 @@ def main():
             requests=requests)
         
         scenarios.append(scenario)
-
         scenario_id += 1
 
+    dump_scenarios(scenarios, f'{new_experiment_path}/scenarios.json')
 
-    with open(f'{new_experiment_path}/tmp/design_{exp_id}.json', 'w') as outfile:
+    with open(f'{new_experiment_path}/factors_code.json', 'w') as outfile:
         json.dump(code_map, outfile, indent=4, sort_keys=True)
+
+
 
     # dump baseline trials
     with open(f'{new_experiment_path}/tmp/experiment_baseline_trials_{exp_id}.json', 'w') as outfile:
@@ -220,6 +225,38 @@ def main():
 
 def get_sim_exec():
     return SimExec(container)
+
+
+def repack(objiter, repacking_tupels):
+    new = {}
+    for key, value in objiter:
+        _, fnc = next(filter(lambda item: item[0] == key, repacking_tupels), (None, None))
+        new[key] = fnc(value) if fnc else value
+    return new
+
+def dump_scenarios(scenarios, path):
+    noop = lambda x: x
+    
+    def repack_robots(robot):
+        return repack(robot.items(),
+            [('location', lambda location: location.label )])
+
+    def scenrio_to_dump(scenario: Scenario):
+        return repack(scenario.__dict__.items(),[ 
+            ('nurse', lambda nurses: list(map( lambda nurse: nurse.location))),
+            ('requests', 
+                lambda requests: list(map( 
+                        lambda request: { 
+                            'timestamp': request.timestamp, 
+                            'task': request.task.name }, requests            ) 
+            )),
+            ('robots', lambda robots: list(map(repack_robots, robots )))
+        ])
+
+    sceratios_to_dump = list(map(scenrio_to_dump, scenarios))
+    with open(path, 'w') as outfile:
+        json.dump(sceratios_to_dump, outfile, indent=4, sort_keys=True)
+
 
 
 

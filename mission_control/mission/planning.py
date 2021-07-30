@@ -6,14 +6,22 @@ from mission_control.mission.ihtn import Task, ElementaryTask, AbstractTask, Syn
 def is_assigned(task: Task, role):
     return True if role in task.assign_to else False
 
-def create_send_message(next_task, role):
+def create_send_message(next_task, prev_task, role):
+    next_role_label = next_task.assign_to[0].label
+    message = f'{prev_task.name}_completed'
     SEND_MESSAGE = SyncTask.SyncType.SEND_MESSAGE.value
-    smt = SyncTask(type=SEND_MESSAGE, to_=next_task.assign_to, assign_to=role)
+    smt = SyncTask(type=SEND_MESSAGE, to_role=next_task.assign_to, 
+            assign_to=role, name=f'notify_{next_role_label}_of_{message}',
+            message=message)
     return smt
 
 def create_wait_message(prev_task, role):
+    prev_role_label = prev_task.assign_to[0].label
+    message = f'{prev_task.name}_completed'
     WAIT_MESSAGE = SyncTask.SyncType.WAIT_MESSAGE.value
-    wmt = SyncTask(type=WAIT_MESSAGE, from_=prev_task.assign_to, assign_to=role)
+    wmt = SyncTask(type=WAIT_MESSAGE, from_role=prev_task.assign_to, 
+            assign_to=role, name=f'wait_{prev_role_label}_to_complete_{prev_task.name}',
+            message=message)
     return wmt
 
 def distribute(task: Task, role):
@@ -44,17 +52,16 @@ def distribute(task: Task, role):
                     if k + 1 == len(method.subtasks):
                         pass
                     else:
-                        
                         if is_assigned(ktask, role):
                             next_task = method.subtasks[k+1]
                             if not is_assigned(next_task, role):
                                 # assigned to this, and  not the next
                                 # = notify the next
-                                smt = create_send_message(next_task, role)
+                                smt = create_send_message(next_task, ktask, role)
                                 nsubtasks.append(smt)
                         elif is_assigned(method.subtasks[k+1], role):
                             # not assign to this, but to the next
-                            prev_task = method.subtasks[k-1]
+                            prev_task = method.subtasks[k]
                             wmt = create_wait_message(prev_task, role)
                             nsubtasks.append(wmt)
                         else:

@@ -33,7 +33,7 @@ def obj_to_string(obj, base_ident='', ident='  ', parents=RefPath()):
         return 'None'
     if isinstance(obj, primitive):
         return str(obj)
-    if isinstance(obj, (set, list)):
+    if isinstance(obj, (set, list, tuple)):
         from_obj = enumeration_to_string_base(base_ident=internal_ident)
         return from_obj(obj, parents=parents)
     if isinstance(obj, type):

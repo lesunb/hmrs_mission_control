@@ -35,7 +35,10 @@ def test_sync_between_two_agents(ihtn_unload_sample):
     global_plan = ihtn_unload_sample.clone()
     distribution = distribute(global_plan, r1)
     assert count_elementary_tasks(distribution) == 2
-    assert check_tasks_names(flat_plan(distribution), ['close_drawer_lab', 'open_drawer_lab', 'send_message', 'wait_message'])
+    plan = flat_plan(distribution)
+    assert check_tasks_names(plan, [
+        'open_drawer_lab', 'notify_lab_arm_of_open_drawer_lab_completed',
+        'wait_lab_arm_to_complete_pick_up_sample', 'close_drawer_lab'])
 
 def test_distribute(ihtn_pickup_sample):
     distribution = distribute(ihtn_pickup_sample, r1)
@@ -59,7 +62,7 @@ def test_eliminate_left_task_all_tasks():
     res_plan = eliminate_left_task(lab_samples_ihtn.navto_room.value, global_plan)
     res_plan = eliminate_left_task(lab_samples_ihtn.approach_nurse.value, res_plan)
     res_plan = eliminate_left_task(lab_samples_ihtn.authenticate_nurse.value, res_plan)
-    res_plan = eliminate_left_task(lab_samples_ihtn.open_drawer_nurse.value, res_plan)
+    res_plan = eliminate_left_task(lab_samples_ihtn.open_drawer_for_nurse.value, res_plan)
     res_plan = eliminate_left_task(lab_samples_ihtn.deposit.value, res_plan)
     res_plan = eliminate_left_task(lab_samples_ihtn.close_drawer_nurse.value, res_plan)
     res_plan = eliminate_left_task(lab_samples_ihtn.navto_lab.value, res_plan)

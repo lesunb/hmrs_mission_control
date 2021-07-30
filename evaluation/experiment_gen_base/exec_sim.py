@@ -80,7 +80,7 @@ class SimExec:
         for r in robots_initial_conf:
             
             node = Node(sim)
-            robot = self.instantiate_robot_component(node, name=f'r{r["id"]}', **r)
+            robot = self.instantiate_robot_component(node, **r)
             node.add_component(robot)
             # node plugins
             KnowledgePublisher(node)

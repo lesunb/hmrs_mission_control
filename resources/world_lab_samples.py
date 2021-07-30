@@ -97,7 +97,7 @@ def pickup_ihtn(pickup_location):
         navto_room = ElementaryTask(task_type.NAV_TO, destination=pickup_location, assign_to=[r1])
         approach_nurse = ElementaryTask(task_type.APPROACH_PERSON, target=nurse, assign_to=[r1])
         authenticate_nurse = ElementaryTask(task_type.AUTHENTICATE_PERSON, target=nurse, assign_to=[r1])
-        open_drawer_nurse = ElementaryTask(task_type.OPERATE_DRAWER, action='open', assign_to=[r1])
+        open_drawer_for_nurse = ElementaryTask(task_type.OPERATE_DRAWER, action='open', assign_to=[r1])
         deposit = ElementaryTask(task_type.DEPOSIT, assign_to = [nurse])
         close_drawer_nurse = ElementaryTask(task_type.OPERATE_DRAWER, action='close', assign_to=[r1])
         navto_lab = ElementaryTask(task_type.NAV_TO, destination=poi.laboratory.value, assign_to=[r1])
@@ -107,7 +107,7 @@ def pickup_ihtn(pickup_location):
         close_drawer_lab = ElementaryTask(task_type.OPERATE_DRAWER, action='close', assign_to=[r1])
 
         # methods and abstract tasks
-        m_deposit = Method(subtasks = [open_drawer_nurse, deposit, close_drawer_nurse])
+        m_deposit = Method(subtasks = [open_drawer_for_nurse, deposit, close_drawer_nurse])
         deposit_sample_on_delivery_bot = AbstractTask(methods=[m_deposit])
         m_retrieve = Method(subtasks = [approach_nurse, authenticate_nurse, deposit_sample_on_delivery_bot])
         retrive_sample = AbstractTask(methods=[m_retrieve])

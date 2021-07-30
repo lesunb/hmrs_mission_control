@@ -104,12 +104,11 @@ class SyncTask(Task):
     class SyncType(Enum):
         WAIT_MESSAGE = 'wait_message'
         SEND_MESSAGE = 'send_message'
-    def __init__(self, type: SyncType, to = None, from_=None, **kwargs):
+    def __init__(self, type: SyncType, to_role = None, from_role = None, **kwargs):
         super().__init__(**kwargs)
         self.type = type
-        self.name = type
-        self.to = to
-        self.from_ = from_
+        self.to_role = to_role
+        self.from_role = from_role
  
     def clone(self):
         return copy(self)

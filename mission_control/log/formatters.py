@@ -1,3 +1,5 @@
+import json
+
 from mission_control.mission.planning import flat_plan
 from mission_control.core import LocalMission, Worker
 from typing import List
@@ -20,10 +22,10 @@ def pipe(*funcs):
 class CoalitionFormationLogger:
     
     def register(lfm: LogFormatterManager):
-        lfm.register_formatter('incompatible_workers', CoalitionFormationLogger.incompatible_workers_to_log)
-        lfm.register_formatter('bid', pipe(CoalitionFormationLogger.bid_to_log, str))
+        lfm.register_formatter('incompatible_workers', pipe(CoalitionFormationLogger.incompatible_workers_to_log, json.dumps))
+        lfm.register_formatter('bid', pipe(CoalitionFormationLogger.bid_to_log, json.dumps))
         lfm.register_formatter('rank', CoalitionFormationLogger.rank_to_log)
-        lfm.register_formatter('selected_bid', pipe(CoalitionFormationLogger.selected_bid_to_log, str))
+        lfm.register_formatter('selected_bid', pipe(CoalitionFormationLogger.selected_bid_to_log, json.dumps))
         lfm.register_formatter('local_mission', CoalitionFormationLogger.local_mission_to_log)
 
 

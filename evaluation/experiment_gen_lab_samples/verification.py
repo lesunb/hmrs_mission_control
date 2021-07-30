@@ -24,7 +24,7 @@ def evaluate_robot_pickup_samples(container:Container, nurse_location, avg_speed
             (routes_ed.get(location, nurse_location).get_distance() / avg_speed ), # navto_room
             approach_person_time, #approach_nurse
             authenticate_person_time, #authenticate_nurse 
-            operate_drawer_time, #open_drawer_nurse 
+            operate_drawer_time, #open_drawer_for_nurse 
             send_message_time, wait_message_time, #deposit 
             operate_drawer_time, #close_drawer_nurse 
             (routes_ed.get(nurse_location, poi.laboratory.value).get_distance() / avg_speed ), #navto_lab 

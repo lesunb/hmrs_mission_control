@@ -64,21 +64,21 @@ def get_baseline_plan(origin, nurse_location, lab, routes_ed):
                 [
                     "open"
                 ],
-                "open_drawer_nurse"
+                "open_drawer_for_nurse"
             ],
             [
                 "send_message",
                 [
                     "nurse"
                 ],
-                "send_message"
+                "notify_nurse_of_open_drawer_for_nurse_completed"
             ],
             [
                 "wait_message",
                 [
-                    "r1"
+                    "nurse"
                 ],
-                "wait_message"
+                "wait_nurse_to_complete_deposit"
             ],
             [
                 "operate_drawer",
@@ -114,14 +114,14 @@ def get_baseline_plan(origin, nurse_location, lab, routes_ed):
                 [
                     "lab_arm"
                 ],
-                "send_message"
+                "notify_lab_arm_of_open_drawer_lab_completed"
             ],
             [
                 "wait_message",
                 [
-                    "r1"
+                    "lab_arm"
                 ],
-                "wait_message"
+                "wait_lab_arm_to_complete_pick_up_sample"
             ],
             [
                 "operate_drawer",

@@ -14,7 +14,7 @@ def test_mark_all_subtasks_as_concluded():
     pickup_sample, lab_samples_ihtn =  pickup_ihtn(poi.ic_room_3.value)
     
     tasks = [
-        lab_samples_ihtn.open_drawer_nurse.value,
+        lab_samples_ihtn.open_drawer_for_nurse.value,
         lab_samples_ihtn.deposit.value,
         lab_samples_ihtn.close_drawer_nurse.value
     ]
