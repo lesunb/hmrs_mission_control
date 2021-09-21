@@ -17,9 +17,9 @@ Heterogeneous Multi-Robots Mission Control
 
 The source code is released under a [MIT license](LICENSE).
 
-**Authors: Gabriel Rodrigues, Gabriel F P Araujo and Vicente Moraes<br />
+**Authors: Gabriel Rodrigues, Vicente Moraes and Gabriel F P Araujo <br />
 Affiliation: [LES](http://les.unb.br//)<br />
-Maintainers: [Gabriel Rodrigues](mailto:gabrielsr@gmail.com), [Gabriel F P Araujo](mailto:gabriel.fp.araujo@gmail.com) and [Vicente Moraes](mailto:vicenteromeiromoraes@gmail.com)**
+Maintainers: [Gabriel Rodrigues](mailto:gabrielsr@gmail.com), [Vicente Moraes](mailto:vicenteromeiromoraes@gmail.com),[Gabriel F P Araujo](mailto:gabriel.fp.araujo@gmail.com)**
 
 **Heterogeneous Multi-Robots Mission Control** is research code, expect that it changes often and any fitness for a particular purpose is disclaimed.
 
