@@ -23,7 +23,7 @@ Maintainers: [Gabriel Rodrigues](mailto:gabrielsr@gmail.com), [Vicente Moraes](m
 
 **Heterogeneous Multi-Robots Mission Control** is research code, expect that it changes often and any fitness for a particular purpose is disclaimed.
 
-Env Depencies
+Environment dependencies
 -------------
 python 3, pip
 
@@ -32,7 +32,7 @@ Used IDE: vscode, plugin python
 macOS aditional dependencies
 brew install libmagic
 
-Instal pipenv
+Install pipenv
 ------------- 
 
 pipenv easy the process of managing python dependencies
