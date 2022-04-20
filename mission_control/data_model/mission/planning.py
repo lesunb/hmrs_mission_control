@@ -1,6 +1,6 @@
 
 from typing import List
-from mission_control.mission.ihtn import Task, ElementaryTask, AbstractTask, SyncTask, MethodOrdering
+from mission_control.data_model.ihtn import Task, ElementaryTask, AbstractTask, SyncTask, MethodOrdering
 
 
 def is_assigned(task: Task, role):

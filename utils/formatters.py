@@ -1,11 +1,9 @@
 import json
-
-from mission_control.mission.planning import flat_plan
-from mission_control.core import LocalMission, Worker
 from typing import List
-from mission_control.estimate.estimate import Bid, Partial
-from utils.logger import LogFormatterManager, Logger\
 
+from utils.logger import LogFormatterManager
+from mission_control.data_model.core import LocalMission, Worker
+from mission_control.coordinator.estimating.estimate import Bid, Partial
 
 from evaluation.experiment_gen_base.to_executor import mc_task_to_exeuctor
 
@@ -28,16 +26,13 @@ class CoalitionFormationLogger:
         lfm.register_formatter('selected_bid', pipe(CoalitionFormationLogger.selected_bid_to_log, json.dumps))
         lfm.register_formatter('local_mission', CoalitionFormationLogger.local_mission_to_log)
 
-
-
     def bid_to_log(bid: Bid):
-
         log_entry  = {
-            "worker": bid.worker.name,
-            "is_viable": not bid.estimate.is_inviable,
-            "time": bid.estimate.time,
-            "remaining_battery": bid.remaining_battery,
-            "energy": bid.estimate.energy
+            'worker': bid.worker.name,
+            'is_viable': not bid.estimate.is_inviable,
+            'time': bid.estimate.time,
+            'remaining_battery': bid.remaining_battery,
+            'energy': bid.estimate.energy
         }
         return log_entry
 
@@ -48,10 +43,10 @@ class CoalitionFormationLogger:
     def partials_to_log(partials: List[Partial]):
         def log_partial(partial: Partial):
             return {
-                "skill": partial.task.type,
-                "label": partial.task.name,
-                "time": partial.estimate.time,
-                "energy": partial.estimate.energy
+                'skill': partial.task.type,
+                'label': partial.task.name,
+                'time': partial.estimate.time,
+                'energy': partial.estimate.energy
             }
         return list(map(log_partial, partials))
         

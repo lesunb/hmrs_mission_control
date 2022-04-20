@@ -1,7 +1,7 @@
 
-from mission_control.core import BatteryTimeConstantDischarge
+from mission_control.data_model.core import BatteryTimeConstantDischarge
 from ..world_collector import *
-from mission_control.estimate.core import create_context_gen
+from mission_control.coordinator.estimating.core import create_context_gen
 
 task1 = ElementaryTask(type=task_type.NAV_TO.value, destination=poi.room3.value)
 task2 = ElementaryTask(type=task_type.NAV_TO.value, destination=poi.room1.value)

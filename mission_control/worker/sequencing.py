@@ -1,10 +1,8 @@
 from abc import abstractmethod
-from copy import Error
 from enum import Enum
-from mission_control.mission.ihtn import AbstractTask, ElementaryTask
-from ..core import Task
-from mission_control.mission.planning import flat_plan
-from mission_control.mission.execution import eliminate_left_task, get_first_task
+from mission_control.data_model.ihtn import ElementaryTask
+from mission_control.data_model.mission.execution import eliminate_left_task, get_first_task
+from ..data_model.core import Task
 
 class TickStatus:
     class Type(Enum):

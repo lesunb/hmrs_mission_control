@@ -1,5 +1,5 @@
 
-from mission_control.mission.ihtn import AbstractTask
+from mission_control.data_model.ihtn import AbstractTask
 from resources.world_lab_samples import pickup_ihtn
 from resources.world_lab_samples import poi 
 

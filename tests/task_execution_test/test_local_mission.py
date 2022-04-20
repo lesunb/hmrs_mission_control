@@ -1,5 +1,5 @@
 
-from mission_control.processes.sequencing import LocalMissionController, TickStatus
+from mission_control.worker.sequencing import LocalMissionController, TickStatus
 
 from ..world_collector import *
 

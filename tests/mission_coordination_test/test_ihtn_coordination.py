@@ -1,5 +1,5 @@
-from mission_control.mission.coordination import update_estimates_with_progress
-from mission_control.mission.ihtn import TaskState, TaskStatus
+from mission_control.data_model.mission.coordination import update_estimates_with_progress
+from mission_control.data_model.ihtn import TaskState, TaskStatus
 from resources.world_lab_samples import *
 
 def test_mark_elementary_as_concluded():

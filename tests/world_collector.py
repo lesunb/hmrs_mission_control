@@ -1,9 +1,9 @@
 from copy import deepcopy
-from mission_control.log.formatters import CoalitionFormationLogger
+from utils.formatters import CoalitionFormationLogger
 from utils.logger import ContextualLogger, LogFormatterManager
-from mission_control.mission.repair import MissionRepairPlannerRegister, MissionRepairStatus, RepairPlanner
-from mission_control.processes.integration import MissionHandler
-from mission_control.processes.sequencing import SkillImplementation, SkillLibrary, TickStatus
+from mission_control.data_model.mission.repair import MissionRepairPlannerRegister, MissionRepairStatus, RepairPlanner
+from mission_control.coordinator.integration import MissionHandler
+from mission_control.worker.sequencing import SkillImplementation, SkillLibrary, TickStatus
 import pytest
 
 from lagom import Container
@@ -11,11 +11,11 @@ from typing import List
 
 from enum import Enum
 
-from mission_control.core import Battery, BatteryTimeConstantDischarge, LocalMission, MissionContext, Role, Worker, POI
-from mission_control.estimate.core import SkillDescriptorRegister
-from mission_control.estimate.estimate import EnergyEstimatorConstantDischarge, EstimationManager, Estimator, TimeEstimator
-from mission_control.processes.coalition_formation import CoalitionFormationProcess, coalitionFormationError
-from mission_control.mission.ihtn import Method, ElementaryTask, AbstractTask, Task, TaskState
+from mission_control.data_model.core import Battery, BatteryTimeConstantDischarge, LocalMission, MissionContext, Role, Worker, POI
+from mission_control.coordinator.estimating.core import SkillDescriptorRegister
+from mission_control.coordinator.estimating.estimate import EnergyEstimatorConstantDischarge, EstimationManager, Estimator, TimeEstimator
+from mission_control.coordinator.coalition_formation import CoalitionFormationProcess, coalitionFormationError
+from mission_control.data_model.ihtn import Method, ElementaryTask, AbstractTask, Task, TaskState
 
 from mission_control.common_descriptors.routes_ed import RoutesEnvironmentDescriptor, Map, Nodes
 from mission_control.common_descriptors.navigation_sd import NavigationSkillDescriptor, Move

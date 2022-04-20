@@ -1,8 +1,8 @@
 
 from ..world_collector import *
 
-from mission_control.processes.coalition_formation import CoalitionFormationProcess, Bid
-from mission_control.core import Estimate, InviableEstimate, MissionContext
+from mission_control.coordinator.coalition_formation import CoalitionFormationProcess, Bid
+from mission_control.data_model.core import Estimate, InviableEstimate, MissionContext
 
 
 def test_flat_plan(cf_process: CoalitionFormationProcess, ihtn_collect, collection_ihtn):

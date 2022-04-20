@@ -1,6 +1,10 @@
 from mission_control.common_descriptors.routes_ed import Route
-from mission_control.mission.planning import flat_plan
+from mission_control.data_model.core import LocalMission
+from mission_control.data_model.mission.planning import flat_plan
 
+
+def local_mission_to_log(local_mission: LocalMission):
+    return list(map(mc_task_to_exeuctor, local_mission))
 
 
 def mc_task_to_exeuctor(elementary_task):

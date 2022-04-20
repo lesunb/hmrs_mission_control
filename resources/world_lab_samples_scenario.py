@@ -1,5 +1,5 @@
 from evaluation.experiment_gen_base.scenario import Scenario
-from mission_control.core import Request
+from mission_control.data_model.core import Request
 from .world_lab_samples import pickup_ihtn, poi
 
 

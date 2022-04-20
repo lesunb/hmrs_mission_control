@@ -1,5 +1,5 @@
 from .world_collector import *
-from utils.to_string import obj_to_string, dict_to_string
+from utils.to_string import obj_to_string
 
 
 def test_simple_obj():

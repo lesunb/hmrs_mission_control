@@ -1,4 +1,4 @@
-from mission_control.core import MissionContext, LocalMission, Worker
+from mission_control.data_model.core import MissionContext, LocalMission, Worker
 from mission_control.deeco_integration.coordinator import Coordinator
 
 class NodeMock():

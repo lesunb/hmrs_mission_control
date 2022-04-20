@@ -7,10 +7,10 @@ from typing import List, Mapping
 from deeco.core import BaseKnowledge, Component, ComponentRole, Node, UUID
 from deeco.core import process
 
-from ..core import BatteryTimeConstantDischarge, LocalMission, MissionContext, Worker
-from ..processes.integration import MissionHandler, MissionUnnexpectedError
-from ..processes.coalition_formation import CoalitionFormationProcess
-from ..processes.supervision import SupervisionProcess
+from ..data_model.core import BatteryTimeConstantDischarge, LocalMission, MissionContext, Worker
+from ..coordinator.integration import MissionHandler, MissionUnnexpectedError
+from ..coordinator.coalition_formation import CoalitionFormationProcess
+from ..coordinator.supervision import SupervisionProcess
 
 
 class MissionCoordinator(ComponentRole):
@@ -88,7 +88,7 @@ class Coordinator(Component, MissionHandler):
     def supervision(self, node):
         for active_mission in self.get_active_missions():
             task_updates = self.get_pending_updates(active_mission)
-            assigned_workers = self.get_assigned_workers(active_mission)
+            # assigned_workers = self.get_assigned_workers(active_mission)
             self.supervision_process.run(active_mission, task_updates)
 
     def report_progress(self, acive_mission):
@@ -144,7 +144,6 @@ class Coordinator(Component, MissionHandler):
     def get_free_workers(self) -> Mapping[UUID, Worker]:
         workers = dict(self.knowledge.active_workers)
         missions = self.knowledge.missions 
-        assigned_workers = []
         
         for mission in missions:
             for local_mission in mission.local_missions:

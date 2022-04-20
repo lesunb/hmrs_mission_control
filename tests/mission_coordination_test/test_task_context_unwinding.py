@@ -1,6 +1,6 @@
-from mission_control.estimate.core import TaskContext, create_context_gen
-from mission_control.core import Worker, POI
-from mission_control.mission.ihtn import ElementaryTask
+from mission_control.coordinator.estimating.core import TaskContext, create_context_gen
+from mission_control.data_model.core import Worker, POI
+from mission_control.data_model.ihtn import ElementaryTask
 
 def test_task_context_start():
     sr_poi = POI('storage_room')

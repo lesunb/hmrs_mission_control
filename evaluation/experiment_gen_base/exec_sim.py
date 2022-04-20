@@ -2,7 +2,7 @@
 
 from lagom import Container
 
-from mission_control.core import Battery
+from mission_control.data_model.core import Battery
 from deeco.core import Node
 from deeco.sim import Sim
 from deeco.plugins.identity_replicas import IdentityReplicas
@@ -21,7 +21,7 @@ from mission_control.deeco_integration.plugins.requests_queue import RequestsQue
 from mission_control.deeco_integration.mission_coordination_ensemble import MissionCoordinationEnsemble
 
 
-from mission_control.processes.coalition_formation import CoalitionFormationProcess
+from mission_control.coordinator.coalition_formation import CoalitionFormationProcess
 
 from resources.world_lab_samples import *
 from .to_executor import prep_plan

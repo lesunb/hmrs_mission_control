@@ -2,8 +2,8 @@
 
 from ..world_collector import *
 
-from mission_control.mission.ihtn import Task
-from mission_control.core import MissionContext, MissionStatus
+from mission_control.data_model.ihtn import Task
+from mission_control.data_model.core import MissionContext, MissionStatus
 
 def test_coalition_formation_process(cf_process: CoalitionFormationProcess, ihtn_collect: Task, collection_robots):
     mission_context = MissionContext(request_id=0, global_plan = ihtn_collect)

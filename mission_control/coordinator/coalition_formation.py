@@ -1,13 +1,13 @@
 
-from mission_control.mission.ihtn import TaskStatus, transverse_ihtn_apply_for_task
+from mission_control.data_model.ihtn import TaskStatus, transverse_ihtn_apply_for_task
 from typing import Generator, Dict, List, Sequence
 from utils.logger import ContextualLogger, Logger
 
-from mission_control.mission.ihtn import Assignment, ElementaryTask, Task
-from mission_control.mission.planning import distribute, flat_plan
+from mission_control.data_model.ihtn import Assignment, ElementaryTask, Task
+from mission_control.data_model.mission.planning import distribute, flat_plan
 from .integration import MissionHandler, MissionUnnexpectedError
-from ..core import MissionContext, MissionStatus, Worker, LocalMission, Role
-from ..estimate.estimate import EstimationManager, Bid
+from .estimating.estimate import EstimationManager, Bid
+from ..data_model.core import MissionContext, MissionStatus, Worker, LocalMission, Role
 
 
 def coalitionFormationError(e, mission_context):

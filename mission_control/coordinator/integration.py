@@ -1,7 +1,7 @@
 
 from abc import abstractmethod
 
-from ..core import MissionContext
+from ..data_model.core import MissionContext
 
 class MissionError(Exception):
     def __init__(orignal_error, message):

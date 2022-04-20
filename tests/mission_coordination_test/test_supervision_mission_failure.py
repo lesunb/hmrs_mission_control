@@ -1,8 +1,8 @@
 
 
-from mission_control.core import LocalMission, MissionState
-from mission_control.processes.supervision import SupervisionProcess
-from mission_control.mission.ihtn import Assignment, TaskFailure, TaskStatus, TaskState
+from mission_control.data_model.core import LocalMission, MissionState
+from mission_control.coordinator.supervision import SupervisionProcess
+from mission_control.data_model.ihtn import Assignment, TaskFailure, TaskStatus, TaskState
 
 from ..world_collector import *
 

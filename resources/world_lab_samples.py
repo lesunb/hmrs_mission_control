@@ -1,6 +1,6 @@
 from copy import deepcopy
 from mission_control.utils.contants import ConstantsProvider
-from mission_control.log.formatters import CoalitionFormationLogger
+from utils.formatters import CoalitionFormationLogger
 from utils.logger import ContextualLogger, LogFormatterManager
 import pytest
 from enum import Enum
@@ -11,19 +11,19 @@ from lagom.container import Container
 from utils.timer import Timer
 from mission_control.deeco_integration.deeco_timer import DeecoTimer
 
-from mission_control.estimate.estimate import EnergyEstimatorConstantDischarge, EstimationManager, Estimator, PLAN_MINIMUM_TARGET_BATTERTY_CHARGE_CONST, TimeEstimator
-from mission_control.estimate.core import SkillDescriptorRegister
+from mission_control.coordinator.estimating.estimate import EnergyEstimatorConstantDischarge, EstimationManager, Estimator, PLAN_MINIMUM_TARGET_BATTERTY_CHARGE_CONST, TimeEstimator
+from mission_control.coordinator.estimating.core import SkillDescriptorRegister
 from mission_control.common_descriptors.generic_constant_cost_sd import generic_skill_descriptor_constant_cost_factory
 from mission_control.common_descriptors.navigation_sd import NavigationSkillDescriptor
 from mission_control.common_descriptors.routes_ed import Map, RoutesEnvironmentDescriptor
 
 from resources.hospital_map import create_hospital_scenario_map
 
-from mission_control.mission.ihtn import Method, ElementaryTask, AbstractTask
-from mission_control.core import POI, Role
-from mission_control.processes.coalition_formation import CoalitionFormationProcess
+from mission_control.data_model.ihtn import Method, ElementaryTask, AbstractTask
+from mission_control.data_model.core import POI, Role
+from mission_control.coordinator.coalition_formation import CoalitionFormationProcess
 
-from mission_control.mission.ihtn import SyncTask
+from mission_control.data_model.ihtn import SyncTask
 
 class Defs(object):
     def __iter__(self):

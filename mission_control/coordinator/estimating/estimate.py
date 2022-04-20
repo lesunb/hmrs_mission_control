@@ -2,10 +2,10 @@ from mission_control.utils.contants import ConstantsProvider
 import traceback
 
 from typing import Callable, List, Tuple, Any
-from mission_control.mission.ihtn import ElementaryTask, Task
+from mission_control.data_model.ihtn import ElementaryTask, Task
 
-from .core import SkillDescriptor, TaskContext, create_context_gen, SkillDescriptorRegister
-from ..core import BatteryTimeConstantDischarge, MissionContext, Worker, Estimate, InviableEstimate
+from .core import SkillDescriptor, TaskContext, SkillDescriptorRegister, create_context_gen
+from ...data_model.core import BatteryTimeConstantDischarge, MissionContext, Worker, Estimate, InviableEstimate
 
 
 PLAN_MINIMUM_TARGET_BATTERTY_CHARGE_CONST = 'PLAN_MINIMUM_TARGET_BATTERTY_CHARGE_CONST'
@@ -19,7 +19,6 @@ class Bid:
         self.worker = worker
         self.estimate = estimate
         self.partials = partials
-
 
 class Estimator:
     def estimation(self, task_context: TaskContext, estimate: Estimate, next: Callable, invalid: Callable, **plans ) -> Tuple[Estimate, Any]:
