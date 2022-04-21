@@ -3,6 +3,7 @@ from abc import abstractmethod
 
 from ..data_model.restrictions import MissionContext
 
+
 class MissionError(Exception):
     def __init__(orignal_error, message):
         pass

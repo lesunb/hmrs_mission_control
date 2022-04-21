@@ -1,19 +1,22 @@
 
 
-from abc import abstractmethod
 import functools
-from lagom.interfaces import T
 import operator
-
-from ..data_model.restrictions import Estimate, LocalMission, MissionContext, MissionState, MissionStatus, is_success, is_failed
-
-from mission_control.data_model.processes.repair import MissionRepairPlannerRegister, MissionRepairStatus
-from mission_control.data_model.ihtn import Assignment, ElementaryTask, Task, TaskState, TaskStatus, ihtn_aggregate
-from mission_control.data_model.processes.supervise import update_estimates_with_progress
-
+from abc import abstractmethod
 from typing import Generator, List, Tuple
 
+from ..data_model.ihtn import (Assignment, ElementaryTask, Task, TaskState,
+                               TaskStatus, ihtn_aggregate)
+from ..data_model.processes.repair import (MissionRepairPlannerRegister,
+                                           MissionRepairStatus)
+from ..data_model.processes.supervise import update_estimates_with_progress
+from ..data_model.restrictions import (Estimate, LocalMission, MissionContext,
+                                       MissionState, MissionStatus, is_failed,
+                                       is_success)
 from .integration import MissionHandler, MissionUnnexpectedError
+
+#from lagom.interfaces import T
+
 
 def createError(e, acitve_mission, updates):
     message = f'Unexpected error updating {acitve_mission} with {updates}'
@@ -57,7 +60,7 @@ class SupervisionProcess:
         pass
 
     @abstractmethod
-    def get_pending_updates(local_mission: LocalMission) -> List[TaskState]:
+    def get_pending_updates(self, local_mission: LocalMission) -> List[TaskState]:
         pass
 
     def run(self):
@@ -102,15 +105,14 @@ class SupervisionProcess:
         task_states = self.get_last_state_updates(local_mission)
         for task_state in task_states:
             update_local_mission_with_task_state(local_mission, task_state)
-            
+
         #  failed
         if local_mission.is_status(TaskStatus.FAILED):
             
             # local mission repair
             repair_result, task_updates_after_repair = self.local_mission_repair(local_mission)
-            
-            if repair_result == MissionRepairStatus.REASSIGN or \
-                repair_result == MissionRepairStatus.PLAN_ADAPTED:
+
+            if repair_result in [MissionRepairStatus.REASSIGN, MissionRepairStatus.PLAN_ADAPTED]:
                 # repaired
                 local_mission.set_status(TaskStatus.IN_PROGRESS)
                 task_states = task_updates_after_repair
@@ -118,7 +120,6 @@ class SupervisionProcess:
                 # failed
                 local_mission.set_status(TaskStatus.FAILED)
 
-        # concluded with success
         elif is_success(local_mission):
             end_local_mission(local_mission, TaskStatus.COMPLETED_WITH_SUC)
 

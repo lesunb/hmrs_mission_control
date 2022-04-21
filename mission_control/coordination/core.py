@@ -78,9 +78,7 @@ class SkillDescriptor:
 
 class SkillDescriptorRegister:
     def __init__(self, *task_type_skill_desc_pairs):
-        self.descs = {}
-        for pair in task_type_skill_desc_pairs:
-            self.descs[pair[0]] = pair[1]
+        self.descs = {pair[0]: pair[1] for pair in task_type_skill_desc_pairs}
     
     def register(self, task_type, descriptor: SkillDescriptor):
         self.descs[task_type] = descriptor
