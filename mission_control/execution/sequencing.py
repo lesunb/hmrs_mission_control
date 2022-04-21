@@ -1,96 +1,15 @@
-from abc import abstractmethod
 from enum import Enum
-from mission_control.data_model.ihtn import ElementaryTask
-from mission_control.data_model.processes.execution import eliminate_left_task, get_first_task
+
+from ..data_model.ihtn_algorithms import eliminate_left_task, get_first_task
 from ..data_model.restrictions import Task
+from .active_skill import ActiveSkillController
+from .skill_library import SkillLibrary
+from .interfaces import TickStatus
 
-class TickStatus:
-    class Type(Enum):
-        FATAL_FAILURE = 0
-        IN_PROGRESS = 1
-        COMPLETED_WITH_SUC = 2
-    
-    def __init__(self, status: Type, task: Task):
-        self.status, self.task = status, task
-    
 
-class SkillImplementation:
-    
-    def __init__(self):
-        self.is_loaded = False
-        self.task = None
-
-    @abstractmethod
-    def on_load(self):
-        """ 
-        On start
-        """
+class TaskStatus:
+    def set_value(self, value):
         pass
-    
-    @abstractmethod
-    def on_complete(self):
-        pass
-
-    @abstractmethod
-    def on_tick(self) -> TickStatus:
-        pass
-    
-    def load(self, task: Task):
-        self.on_load(task)
-        self.is_loaded = True
-
-    def tick(self) -> TickStatus:
-        if not self.is_loaded:
-            return #TODO return state loading
-        return self.on_tick()
-
-    def complete(self):
-        self.on_complete()
-
-class SkillLibrary:
-    def __init__(self):
-        self.skills_map = {}
-
-    def query(self, task: ElementaryTask) -> SkillImplementation:
-        ref = self.skills_map[task.type]
-        if ref is None:
-            raise Exception(f'no skill implementation for <{task.type}> found on library' )
-        return ref()
-
-    def add(self, task_type, skill_impl: SkillImplementation):
-        self.skills_map[task_type] = skill_impl
-
-
-class ActiveSkillController:
-    """ 
-    Active Skill Subsystem
-    """
-    def __init__(self):
-        self.active_skill = None
-
-    def load(self, skill: SkillImplementation, task: Task):
-        """
-        Load a new skill
-        """
-        self.active_skill = skill
-        skill.load(task)
-
-    def is_idle(self):
-        """  
-        Is idle if there is no active skill
-        """
-        return self.active_skill is None
-
-    def tick(self) -> TickStatus:
-        """
-        Tick the active skill
-        """
-        tick_result = self.active_skill.tick()
-        if tick_result.status == TickStatus.Type.COMPLETED_WITH_SUC:
-            self.active_skill.complete()
-            self.active_skill = None
-
-        return tick_result
 
 class LocalMissionController:
     class Status(Enum):
@@ -144,10 +63,6 @@ class LocalMissionController:
     def get_task_status(self):
         pass
 
-
-class TaskStatus:
-    def set_value(self, value):
-        pass
 
 class SequencingProcess:
     def __init__(self, skill_library: SkillLibrary):

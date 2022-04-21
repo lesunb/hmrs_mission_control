@@ -1,4 +1,4 @@
-from ..ihtn import ElementaryTask, Task, AbstractTask
+from .ihtn import ElementaryTask, Task, AbstractTask
 
 def eliminate_left_task(task: ElementaryTask, plan: Task):
     if plan is task:

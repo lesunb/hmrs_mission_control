@@ -1,4 +1,4 @@
-from ..ihtn import AbstractTask, ElementaryTask, Task, TaskState, TaskStatus, transverse_ihtn
+from ..data_model.ihtn import AbstractTask, ElementaryTask, Task, TaskState, TaskStatus, transverse_ihtn
 
 
 def update_estimates_with_progress(ihtn: Task, task_state: TaskState):

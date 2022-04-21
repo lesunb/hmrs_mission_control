@@ -1,9 +1,22 @@
 # -*- coding: utf-8 -*-
-from .ihtn import ElementaryTask
-from .restrictions import Capability
-from .processes.execution import eliminate_left_task
+from .ihtn import ElementaryTask, Method, AbstractTask, TaskState
+from .restrictions import Capability, Task, Battery, BatteryTimeConstantDischarge, LocalMission, MissionContext, Role, Worker, POI
+from .ihtn_algorithms import eliminate_left_task
 
-__all__ =[ElementaryTask, Capability, eliminate_left_task]
+
+__all__ =[
+    ElementaryTask, Method, AbstractTask, TaskState,
+    Capability,
+    Task, 
+    Battery,
+    BatteryTimeConstantDischarge,
+    LocalMission,
+    MissionContext,
+    Role,
+    Worker,
+    POI,
+    eliminate_left_task,
+    ]
 
 
 # def _import_all_modules():

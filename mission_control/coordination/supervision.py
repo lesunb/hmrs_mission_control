@@ -7,9 +7,9 @@ from typing import Generator, List, Tuple
 
 from ..data_model.ihtn import (Assignment, ElementaryTask, Task, TaskState,
                                TaskStatus, ihtn_aggregate)
-from ..data_model.processes.repair import (MissionRepairPlannerRegister,
+from .repair import (MissionRepairPlannerRegister,
                                            MissionRepairStatus)
-from ..data_model.processes.supervise import update_estimates_with_progress
+from .supervise import update_estimates_with_progress
 from ..data_model.restrictions import (Estimate, LocalMission, MissionContext,
                                        MissionState, MissionStatus, is_failed,
                                        is_success)

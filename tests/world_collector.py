@@ -1,22 +1,20 @@
-from copy import deepcopy
-from utils.formatters import CoalitionFormationLogger
-from utils.logger import ContextualLogger, LogFormatterManager
-from mission_control.data_model.processes.repair import MissionRepairPlannerRegister, MissionRepairStatus, RepairPlanner
-from mission_control.coordination.integration import MissionHandler
-from mission_control.execution.sequencing import SkillImplementation, SkillLibrary, TickStatus
 import pytest
-
 from lagom import Container
 from typing import List
 
 from enum import Enum
+from copy import deepcopy
 
-from mission_control.data_model.restrictions import Battery, BatteryTimeConstantDischarge, LocalMission, MissionContext, Role, Worker, POI
-from mission_control.coordination.core import SkillDescriptorRegister
-from mission_control.coordination.estimating import EnergyEstimatorConstantDischarge, EstimatingManager, Estimator, TimeEstimator
-from mission_control.coordination.coalition_formation import CoalitionFormationProcess, coalitionFormationError
-from mission_control.data_model.ihtn import Method, ElementaryTask, AbstractTask, Task, TaskState
+from utils.formatters import CoalitionFormationLogger
+from utils.logger import ContextualLogger, LogFormatterManager
 
+from mission_control.coordination import MissionRepairPlannerRegister, MissionRepairStatus, RepairPlanner, MissionHandler
+from mission_control.execution import SkillLibrary, TickStatus, SkillImplementation
+from mission_control.coordination import SkillDescriptorRegister,\
+     EnergyEstimatorConstantDischarge, EstimatingManager, Estimator, TimeEstimator, \
+     CoalitionFormationProcess
+from mission_control.data_model import Method, ElementaryTask, AbstractTask, Task, TaskState, \
+     Battery, BatteryTimeConstantDischarge, LocalMission, MissionContext, Role, Worker, POI
 from mission_control.common_descriptors.routes_ed import RoutesEnvironmentDescriptor, Map, Nodes
 from mission_control.common_descriptors.navigation_sd import NavigationSkillDescriptor, Move
 from mission_control.common_descriptors.generic_constant_cost_sd import generic_skill_descriptor_constant_cost_factory
@@ -126,10 +124,7 @@ collection_mission_type = 'collection_mission'
 
 
 def collector_ihtn_plan_repair(ihtn: Task, task_state: TaskState):
-    if task_state.task == _collection_ihtn.navto_room3.value:
-        return ihtn
-    else:
-        return False
+    return ihtn if task_state.task == _collection_ihtn.navto_room3.value else False
 
 
 
@@ -154,8 +149,7 @@ def collection_robots():
 
 @pytest.fixture
 def collection_robots_a_b_and_d():
-    robots = [ enum_item.value for enum_item in [robot.a, robot.b, robot.d]]
-    return robots
+    return [ enum_item.value for enum_item in [robot.a, robot.b, robot.d]]
 
 
 ######
@@ -221,14 +215,13 @@ class OneTickSkill(SkillImplementation):
         print(task)
 
     def on_tick(self):
-        if self.tick_count is 0:
-            self.tick_count = 1
-            return TickStatus(status=TickStatus.Type.IN_PROGRESS, task=self.task)
-        else:
+        if self.tick_count != 0:
             return TickStatus(status=TickStatus.Type.COMPLETED_WITH_SUC, task=self.task)
+        self.tick_count = 1
+        return TickStatus(status=TickStatus.Type.IN_PROGRESS, task=self.task)
 
     def on_complete(self):
-        print(f'task completed')
+        print('task completed')
 
 collector_skill_library = SkillLibrary()
 collector_skill_library.add(task_type.NAV_TO.value, OneTickSkill)
@@ -244,8 +237,7 @@ def collection_mission():
     mission_context = MissionContext(request_id=0, global_plan = deepcopy(_collection_ihtn.collect.value.clone()), mission_type=collection_mission_type)
     cfp.do_run(mission_context, robots, MissionHandlerMock())
     robot_b = robots[1] # robot B that is the fastest that have the skills
-    cmission = {"mission": mission_context, 'robot': robot_b}
-    return cmission
+    return {"mission": mission_context, 'robot': robot_b}
 
 
 class CollectorMissionRepair(RepairPlanner):
