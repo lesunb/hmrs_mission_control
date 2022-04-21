@@ -8,9 +8,9 @@ from deeco.core import BaseKnowledge, Component, ComponentRole, Node, UUID
 from deeco.core import process
 
 from ..data_model.restrictions import BatteryTimeConstantDischarge, LocalMission, MissionContext, Worker
-from ..coordinator.integration import MissionHandler, MissionUnnexpectedError
-from ..coordinator.coalition_formation import CoalitionFormationProcess
-from ..coordinator.supervision import SupervisionProcess
+from ..coordination.integration import MissionHandler, MissionUnnexpectedError
+from ..coordination.coalition_formation import CoalitionFormationProcess
+from ..coordination.supervision import SupervisionProcess
 
 
 class MissionCoordinator(ComponentRole):

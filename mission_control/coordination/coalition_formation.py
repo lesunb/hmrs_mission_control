@@ -3,7 +3,7 @@ from typing import Generator, Dict, List, Sequence
 from utils.logger import ContextualLogger, Logger
 
 from .integration import MissionHandler, MissionUnnexpectedError
-from .estimating.estimate import EstimationManager, Bid
+from .estimating import EstimatingManager, Bid
 from ..data_model.processes.planning import distribute, flat_plan
 from ..data_model.restrictions import MissionContext, MissionStatus, Worker, LocalMission, Role
 from ..data_model.ihtn import Assignment, Task
@@ -20,9 +20,9 @@ class CoalitionFormationProcess:
     """ Service of creating coalitions. It receives an ihtn with tasks 
     assigned to roles an return a selection of robots to execute the plan """
 
-    def __init__(self, estimate_manager: EstimationManager, cl: ContextualLogger):
+    def __init__(self, estimate_manager: EstimatingManager, cl: ContextualLogger):
         self.individual_plans = []
-        self.estimate_manager: EstimationManager = estimate_manager
+        self.estimate_manager: EstimatingManager = estimate_manager
         self.cl = cl
         self.l: Logger = cl.get_logger('cf_process')
         

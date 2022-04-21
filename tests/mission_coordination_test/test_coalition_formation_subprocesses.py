@@ -1,7 +1,7 @@
 
 from ..world_collector import *
 
-from mission_control.coordinator.coalition_formation import CoalitionFormationProcess, Bid
+from mission_control.coordination.coalition_formation import CoalitionFormationProcess, Bid
 from mission_control.data_model.restrictions import Estimate, InviableEstimate, MissionContext
 
 

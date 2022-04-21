@@ -5,7 +5,7 @@ from typing import Callable, List, Tuple, Any
 from mission_control.data_model.ihtn import ElementaryTask, Task
 
 from .core import SkillDescriptor, TaskContext, SkillDescriptorRegister, create_context_gen
-from ...data_model.restrictions import BatteryTimeConstantDischarge, MissionContext, Worker, Estimate, InviableEstimate
+from ..data_model.restrictions import BatteryTimeConstantDischarge, MissionContext, Worker, Estimate, InviableEstimate
 
 
 PLAN_MINIMUM_TARGET_BATTERTY_CHARGE_CONST = 'PLAN_MINIMUM_TARGET_BATTERTY_CHARGE_CONST'
@@ -143,7 +143,7 @@ class CheckViabilityChain:
         next()
         return result, result_estimate
 
-class EstimationManager:
+class EstimatingManager:
     def __init__(self, estimate_chain: List[Estimator]):
         self.estimate_chain = estimate_chain
         

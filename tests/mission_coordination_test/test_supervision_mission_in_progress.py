@@ -4,7 +4,7 @@ from mission_control.data_model.processes.supervise import update_estimates_with
 from mission_control.data_model.ihtn import TaskStatus, TaskState
 from ..world_collector import *
 
-from mission_control.coordinator.supervision import SupervisionProcess
+from mission_control.coordination.supervision import SupervisionProcess
 
 
 def test_estimate_time_remaining_on_init(collection_mission):

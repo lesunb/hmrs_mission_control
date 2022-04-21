@@ -11,8 +11,8 @@ from lagom.container import Container
 from utils.timer import Timer
 from mission_control.deeco_integration.deeco_timer import DeecoTimer
 
-from mission_control.coordinator.estimating.estimate import EnergyEstimatorConstantDischarge, EstimationManager, Estimator, PLAN_MINIMUM_TARGET_BATTERTY_CHARGE_CONST, TimeEstimator
-from mission_control.coordinator.estimating.core import SkillDescriptorRegister
+from mission_control.coordination.estimating import EnergyEstimatorConstantDischarge, EstimatingManager, Estimator, PLAN_MINIMUM_TARGET_BATTERTY_CHARGE_CONST, TimeEstimator
+from mission_control.coordination.core import SkillDescriptorRegister
 from mission_control.common_descriptors.generic_constant_cost_sd import generic_skill_descriptor_constant_cost_factory
 from mission_control.common_descriptors.navigation_sd import NavigationSkillDescriptor
 from mission_control.common_descriptors.routes_ed import Map, RoutesEnvironmentDescriptor
@@ -21,7 +21,7 @@ from resources.hospital_map import create_hospital_scenario_map
 
 from mission_control.data_model.ihtn import Method, ElementaryTask, AbstractTask
 from mission_control.data_model.restrictions import POI, Role
-from mission_control.coordinator.coalition_formation import CoalitionFormationProcess
+from mission_control.coordination.coalition_formation import CoalitionFormationProcess
 
 from mission_control.data_model.ihtn import SyncTask
 
@@ -221,6 +221,6 @@ time_estimator = container[TimeEstimator]
 energy_estimator = container[EnergyEstimatorConstantDischarge]
 container[List[Estimator]] = [time_estimator, energy_estimator]
 
-em: EstimationManager = container[EstimationManager]
+em: EstimatingManager = container[EstimatingManager]
 cf_process: CoalitionFormationProcess = container[CoalitionFormationProcess]
 

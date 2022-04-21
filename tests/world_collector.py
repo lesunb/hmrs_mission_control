@@ -2,8 +2,8 @@ from copy import deepcopy
 from utils.formatters import CoalitionFormationLogger
 from utils.logger import ContextualLogger, LogFormatterManager
 from mission_control.data_model.processes.repair import MissionRepairPlannerRegister, MissionRepairStatus, RepairPlanner
-from mission_control.coordinator.integration import MissionHandler
-from mission_control.worker.sequencing import SkillImplementation, SkillLibrary, TickStatus
+from mission_control.coordination.integration import MissionHandler
+from mission_control.execution.sequencing import SkillImplementation, SkillLibrary, TickStatus
 import pytest
 
 from lagom import Container
@@ -12,9 +12,9 @@ from typing import List
 from enum import Enum
 
 from mission_control.data_model.restrictions import Battery, BatteryTimeConstantDischarge, LocalMission, MissionContext, Role, Worker, POI
-from mission_control.coordinator.estimating.core import SkillDescriptorRegister
-from mission_control.coordinator.estimating.estimate import EnergyEstimatorConstantDischarge, EstimationManager, Estimator, TimeEstimator
-from mission_control.coordinator.coalition_formation import CoalitionFormationProcess, coalitionFormationError
+from mission_control.coordination.core import SkillDescriptorRegister
+from mission_control.coordination.estimating import EnergyEstimatorConstantDischarge, EstimatingManager, Estimator, TimeEstimator
+from mission_control.coordination.coalition_formation import CoalitionFormationProcess, coalitionFormationError
 from mission_control.data_model.ihtn import Method, ElementaryTask, AbstractTask, Task, TaskState
 
 from mission_control.common_descriptors.routes_ed import RoutesEnvironmentDescriptor, Map, Nodes
@@ -191,7 +191,7 @@ time_estimator = container[TimeEstimator]
 energy_estimator = container[EnergyEstimatorConstantDischarge]
 container[List[Estimator]] = [time_estimator, energy_estimator]
 
-em:EstimationManager = container[EstimationManager]
+em:EstimatingManager = container[EstimatingManager]
 cfp: CoalitionFormationProcess = container[CoalitionFormationProcess]
 ######
 # Robots

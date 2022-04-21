@@ -1,7 +1,7 @@
 
 
 from mission_control.data_model.restrictions import LocalMission, MissionState
-from mission_control.coordinator.supervision import SupervisionProcess
+from mission_control.coordination.supervision import SupervisionProcess
 from mission_control.data_model.ihtn import Assignment, TaskFailure, TaskStatus, TaskState
 
 from ..world_collector import *
