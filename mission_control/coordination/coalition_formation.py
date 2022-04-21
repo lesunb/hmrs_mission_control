@@ -4,7 +4,7 @@ from utils.logger import ContextualLogger, Logger
 
 from .integration import MissionHandler, MissionUnnexpectedError
 from .estimating import EstimatingManager, Bid
-from ..data_model.processes.planning import distribute, flat_plan
+from .planning import distribute, flat_plan
 from ..data_model.restrictions import MissionContext, MissionStatus, Worker, LocalMission, Role
 from ..data_model.ihtn import Assignment, Task
 from ..data_model.ihtn import transverse_ihtn_apply_for_task

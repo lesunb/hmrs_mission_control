@@ -39,12 +39,11 @@ def distribute(task: Task, role):
                 for tk in method.subtasks:
                     if not is_assigned(tk, role):
                         continue
-                    else:
-                        nplan = distribute(task, role)
-                        nsubtasks.append(nplan)
+                    nplan = distribute(task, role)
+                    nsubtasks.append(nplan)
             else:
                 # SEQUENTIAL
-                for k, ktask in  enumerate(method.subtasks):
+                for k, ktask in enumerate(method.subtasks):
                     # last
                     plan = distribute(ktask, role)
                     if plan is not None:
@@ -88,7 +87,7 @@ def count_elementary_tasks(ihtn):
     else: return 0
 
 def flat_plan(ihtn) -> List[ElementaryTask]:
-    if isinstance(ihtn, ElementaryTask) or isinstance(ihtn, SyncTask) :
+    if isinstance(ihtn, (ElementaryTask, SyncTask)):
         return [ihtn]
     elif isinstance(ihtn, AbstractTask):
         plan = []
@@ -97,9 +96,6 @@ def flat_plan(ihtn) -> List[ElementaryTask]:
         return plan
 
 def check_tasks_names(tasks, expected):
-    obtained_task_names = []
-    for task in tasks:
-        obtained_task_names.append(task.name)
-    
+    obtained_task_names = [task.name for task in tasks]
     diff =  set(obtained_task_names) ^ set(expected)
     return not diff

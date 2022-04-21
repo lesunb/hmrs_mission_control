@@ -1,5 +1,5 @@
 from enum import Enum
-from .planning import flat_plan
+from ...coordination.planning import flat_plan
 from ..ihtn import Task, TaskState, TaskStatus
 from ..restrictions import LocalMission, MissionContext
 from .. import ElementaryTask
