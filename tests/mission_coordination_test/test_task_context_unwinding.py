@@ -1,5 +1,5 @@
 from mission_control.coordinator.estimating.core import TaskContext, create_context_gen
-from mission_control.data_model.core import Worker, POI
+from mission_control.data_model.restrictions import Worker, POI
 from mission_control.data_model.ihtn import ElementaryTask
 
 def test_task_context_start():

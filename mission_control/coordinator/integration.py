@@ -1,7 +1,7 @@
 
 from abc import abstractmethod
 
-from ..data_model.core import MissionContext
+from ..data_model.restrictions import MissionContext
 
 class MissionError(Exception):
     def __init__(orignal_error, message):
@@ -10,9 +10,6 @@ class MissionError(Exception):
 class MissionUnnexpectedError(Exception):
     def __init__(self, orignal_error, message):
         pass
-
-class ScheduleUpdate:
-    pass
 
 class MissionHandler:
     """

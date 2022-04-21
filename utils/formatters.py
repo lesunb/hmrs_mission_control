@@ -2,7 +2,7 @@ import json
 from typing import List
 
 from utils.logger import LogFormatterManager
-from mission_control.data_model.core import LocalMission, Worker
+from mission_control.data_model.restrictions import LocalMission, Worker
 from mission_control.coordinator.estimating.estimate import Bid, Partial
 
 from evaluation.experiment_gen_base.to_executor import mc_task_to_exeuctor

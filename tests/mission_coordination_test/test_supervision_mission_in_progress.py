@@ -1,6 +1,6 @@
 
 
-from mission_control.data_model.mission.coordination import update_estimates_with_progress
+from mission_control.data_model.processes.supervise import update_estimates_with_progress
 from mission_control.data_model.ihtn import TaskStatus, TaskState
 from ..world_collector import *
 

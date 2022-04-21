@@ -1,6 +1,6 @@
 from deeco.core import NodePlugin
 from typing import List
-from mission_control.data_model.core import Request
+from mission_control.data_model.restrictions import Request
 
 def request_sequence_gen(requests: List[Request]):
     requests.sort(key=lambda req: req.timestamp)

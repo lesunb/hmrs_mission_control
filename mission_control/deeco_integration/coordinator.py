@@ -7,7 +7,7 @@ from typing import List, Mapping
 from deeco.core import BaseKnowledge, Component, ComponentRole, Node, UUID
 from deeco.core import process
 
-from ..data_model.core import BatteryTimeConstantDischarge, LocalMission, MissionContext, Worker
+from ..data_model.restrictions import BatteryTimeConstantDischarge, LocalMission, MissionContext, Worker
 from ..coordinator.integration import MissionHandler, MissionUnnexpectedError
 from ..coordinator.coalition_formation import CoalitionFormationProcess
 from ..coordinator.supervision import SupervisionProcess

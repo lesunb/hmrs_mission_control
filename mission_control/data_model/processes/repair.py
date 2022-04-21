@@ -1,8 +1,8 @@
 from enum import Enum
-from mission_control.data_model.mission.planning import flat_plan
-from mission_control.data_model.ihtn import ElementaryTask, Task, TaskState, TaskStatus, transverse_ihtn
-
-from ..core import LocalMission, MissionContext
+from .planning import flat_plan
+from ..ihtn import Task, TaskState, TaskStatus
+from ..restrictions import LocalMission, MissionContext
+from .. import ElementaryTask
 
 class MissionRepairStatus(Enum):
     class RepairType:

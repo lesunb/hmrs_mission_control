@@ -1,8 +1,8 @@
 from abc import abstractmethod
 from enum import Enum
 from mission_control.data_model.ihtn import ElementaryTask
-from mission_control.data_model.mission.execution import eliminate_left_task, get_first_task
-from ..data_model.core import Task
+from mission_control.data_model.processes.execution import eliminate_left_task, get_first_task
+from ..data_model.restrictions import Task
 
 class TickStatus:
     class Type(Enum):

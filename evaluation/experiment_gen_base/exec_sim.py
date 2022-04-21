@@ -2,7 +2,7 @@
 
 from lagom import Container
 
-from mission_control.data_model.core import Battery
+from mission_control.data_model.restrictions import Battery
 from deeco.core import Node
 from deeco.sim import Sim
 from deeco.plugins.identity_replicas import IdentityReplicas

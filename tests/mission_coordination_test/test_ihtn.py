@@ -1,7 +1,7 @@
 from resources.world_lab_samples import *
 
-from mission_control.data_model.mission.planning import distribute, count_elementary_tasks, flat_plan, check_tasks_names
-from mission_control.data_model.mission.execution import eliminate_left_task
+from mission_control.data_model.processes.planning import distribute, count_elementary_tasks, flat_plan, check_tasks_names
+from mission_control.data_model import eliminate_left_task
 
 def eq(obja, objb, *fields):
     if type(obja) == type(objb):

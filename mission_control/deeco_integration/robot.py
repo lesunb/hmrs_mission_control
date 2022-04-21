@@ -8,7 +8,7 @@ from deeco.core import ComponentRole
 from deeco.core import process
 from deeco.position import Position
 
-from mission_control.data_model.core import Battery, LocalMission, POI
+from mission_control.data_model.restrictions import Battery, LocalMission, POI
 
 # Roles
 class Worker(ComponentRole):

@@ -1,5 +1,5 @@
 
-from mission_control.data_model.core import Request
+from mission_control.data_model.restrictions import Request
 
 
 def create_from_str(input_str: str):

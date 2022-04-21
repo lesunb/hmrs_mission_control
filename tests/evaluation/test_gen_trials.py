@@ -1,5 +1,5 @@
 
-from mission_control.data_model.core import POI
+from mission_control.data_model.restrictions import POI
 
 from evaluation.experiment_gen_base.trial_design import draw_without_repetition, total_combinations
 

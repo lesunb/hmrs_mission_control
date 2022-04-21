@@ -1,7 +1,7 @@
 from copy import deepcopy
 from utils.formatters import CoalitionFormationLogger
 from utils.logger import ContextualLogger, LogFormatterManager
-from mission_control.data_model.mission.repair import MissionRepairPlannerRegister, MissionRepairStatus, RepairPlanner
+from mission_control.data_model.processes.repair import MissionRepairPlannerRegister, MissionRepairStatus, RepairPlanner
 from mission_control.coordinator.integration import MissionHandler
 from mission_control.worker.sequencing import SkillImplementation, SkillLibrary, TickStatus
 import pytest
@@ -11,7 +11,7 @@ from typing import List
 
 from enum import Enum
 
-from mission_control.data_model.core import Battery, BatteryTimeConstantDischarge, LocalMission, MissionContext, Role, Worker, POI
+from mission_control.data_model.restrictions import Battery, BatteryTimeConstantDischarge, LocalMission, MissionContext, Role, Worker, POI
 from mission_control.coordinator.estimating.core import SkillDescriptorRegister
 from mission_control.coordinator.estimating.estimate import EnergyEstimatorConstantDischarge, EstimationManager, Estimator, TimeEstimator
 from mission_control.coordinator.coalition_formation import CoalitionFormationProcess, coalitionFormationError

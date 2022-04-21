@@ -1,7 +1,7 @@
 from typing import Final
 
 from ..coordinator.estimating.core import SkillDescriptor
-from ..data_model.core import Estimate
+from ..data_model.restrictions import Estimate
 
 
 def generic_skill_descriptor_constant_cost_factory(name, time_constant_cost):

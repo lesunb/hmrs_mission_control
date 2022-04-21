@@ -3,7 +3,7 @@ from lagom import Container
 
 from ..world_collector import *
 
-from mission_control.data_model.core import POI, worker_factory
+from mission_control.data_model.restrictions import POI, worker_factory
 from mission_control.coordinator.estimating.estimate import EstimationManager
 from mission_control.coordinator.estimating.core import create_context_gen
 from mission_control.data_model.ihtn import ElementaryTask

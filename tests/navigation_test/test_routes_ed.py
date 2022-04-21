@@ -1,5 +1,5 @@
 from mission_control.common_descriptors.routes_ed import RoutesEnvironmentDescriptor
-from mission_control.data_model.core import POI
+from mission_control.data_model.restrictions import POI
 
 from resources.hospital_map import create_hospital_scenario_map
 import math

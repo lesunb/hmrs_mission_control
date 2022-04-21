@@ -10,7 +10,7 @@ from datetime import datetime
 from utils.logger import LogDir
 from utils.to_string import obj_to_string
 
-from mission_control.data_model.core import Request
+from mission_control.data_model.restrictions import Request
 from evaluation.experiment_gen_base.exec_sim import SimExec
 from evaluation.experiment_gen_base.scenario import Scenario
 from evaluation.experiment_gen_base.trial_design import draw_without_repetition, draw_from_distribution, selection, total_combinations

@@ -1,5 +1,5 @@
 
-from mission_control.data_model.core import BatteryTimeConstantDischarge
+from mission_control.data_model.restrictions import BatteryTimeConstantDischarge
 from ..world_collector import *
 from mission_control.coordinator.estimating.core import create_context_gen
 

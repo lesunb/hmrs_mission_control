@@ -5,11 +5,11 @@ import functools
 from lagom.interfaces import T
 import operator
 
-from ..data_model.core import Estimate, LocalMission, MissionContext, MissionState, MissionStatus, is_success, is_failed
+from ..data_model.restrictions import Estimate, LocalMission, MissionContext, MissionState, MissionStatus, is_success, is_failed
 
-from mission_control.data_model.mission.repair import MissionRepairPlannerRegister, MissionRepairStatus
+from mission_control.data_model.processes.repair import MissionRepairPlannerRegister, MissionRepairStatus
 from mission_control.data_model.ihtn import Assignment, ElementaryTask, Task, TaskState, TaskStatus, ihtn_aggregate
-from mission_control.data_model.mission.coordination import update_estimates_with_progress
+from mission_control.data_model.processes.supervise import update_estimates_with_progress
 
 from typing import Generator, List, Tuple
 

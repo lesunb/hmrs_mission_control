@@ -5,7 +5,7 @@ from deeco.mapping import SetValue
 from .robot import Worker
 from .coordinator import MissionCoordinator
 
-from ..data_model.core import MissionContext, LocalMission
+from ..data_model.restrictions import MissionContext, LocalMission
 
 # Role
 class MissionContextRole(ComponentRole, MissionContext):

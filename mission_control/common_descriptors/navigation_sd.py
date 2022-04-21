@@ -2,7 +2,7 @@ from typing import Final
 
 from ..coordinator.estimating.core import SkillDescriptor, TaskContext
 from .routes_ed import RoutesEnvironmentDescriptor
-from ..data_model.core import POI, Capability, Estimate, InviableEstimate
+from ..data_model.restrictions import POI, Capability, Estimate, InviableEstimate
 
 class Move(Capability):
     def __init__(self, avg_speed, u):

@@ -3,7 +3,7 @@ import copy
 from typing import Any, List, Tuple
 
 from mission_control.data_model.ihtn import ElementaryTask
-from mission_control.data_model.core import Worker, Estimate
+from mission_control.data_model.restrictions import Worker, Estimate
 
 
 class TaskContext:
