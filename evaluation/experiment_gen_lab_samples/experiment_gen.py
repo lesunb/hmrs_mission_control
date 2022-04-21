@@ -11,7 +11,7 @@ from utils.logger import LogDir
 from utils.to_string import obj_to_string
 
 from mission_control.data_model.restrictions import Request
-from evaluation.experiment_gen_base.exec_sim import SimExec
+from evaluation.experiment_gen_base.sim_exec import SimExec
 from evaluation.experiment_gen_base.scenario import Scenario
 from evaluation.experiment_gen_base.trial_design import draw_without_repetition, draw_from_distribution, selection, total_combinations
 
@@ -52,27 +52,21 @@ def trial_key_to_sort(trial):
 def main():
     exp_id = exp_gen_id()
     new_experiment_path = f'new_experiments/experiment_{exp_id}_run_1/step1_experiment_generation'
-    path = Path(new_experiment_path + '/tmp')
+    path = Path(f'{new_experiment_path}/tmp')
     path.mkdir(parents=True, exist_ok=True)
-    LogDir.default_path = new_experiment_path + '/logs'
+    LogDir.default_path = f'{new_experiment_path}/logs'
 
 
     random = Random()
     random.seed(42)
     number_of_robots = 6
     number_of_nurses = 1
-    
+
     # times in which a new request will appear in the trial
     request_times = [ 4000 ] # single request
 
     # selected levels
     #################
-
-    # robot can have or not a secure drawer
-    skills_levels = [
-        carry_robot_skills, # all skills
-        list(set(carry_robot_skills) - set([task_type.OPERATE_DRAWER])) # all skills but operate drawer
-    ]
 
     # constant for all robots
     avg_speed = [[0.15]*number_of_robots]
@@ -90,12 +84,12 @@ def main():
         draw_without_repetition([x * 0.00002 for x in range(10, 40)], number_of_robots, random),
         draw_without_repetition([x * 0.00002 for x in range(10, 40)], number_of_robots, random),
     ]
-        
+
     # three random selections for each robot
     skills = [
-        [ selection(carry_robot_skills, 0.94, random) for x in range(0, number_of_robots) ],
-        [ selection(carry_robot_skills, 0.94, random) for x in range(0, number_of_robots) ],
-        [ selection(carry_robot_skills, 0.94, random) for x in range(0, number_of_robots) ],
+        [ selection(carry_robot_skills, 0.94, random) for x in range(number_of_robots) ],
+        [ selection(carry_robot_skills, 0.94, random) for x in range(number_of_robots) ],
+        [ selection(carry_robot_skills, 0.94, random) for x in range(number_of_robots) ],
     ]
 
     # three selections of positions for each robot
@@ -122,21 +116,20 @@ def main():
     scenarios: List[Scenario] = []
     requests = None
     baseline_trials = []
-    scenario_id = 1
-    for trial_design in trial_designs:
+    for scenario_id, trial_design in enumerate(trial_designs, start=1):
         set_of_robot_factors = []
         code = trial_design.code
         factors = trial_design.factors_map
 
-        for robot_index in range(0, number_of_robots):
+        for robot_index in range(number_of_robots):
             #each robot
             robot_facotrs = { 'id': (robot_index + 1), 'name': f'r{(robot_index + 1)}'}
             for factor_key, values_set in trial_design.items():
                 # each factor
                 robot_facotrs[factor_key] = values_set[robot_index]
-            
+
             set_of_robot_factors.append(robot_facotrs)
-        
+
         # trailing positions are the position of nurses
         nurse_locations = trial_design['location'][number_of_robots: number_of_robots + number_of_nurses]
 
@@ -152,23 +145,21 @@ def main():
         ##
         # append baseline trial
         ##
-        baseline_code = code + 'b'
+        baseline_code = f'{code}b'
         append_baseline_trial(baseline_trials, id=scenario_id, code=baseline_code, factors=factors, robots=set_of_robot_factors, 
             nurses_locations=nurses_locations, nurses=nurses, routes_ed=routes_ed, random=random)
-        
+
 
         ##
         # append approach trial
         ##
-        planned_code = code + 'p' # at 'p', for _p_lanned variant
+        planned_code = f'{code}p'
         scenario = Scenario(id=scenario_id, code=planned_code, factors=factors,
             robots=set_of_robot_factors, 
             nurses= nurses,
             requests=requests)
-        
-        scenarios.append(scenario)
-        scenario_id += 1
 
+        scenarios.append(scenario)
     dump_scenarios(scenarios, f'{new_experiment_path}/scenarios.json')
 
     with open(f'{new_experiment_path}/factors_code.json', 'w') as outfile:
@@ -201,14 +192,13 @@ def main():
             planned_trials.append(scenario.__dict__)
         else:
             no_plan_trials.append(scenario.__dict__)
-    
+
     # dump no planned trials for debug (ideally it is empty)
     if no_plan_trials:
         with open(f'{new_experiment_path}/no_plan_trials.json', 'w') as outfile:
             json.dump(no_plan_trials, outfile, indent=4, sort_keys=True)
 
-    trials = []
-    trials.extend(planned_trials)
+    trials = list(planned_trials)
     trials.extend(baseline_trials)
     trials.sort(key=trial_key_to_sort)
     # finally, write the experiment gen to the final folder
