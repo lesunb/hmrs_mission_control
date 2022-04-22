@@ -1,10 +1,9 @@
-from deeco.plugins.ensemblereactor import EnsembleMember
-from deeco.core import EnsembleDefinition, BaseKnowledge
-from deeco.core import ComponentRole, Group
-from deeco.mapping import SetValue
+from deeco import EnsembleMember,EnsembleDefinition, BaseKnowledge, \
+					ComponentRole, Group, \
+					SetValue
+
 from .robot import Worker
 from .coordinator import MissionCoordinator
-
 from ..data_model.restrictions import MissionContext, LocalMission
 
 # Role
@@ -18,7 +17,8 @@ class MissionCoordinationEnsemble(EnsembleDefinition):
 			super().__init__()
 
 		def __str__(self):
-			return self.__class__.__name__ + " with component ids " + str(list(map(lambda x: x.id, self.members)))
+			return f'{self.__class__.__name__} with component ids ' + str(
+			    list(map(lambda x: x.id, self.members)))
 
 	def __init__(self):
 		super().__init__(coordinator=MissionCoordinator, member=Worker)

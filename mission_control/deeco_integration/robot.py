@@ -1,14 +1,10 @@
-from random import Random
 from typing import List
 
-from deeco.core import BaseKnowledge
-from deeco.core import Component
-from deeco.core import Node
-from deeco.core import ComponentRole
-from deeco.core import process
-from deeco.position import Position
+from deeco import (BaseKnowledge, Component, ComponentRole, Node, Position,
+                   process)
 
-from mission_control.data_model.restrictions import Battery, LocalMission, POI
+from ..data_model.restrictions import POI, Battery, LocalMission
+
 
 # Roles
 class Worker(ComponentRole):
@@ -55,7 +51,7 @@ class Robot(Component):
 		self.knowledge.local_mission = local_mission
 		self.knowledge.avg_speed = avg_speed
 
-		print("Robot " + str(self.name) + " created")
+		print(f"Robot {self.name} created")
 	
 	# Processes follow
 	@process(period_ms=10)

@@ -1,16 +1,11 @@
-import copy
-
-from deeco.plugins.ensemblereactor import EnsembleMember
-from mission_control.common_descriptors.navigation_sd import Move
 from typing import List, Mapping
 
-from deeco.core import BaseKnowledge, Component, ComponentRole, Node, UUID
-from deeco.core import process
+from deeco import BaseKnowledge, Component, ComponentRole, Node, UUID, EnsembleMember, process
 
-from ..data_model.restrictions import BatteryTimeConstantDischarge, LocalMission, MissionContext, Worker
-from ..coordination.integration import MissionHandler, MissionUnnexpectedError
-from ..coordination.coalition_formation import CoalitionFormationProcess
-from ..coordination.supervision import SupervisionProcess
+
+from ..common_descriptors.navigation_sd import Move
+from ..data_model import BatteryTimeConstantDischarge, LocalMission, MissionContext, Worker
+from ..coordination import MissionHandler, MissionUnnexpectedError, CoalitionFormationProcess, SupervisionProcess
 
 
 class MissionCoordinator(ComponentRole):
@@ -40,7 +35,7 @@ class Coordinator(Component, MissionHandler):
 
         # Initialize knowledge
 
-        print("Coordinator " + str(self.name) + " created")
+        print(f"Coordinator {str(self.name)} created")
 
     @process(period_ms=10)
     def update_time(self, node: Node):

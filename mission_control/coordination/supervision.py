@@ -9,7 +9,7 @@ from ..data_model.ihtn import (Assignment, ElementaryTask, Task, TaskState,
                                TaskStatus, ihtn_aggregate)
 from .repair import (MissionRepairPlannerRegister,
                                            MissionRepairStatus)
-from .supervise import update_estimates_with_progress
+from .update_mission import update_estimates_with_progress
 from ..data_model.restrictions import (Estimate, LocalMission, MissionContext,
                                        MissionState, MissionStatus, is_failed,
                                        is_success)

@@ -1,4 +1,4 @@
-from mission_control.coordination.supervise import update_estimates_with_progress
+from mission_control.coordination.update_mission import update_estimates_with_progress
 from mission_control.data_model.ihtn import TaskState, TaskStatus
 from resources.world_lab_samples import *
 
