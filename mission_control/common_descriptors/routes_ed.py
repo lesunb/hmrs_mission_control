@@ -1,5 +1,5 @@
 from typing import List, Tuple
-from ..coordination.core import EnvironmentDescriptor
+from ..coordination import EnvironmentDescriptor
 from mission_control.data_model.restrictions import POI
 
 class Edge:

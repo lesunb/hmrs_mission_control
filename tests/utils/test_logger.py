@@ -15,15 +15,12 @@ def run_before_and_after_tests(tmpdir):
         if os.path.isfile(file):
             os.remove(file)
 
-
 def fib(l: Logger, end = 100):
     fib1 =0
     fib2 =1
     for _ in range(0, end):
         l.log(f'fib: {fib2}')
         fib1, fib2 = fib2,  fib1 + fib2
-
-
 
 def test_logger():
     container = Container()

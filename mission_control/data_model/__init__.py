@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from .ihtn import ElementaryTask, Method, AbstractTask, TaskState
-from .restrictions import Capability, Task, Battery, BatteryTimeConstantDischarge, LocalMission, MissionContext, Role, Worker, POI
+from .restrictions import Capability, Task, Battery, BatteryTimeConstantDischarge, LocalMission, MissionContext, Role, Worker, POI, Estimate
 from .ihtn_algorithms import eliminate_left_task
 
 
@@ -16,6 +16,7 @@ __all__ =[
     Worker,
     POI,
     eliminate_left_task,
+    Estimate,
     ]
 
 

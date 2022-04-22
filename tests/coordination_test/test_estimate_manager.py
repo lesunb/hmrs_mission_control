@@ -1,9 +1,6 @@
-from enum import Enum
-from lagom import Container
-
 from ..world_collector import *
 
-from mission_control.data_model.restrictions import POI, worker_factory
+from mission_control.data_model.restrictions import worker_factory
 from mission_control.coordination.estimating import EstimatingManager
 from mission_control.coordination.core import create_context_gen
 from mission_control.data_model.ihtn import ElementaryTask
