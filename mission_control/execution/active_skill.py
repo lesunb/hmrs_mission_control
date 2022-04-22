@@ -1,6 +1,6 @@
 
 from ..data_model import Task
-from .interfaces import SkillImplementation, TickStatus
+from .component_model_interfaces import SkillImplementation, TickStatus
 
 
 class ActiveSkillController:

@@ -1,4 +1,4 @@
-from .world_collector import *
+from tests.world_collector import *
 from utils.to_string import obj_to_string
 
 

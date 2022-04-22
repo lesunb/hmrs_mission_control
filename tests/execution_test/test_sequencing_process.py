@@ -1,5 +1,5 @@
-from mission_control.data_model.ihtn import ElementaryTask
-from mission_control.execution.sequencing import ActiveSkillController, SequencingProcess, TaskStatus, LocalMissionController
+from mission_control.data_model import ElementaryTask
+from mission_control.execution import ActiveSkillController, SequencingProcess, TaskStatus, LocalMissionController
 
 from ..world_collector import *
 
@@ -22,7 +22,6 @@ def test_mission_start(ihtn_collect, collection_ihtn):
     
     assert isinstance(local_mission_ctrl._curr_task, ElementaryTask)
 
-
 def test_task_finished_and_has_next(ihtn_collect, collection_ihtn):
     #global_mission = collection_ihtn.collect.value.clone()
     seq_proc = SequencingProcess(skill_library = collector_skill_library)
@@ -41,14 +40,13 @@ def test_task_finished_and_has_next(ihtn_collect, collection_ihtn):
     assert isinstance(local_mission_ctrl._curr_task, ElementaryTask)
     assert local_mission_ctrl._curr_task == collection_ihtn.pick_up_object.value
 
-
 def test_mission_just_finished(collection_ihtn):
     global_mission = collection_ihtn.collect.value.clone()
     seq_proc = SequencingProcess(skill_library = collector_skill_library)
     task_status = TaskStatus()
     local_mission_ctrl  = LocalMissionController(global_mission)
     active_skill_crl= ActiveSkillController()
-    
+
     # Two ticks to complete the first task
     seq_proc.run(local_mission_ctrl, active_skill_crl, task_status=task_status)
     seq_proc.run(local_mission_ctrl, active_skill_crl, task_status=task_status)
@@ -57,8 +55,9 @@ def test_mission_just_finished(collection_ihtn):
     seq_proc.run(local_mission_ctrl, active_skill_crl, task_status=task_status)
     assert collection_ihtn.pick_up_object.value == local_mission_ctrl._curr_task
     seq_proc.run(local_mission_ctrl, active_skill_crl, task_status=task_status)
-     # mission concluded
-    assert local_mission_ctrl._curr_task == None
+
+    # mission concluded
+    assert local_mission_ctrl._curr_task is None
     assert local_mission_ctrl.status == LocalMissionController.Status.CONCLUDED_WIH_SUCCESS
 
     # nothing more is done

@@ -1,5 +1,3 @@
-from typing import Final
-
 from ..coordination.core import SkillDescriptor
 from ..data_model.restrictions import Estimate
 

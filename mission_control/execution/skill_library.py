@@ -1,5 +1,5 @@
 from ..data_model import ElementaryTask
-from .interfaces import SkillImplementation
+from .component_model_interfaces import SkillImplementation
 
 
 class SkillLibrary:

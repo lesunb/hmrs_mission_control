@@ -1,5 +1,5 @@
 
-from mission_control.execution import LocalMissionController, TickStatus
+from mission_control.execution.sequencing import LocalMissionController, TickStatus
 
 from ..world_collector import *
 
@@ -7,11 +7,9 @@ def test_local_mission_empty_plan():
     lm_ctrl = LocalMissionController(local_plan= None)
     assert lm_ctrl.has_no_plan()
 
-
 def test_local_mission_has_plan(ihtn_collect):
     lm_ctrl = LocalMissionController(local_plan= ihtn_collect)
     assert not lm_ctrl.has_no_plan()
-
 
 def test_local_mission_get_first_task(ihtn_collect, collection_ihtn):
     lm_ctrl = LocalMissionController(local_plan= ihtn_collect)

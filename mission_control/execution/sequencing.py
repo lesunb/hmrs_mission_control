@@ -4,7 +4,7 @@ from ..data_model.ihtn_algorithms import eliminate_left_task, get_first_task
 from ..data_model.restrictions import Task
 from .active_skill import ActiveSkillController
 from .skill_library import SkillLibrary
-from .interfaces import TickStatus
+from .component_model_interfaces import TickStatus
 
 
 class TaskStatus:
