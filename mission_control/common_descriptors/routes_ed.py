@@ -1,6 +1,6 @@
 from typing import List, Tuple
 from ..coordination import EnvironmentDescriptor
-from mission_control.data_model.restrictions import POI
+from ..data_model import POI
 
 class Edge:
     def __init__(self, origin, dest):

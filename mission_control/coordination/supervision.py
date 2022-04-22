@@ -5,17 +5,13 @@ import operator
 from abc import abstractmethod
 from typing import Generator, List, Tuple
 
-from ..data_model.ihtn import (Assignment, ElementaryTask, Task, TaskState,
-                               TaskStatus, ihtn_aggregate)
-from .repair import (MissionRepairPlannerRegister,
-                                           MissionRepairStatus)
-from .update_mission import update_estimates_with_progress
-from ..data_model.restrictions import (Estimate, LocalMission, MissionContext,
-                                       MissionState, MissionStatus, is_failed,
-                                       is_success)
+from ..data_model import (Assignment, ElementaryTask, Estimate, LocalMission,
+                          MissionContext, MissionState, MissionStatus, Task,
+                          TaskState, TaskStatus, ihtn_aggregate, is_failed,
+                          is_success)
 from .integration import MissionHandler, MissionUnnexpectedError
-
-#from lagom.interfaces import T
+from .repair import MissionRepairPlannerRegister, MissionRepairStatus
+from .update_mission import update_estimates_with_progress
 
 
 def createError(e, acitve_mission, updates):

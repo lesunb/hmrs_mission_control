@@ -1,11 +1,13 @@
 from __future__ import annotations
+from collections.abc import Sequence
 
 from abc import abstractmethod
-from enum import Enum
 from copy import copy
-from collections.abc import Sequence
-from typing import Callable, List
-from utils.to_string import obj_to_string 
+from enum import Enum
+from typing import List
+
+from utils.to_string import obj_to_string
+
 
 class Role:
     class Type(str, Enum):
@@ -153,52 +155,3 @@ def get_children_assignment(methods: List[ Method ]):
                 assingments.update(get_children_assignment(task.methods))
     return assingments
 
-
-
-
-def transverse_ihtn(ihtn: Task, task_state: TaskState, handle_leaf_match:Callable, handle_branch_match):
-    """
-    deep-first search for task_status.update, and apply handle_subtree 
-     into the each intermediate task
-    """
-    if isinstance(ihtn, ElementaryTask):
-        if ihtn == task_state.task:
-            handle_leaf_match(ihtn, task_state)
-            return True
-        else:
-            return False
-    
-    if isinstance(ihtn, AbstractTask):
-        for subtask in ihtn.selected_method.subtasks:
-            was_found = transverse_ihtn(subtask, task_state, handle_leaf_match, handle_branch_match)
-            if was_found:
-                handle_branch_match(ihtn, task_state)
-                return True
-        return False
-
-def transverse_ihtn_apply_for_task(ihtn: Task, task_list: List[Task], apply: Callable):
-    """
-    deep-first search the ihtn for tasks in task_list, for each match call apply for a pair ihtn task, task in task_list
-     into the each intermediate task
-    """
-    if isinstance(ihtn, ElementaryTask):
-        if ihtn in task_list:
-            index = task_list.index(ihtn)
-            apply(ihtn, task_list[index])
-    
-    if isinstance(ihtn, AbstractTask):
-        for subtask in ihtn.selected_method.subtasks:
-            transverse_ihtn_apply_for_task(subtask, task_list, apply)
-
-
-def ihtn_aggregate(ihtn: Task, agg_func: Callable):
-    """
-    aggregate results from subtasks into higher level abstract tasks
-    """
-    if isinstance(ihtn, ElementaryTask):
-        return ihtn
-    
-    if isinstance(ihtn, AbstractTask):
-        subtask_agg = map(lambda task: ihtn_aggregate(task, agg_func), ihtn.selected_method.subtasks)
-        return agg_func(ihtn, list(subtask_agg))
-        

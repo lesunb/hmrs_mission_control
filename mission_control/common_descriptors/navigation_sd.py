@@ -1,8 +1,8 @@
 from typing import Final
 
-from ..coordination.core import SkillDescriptor, TaskContext
 from .routes_ed import RoutesEnvironmentDescriptor
-from ..data_model.restrictions import POI, Capability, Estimate, InviableEstimate
+from ..coordination import SkillDescriptor, TaskContext
+from ..data_model import POI, Capability, Estimate, InviableEstimate
 
 class Move(Capability):
     def __init__(self, avg_speed, u):

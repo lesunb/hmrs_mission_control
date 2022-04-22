@@ -1,5 +1,5 @@
-from ..coordination.core import SkillDescriptor
-from ..data_model.restrictions import Estimate
+from ..coordination import SkillDescriptor
+from ..data_model import Estimate
 
 
 def generic_skill_descriptor_constant_cost_factory(name, time_constant_cost):

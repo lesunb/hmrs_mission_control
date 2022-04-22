@@ -1,6 +1,6 @@
 from mission_control.coordination.core import TaskContext, create_context_gen
-from mission_control.data_model.restrictions import Worker, POI
-from mission_control.data_model.ihtn import ElementaryTask
+from mission_control.data_model import POI, ElementaryTask, Worker
+
 
 def test_task_context_start():
     sr_poi = POI('storage_room')
@@ -52,7 +52,6 @@ def test_task_context_position_unwinding():
 
 def test_create_task_context():
     task_context_gen = create_context_gen(worker, task_list)
-    estimates = []
     task_ctxs = list(task_context_gen)
     last_ctx = task_ctxs[3]
     assert last_ctx.get('origin') == room1_poi

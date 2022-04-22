@@ -1,10 +1,10 @@
 
-from mission_control.data_model.restrictions import LocalMission, MissionState
-from mission_control.data_model.ihtn import TaskState, TaskStatus
-from mission_control.data_model.restrictions import MissionContext
-from mission_control.coordination.supervision import SupervisionProcess
+from mission_control.coordination import SupervisionProcess
+from mission_control.data_model import (LocalMission, MissionContext,
+                                        MissionState, TaskState, TaskStatus)
 
 from ..world_collector import *
+
 
 def test_local_mission_end_success_concluded(collection_mission, collection_ihtn):
     mission: MissionContext = collection_mission['mission']

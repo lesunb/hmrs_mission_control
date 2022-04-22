@@ -1,10 +1,9 @@
 import traceback
 from typing import Any, Callable, List, Tuple
 
-from ..data_model.ihtn import ElementaryTask, Task
-from ..data_model.restrictions import (BatteryTimeConstantDischarge, Estimate,
-                                       InviableEstimate, MissionContext,
-                                       Worker)
+from ..data_model import (BatteryTimeConstantDischarge, ElementaryTask,
+                          Estimate, InviableEstimate, MissionContext, Task,
+                          Worker)
 from ..utils.contants import ConstantsProvider
 from .core import (SkillDescriptor, SkillDescriptorRegister, TaskContext,
                    create_context_gen)
@@ -58,7 +57,6 @@ class TimeEstimator(Estimator):
             return
         else:
             invalid('max time exceeded (5 min)')
-
 
 class EnergyEstimatorConstantDischarge(Estimator):
     def __init__(self, constant_config_provider: ConstantsProvider):
@@ -167,8 +165,7 @@ class EstimatingManager:
         return EstimationChain(self.estimate_chain).estimate(task_context)
 
     def get_skill_descriptor(self, task_type) -> SkillDescriptor:
-        sd = self.skill_descriptors[task_type]
-        return sd
+        return self.skill_descriptors[task_type]
 
     def set_skill_descriptor(self, sd, task_type):
         self.skill_descriptors[task_type] = sd

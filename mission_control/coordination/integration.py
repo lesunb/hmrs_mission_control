@@ -1,11 +1,11 @@
 
 from abc import abstractmethod
 
-from ..data_model.restrictions import MissionContext
+from ..data_model import MissionContext
 
 
 class MissionError(Exception):
-    def __init__(orignal_error, message):
+    def __init__(self, orignal_error, message):
         pass
 
 class MissionUnnexpectedError(Exception):

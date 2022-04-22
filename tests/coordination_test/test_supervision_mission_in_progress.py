@@ -1,10 +1,11 @@
 
 
-from mission_control.coordination.update_mission import update_estimates_with_progress
-from mission_control.data_model.ihtn import TaskStatus, TaskState
-from ..world_collector import *
+from mission_control.coordination import SupervisionProcess
+from mission_control.coordination.update_mission import \
+    update_estimates_with_progress
+from mission_control.data_model import TaskState, TaskStatus
 
-from mission_control.coordination.supervision import SupervisionProcess
+from ..world_collector import *
 
 
 def test_estimate_time_remaining_on_init(collection_mission):

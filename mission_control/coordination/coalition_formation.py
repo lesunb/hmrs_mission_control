@@ -1,20 +1,19 @@
 
-from typing import Generator, Dict, List, Sequence
+from typing import Dict, Generator, List, Sequence
+
 from utils.logger import ContextualLogger, Logger
 
+from ..data_model import (Assignment, ElementaryTask, LocalMission,
+                          MissionContext, MissionStatus, Role, Task, Worker,
+                          flat_plan, transverse_ihtn_apply_for_task)
+from .estimating import Bid, EstimatingManager
 from .integration import MissionHandler, MissionUnnexpectedError
-from .estimating import EstimatingManager, Bid
-from .planning import distribute, flat_plan
-from ..data_model.restrictions import MissionContext, MissionStatus, Worker, LocalMission, Role
-from ..data_model.ihtn import Assignment, Task
-from ..data_model.ihtn import transverse_ihtn_apply_for_task
-from ..data_model import ElementaryTask
+from .planning import distribute
+
 
 def coalitionFormationError(e, mission_context):
     message = f'Unexpected error forming coalition for {mission_context}'
     return MissionUnnexpectedError(e, message)
-
-
 
 class CoalitionFormationProcess:
     """ Service of creating coalitions. It receives an ihtn with tasks 

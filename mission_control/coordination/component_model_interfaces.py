@@ -1,8 +1,8 @@
-from abc import abstractmethod
 import copy
+from abc import abstractmethod
 from typing import Any, Tuple
 
-from ..data_model import ElementaryTask, Worker, Estimate
+from ..data_model import ElementaryTask, Estimate, Worker
 
 
 class TaskContext:

@@ -1,13 +1,20 @@
 # -*- coding: utf-8 -*-
-from .ihtn import ElementaryTask, Method, AbstractTask, TaskState
-from .restrictions import Capability, Task, Battery, BatteryTimeConstantDischarge, LocalMission, MissionContext, Role, Worker, POI, Estimate
-from .ihtn_algorithms import eliminate_left_task
+from .ihtn import (AbstractTask, Assignment, ElementaryTask, Method, Role,
+                   TaskState, TaskStatus, TaskFailure, MethodOrdering, SyncTask)
+from .ihtn_algorithms import (count_elementary_tasks, eliminate_left_task,
+                              flat_plan, ihtn_aggregate, transverse_ihtn,
+                              transverse_ihtn_apply_for_task)
+from .restrictions import (POI, Battery, BatteryTimeConstantDischarge,
+                           Capability, Estimate, InviableEstimate,
+                           LocalMission, MissionContext, MissionStatus, Task,
+                           Worker, MissionState, is_failed, is_success)
 
-
-__all__ =[
-    ElementaryTask, Method, AbstractTask, TaskState,
+__all__ = [
+    Task, TaskStatus, ElementaryTask,AbstractTask, TaskState, Method,
+    MethodOrdering, SyncTask, TaskFailure,
+    Assignment,
+    MissionStatus,
     Capability,
-    Task, 
     Battery,
     BatteryTimeConstantDischarge,
     LocalMission,
@@ -15,8 +22,10 @@ __all__ =[
     Role,
     Worker,
     POI,
-    eliminate_left_task,
-    Estimate,
+    Estimate, InviableEstimate,
+    eliminate_left_task, count_elementary_tasks, flat_plan, 
+    ihtn_aggregate, transverse_ihtn_apply_for_task, transverse_ihtn,
+    MissionState, is_failed, is_success
     ]
 
 

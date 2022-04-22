@@ -1,11 +1,10 @@
-from ..world_collector import *
-
-from mission_control.data_model.restrictions import worker_factory
-from mission_control.coordination.estimating import EstimatingManager
-from mission_control.coordination.core import create_context_gen
-from mission_control.data_model.ihtn import ElementaryTask
-
 from mission_control.common_descriptors.navigation_sd import Move
+from mission_control.coordination import EstimatingManager
+from mission_control.coordination.core import create_context_gen
+from mission_control.data_model import ElementaryTask
+from mission_control.data_model.restrictions import worker_factory
+
+from ..world_collector import *
 
 task1 = ElementaryTask(type=task_type.NAV_TO.value, destination=poi.room3.value)
 task2 = ElementaryTask(type=task_type.NAV_TO.value, destination=poi.room1.value)

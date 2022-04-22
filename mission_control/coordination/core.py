@@ -1,12 +1,10 @@
 from abc import abstractmethod
-
 from typing import List
 
+from ..data_model import Worker
 from ..data_model.ihtn import ElementaryTask
-from ..data_model.restrictions import Worker, Estimate
+from .component_model_interfaces import SkillDescriptor, TaskContext
 
-
-from .component_model_interfaces import TaskContext, SkillDescriptor
 
 def create_context_gen(worker: Worker, task_list: List[ElementaryTask]):
     task_context = TaskContext(worker=worker)

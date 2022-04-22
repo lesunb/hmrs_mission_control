@@ -1,6 +1,5 @@
 from mission_control.common_descriptors.routes_ed import Route
-from mission_control.data_model.restrictions import LocalMission
-from mission_control.coordination.planning import flat_plan
+from mission_control.data_model import LocalMission, flat_plan
 
 
 def local_mission_to_log(local_mission: LocalMission):

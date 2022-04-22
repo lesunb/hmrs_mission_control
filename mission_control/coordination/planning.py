@@ -1,28 +1,26 @@
 
-from typing import List
-from mission_control.data_model.ihtn import Task, ElementaryTask, AbstractTask, SyncTask, MethodOrdering
+from ..data_model import (AbstractTask, ElementaryTask, MethodOrdering,
+                          SyncTask, Task)
 
 
 def is_assigned(task: Task, role):
-    return True if role in task.assign_to else False
+    return role in task.assign_to
 
 def create_send_message(next_task, prev_task, role):
     next_role_label = next_task.assign_to[0].label
     message = f'{prev_task.name}_completed'
     SEND_MESSAGE = SyncTask.SyncType.SEND_MESSAGE.value
-    smt = SyncTask(type=SEND_MESSAGE, to_role=next_task.assign_to, 
+    return SyncTask(type=SEND_MESSAGE, to_role=next_task.assign_to, 
             assign_to=role, name=f'notify_{next_role_label}_of_{message}',
             message=message)
-    return smt
 
 def create_wait_message(prev_task, role):
     prev_role_label = prev_task.assign_to[0].label
     message = f'{prev_task.name}_completed'
     WAIT_MESSAGE = SyncTask.SyncType.WAIT_MESSAGE.value
-    wmt = SyncTask(type=WAIT_MESSAGE, from_role=prev_task.assign_to, 
+    return SyncTask(type=WAIT_MESSAGE, from_role=prev_task.assign_to, 
             assign_to=role, name=f'wait_{prev_role_label}_to_complete_{prev_task.name}',
             message=message)
-    return wmt
 
 def distribute(task: Task, role):
     if isinstance(task, ElementaryTask):
@@ -74,26 +72,6 @@ def distribute(task: Task, role):
         n_ta.selected_method = n_methods[0]
         return n_ta
 
-    
-
-def count_elementary_tasks(ihtn):
-    if isinstance(ihtn, ElementaryTask):
-        return 1
-    elif isinstance(ihtn, AbstractTask):
-        count = 0
-        for subtask in ihtn.selected_method.subtasks:
-            count += count_elementary_tasks(subtask)
-        return count
-    else: return 0
-
-def flat_plan(ihtn) -> List[ElementaryTask]:
-    if isinstance(ihtn, (ElementaryTask, SyncTask)):
-        return [ihtn]
-    elif isinstance(ihtn, AbstractTask):
-        plan = []
-        for subtask in ihtn.selected_method.subtasks:
-            plan.extend(flat_plan(subtask))
-        return plan
 
 def check_tasks_names(tasks, expected):
     obtained_task_names = [task.name for task in tasks]
