@@ -1,0 +1,5 @@
+Data model provides common abstractions used to represent the domain of multi-robot coordination. 
+
+
+
+== Interface

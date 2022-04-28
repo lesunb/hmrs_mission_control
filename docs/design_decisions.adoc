@@ -1,0 +1,7 @@
+(DD.1) Hybrid between centralized and decentralized
+(DD.2) Architectural Pattern (ensembles)
+(DD.3) Task Decomposition as a Service using iHTN
+(DD.4) Coalition Formation / Task Allocation (Together)
+(DD.5) Coordination is extensible by descriptors.
+(DD.6) Skill based implementation of robot behaviors - Configured for the task at hand.
+

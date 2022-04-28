@@ -1,0 +1,1 @@
+#1 The system should be able to coordinate a mission planned by an external mission planner

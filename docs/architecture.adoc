@@ -1,0 +1,54 @@
+= Architecture
+
+== Runtime Modules
+
+The mission_control runtimes is divided in 6 high-level modules (i.e., Packages in Python):
+
+- ** data_model ** - contains common data structures to represent missions and algorithms to operate on these data structures (xref:modules/data_model.adoc[more]).
+- **coordination** - contains the processes for realizing mission, coordination, i.e., receive mission requests and realize coalition formation.(xref:modules/.adoc[more])
+- **estimating** - is a submodule of coordinator, responsible for  creating estimatives that will support assignment of tasks.(xref:modules/estimating.adoc[more])
+- **execution** - contains the processes abstractions concerned with  the execution of local missions by robots.(xref:modules/execution.adoc[more])
+- **deeco_integration** - creates the runtime organization using the  deeco abstractions. The code in this package instantiates components from the other packages in ensemble based system abstractions, e.g., ensemble components, with knowledge base and processes, and ensemble definitions. (xref:modules/deeco_integration.adoc[more])
+- **utils** - simple common functions such as logging and constants  lookup. (xref:modules/utils.adoc[more])
+
+== Component Model
+
+- ** descriptors  ** -  extend the coordination, allowing it to realize estimating for the specific tasks in the specific environment. (xref:modules/descriptors.adoc[more])
+- ** skill_implementation ** -  (xref:modules/skill_implementation.adoc[more])
+
+== Application
+An application wires all modules together (such as evaluation/experiment_gen_base/sim_exec.py), using a dependency injection framework (such as lagom). 
+
+
+== Dependencies Between Modules
+To favor the testability and modifiability of the system, we establish the following rules for what interactrions are allowed between modules:
+
+=== Mission Control Runtime: 
+
+- data_model has no dependency outside core language features (e.g., basic data structures, enum, type hints, etc).
+- Any module can depend on the data_model, which provides common abstractions to represent and reason about a mission.
+- The coordination and execution modules do only depend on data_model and do not have dependencies between them.
+- coordination module does not have static dependencies on specific skill descriptors nor environment descriptor. These are bound at initialization.
+- deeco_integration depends on data_model, coordination, execution, and deeco. 
+
+
+=== Component Model
+
+Furthermore, an application using mission_control will provide Environment Description Services, Skill Descriptors and Skill Implementations, and independent modules.
+
+
+=== Coordination
+
+- Environment Description Services
+- Skill Descriptors
+
+=== Execution
+
+Skill Implementations
+
+
+
+=== Wiring
+a init script, implementing the main method,  is used for instantiation of the system in a given target configuration (i.e., with a specific selection of skills and environment descriptors). These scripts are responsible for wiring together the components and it depends on every other module using the DI framework as a helper.
+
+

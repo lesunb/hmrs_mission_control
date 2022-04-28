@@ -1,0 +1,56 @@
+Mission Control was designed to coordinate missions of heterogeneous robots in the service robot domain, while providing an architecture that should makes it easy to realize modifications in points for which the system is likely to change.
+
+
+
+To evaluate the fitness of the architecture, we analyze a set of robot missions in the service robot domain described in the literature \cite{askarpour_robomax_2021}.
+From the descriptions, we identified the difference and commonalities between the missions. Then we derived (i) generic mission description, i.e., a description that abstracts away the specifics of different missions, and (ii) identified points that change between different missions, these we considered point likely to change.
+
+Starting from the analysis of a variety of missions in the service robots environment, we defined the points in the architecture that would require change either in case of integration (e.g., for communicating with a external system dispatching task requests) or in case of modification requests (e.g., the system should have a new set of priorities when allocating tasks). In the light of this analysis, we performed an evaluation of the integrability and modifiability of the architecture based on the points that are more likely to change following a questionnaire provided by Bass et. al.~\cite{bass_software_2021}, for either quality attributes.
+
+
+== Mission Coordination
+
+Each mission can be decomposed into tasks that are to be executed by specific roles within the plan. Condition in the environment can influence the mission plan.
+The coordinating system receives mission requests, with mission plans, involving one or more roles assigned to robots, and coordinates the executing by assigning robots to these roles. The assigned robots should be chosen between the ones available in the environment. The system should avoid failures due to low battery level by assigning only robots with sufficient batteries. The system should select only robots that have the required capabilities. If more than one robot is capable of fulfilling a role in a mission, the system should assign the one that can execute its part in less time.
+While evaluating the required capabilities required level of the battery, and time to execute a mission, the system may be required to consult external systems (e.g., a system that contains the map of the environment, with updated information about the availability of corridors).
+
+
+== Requirements
+
+
+-  The system should support an heterogeneous fleet, by taking into account the robot capabilities
+
+- [The system should realize coalition formation / task allocation]
+
+- [The system should take into account the level of battery while allocating tasks]
+
+- [The system should allocate robots according to its capabilities and resources]
+
+- [The system should control the execution of local missions (within a robot, i.e.,sequencing]
+
+- [Adding new robotic behaviors (ie. skills) should be a low impact change, and ]
+
+- [The system should integrate robot behaviors developed by third-parties]
+
+- [The system should be easy to integrate in new environments]
+
+- [The system should be easy to extend for new skills]
+
+- [The system should be easy to extend for new missions]
+
+- [When possible, the design should limit the data exchange in the network]
+
+- [When possible, the design should avoid computation on robots]
+
+
+## Points Likely to Change
+
+When designing the architecture, we should consider points of the system that is likely to change. We consider that the changes emerge due to changes in the environment, needed as a result of differences between missions, and across different environments. We consider that the following are points more likely to change:
+
+- The mission plan (i.e., the sequence of tasks that each robot is required to execute. The parameters of tasks) | Between requests, between different missions
+- The required set of skills required into missions | Between different missions
+- The interfaces of the external systems queried during planning | Between environment, in case of change into the environment
+- The available set of robots / the capabilities of each robot | Between environments, when a change occurs
+- Based on the generic description we elicit the overall functional requirements of the system. Moreover, based on the likely changes, we described the architecturally-significant requirement(\ref{}) relevant for modifiability and integrability.
+
+
