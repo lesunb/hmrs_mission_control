@@ -3,12 +3,15 @@
 :toc:
 :toc-placement!:
 
-Here is my preamble paragraph, but I could really place the TOC anywhere! Lorem ipsum foo bar baz.
 
 toc::[]
 
-xref:requirements[ Requirements ]
-xref:design_decision[ Design Decisions ]
-xref:architecture[ Architecture ]
+// xref:requirements[ Requirements ]
+// xref:design_decision[ Design Decisions ]
+// xref:architecture[ Architecture ]
 
 
+
+include::requirements.adoc[]
+include::design_decisions.adoc[]
+include::architecture.adoc[]
