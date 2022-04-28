@@ -6,7 +6,7 @@ from utils.logger import ContextualLogger, Logger
 from ..data_model import (Assignment, ElementaryTask, LocalMission,
                           MissionContext, MissionStatus, Role, Task, Worker,
                           flat_plan, transverse_ihtn_apply_for_task)
-from .estimating import Bid, EstimatingManager
+from ..estimating import Bid, EstimatingManager
 from .integration import MissionHandler, MissionUnnexpectedError
 from .planning import distribute
 

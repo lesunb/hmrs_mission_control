@@ -11,8 +11,7 @@ from lagom.container import Container
 from utils.timer import Timer
 from mission_control.deeco_integration.deeco_timer import DeecoTimer
 
-from mission_control.coordination.estimating import EnergyEstimatorConstantDischarge, EstimatingManager, Estimator, PLAN_MINIMUM_TARGET_BATTERTY_CHARGE_CONST, TimeEstimator
-from mission_control.coordination.core import SkillDescriptorRegister
+from mission_control.estimating import SkillDescriptorRegister, EnergyEstimatorConstantDischarge, EstimatingManager, Estimator, PLAN_MINIMUM_TARGET_BATTERTY_CHARGE_CONST, TimeEstimator
 from mission_control.common_descriptors.generic_constant_cost_sd import generic_skill_descriptor_constant_cost_factory
 from mission_control.common_descriptors.navigation_sd import NavigationSkillDescriptor
 from mission_control.common_descriptors.routes_ed import Map, RoutesEnvironmentDescriptor

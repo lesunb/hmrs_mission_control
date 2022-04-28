@@ -1,4 +1,4 @@
-from mission_control.coordination.core import TaskContext, create_context_gen
+from mission_control.estimating import TaskContext, create_context_gen
 from mission_control.data_model import POI, ElementaryTask, Worker
 
 
@@ -20,7 +20,6 @@ def test_task_context_get_properties():
     tsk_ctx = tsk_ctx.unwind(task)
     assert tsk_ctx.get('origin') == sr_poi
     assert tsk_ctx.get('destination') == room3_poi
-
 
 
 sr_poi = POI('storage_room')
@@ -47,8 +46,6 @@ def test_task_context_position_unwinding():
     assert tsk_ctxs[2].get('origin') == room1_poi
     assert tsk_ctxs[3].get('origin') == room1_poi # stay still, action has no destination
     assert tsk_ctxs[3].get('destination') == room3_poi
-
-
 
 def test_create_task_context():
     task_context_gen = create_context_gen(worker, task_list)

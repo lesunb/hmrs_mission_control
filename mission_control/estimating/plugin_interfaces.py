@@ -5,6 +5,7 @@ from typing import Any, Tuple
 from ..data_model import ElementaryTask, Estimate, Worker
 
 
+
 class TaskContext:
     def __init__(self, worker: Worker):
         self.worker = worker
@@ -63,4 +64,16 @@ class EnvironmentDescriptor:
     @abstractmethod
     def get(self, parametes):
         pass
+
+class SkillDescriptorRegister:
+    def __init__(self, *task_type_skill_desc_pairs):
+        self.descs = {pair[0]: pair[1] for pair in task_type_skill_desc_pairs}
+    
+    def register(self, task_type, descriptor: SkillDescriptor):
+        self.descs[task_type] = descriptor
+
+    def get(self, type) -> SkillDescriptor:
+        return self.descs[type]
+        
+
 

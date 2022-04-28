@@ -1,5 +1,5 @@
 from mission_control.common_descriptors.navigation_sd import Move
-from mission_control.estimating import create_context_gen
+from mission_control.estimating import EstimatingManager, create_context_gen
 from mission_control.data_model import ElementaryTask
 from mission_control.data_model.restrictions import worker_factory
 
@@ -33,8 +33,11 @@ last_ctx = task_ctxs[2]
 
 
 
+def test_estimate_navigation_task_in_context(estimate_manager: EstimatingManager):
+    estimate = estimate_manager.estimation_in_task_context(last_ctx)
+    assert estimate is not None
 
-def test_estimate_route(routes_envdesc):
-    route = routes_envdesc.get(poi.room3.value, poi.room1.value)
-    assert route.get_distance() > 3
 
+def test_estimate(estimate_manager: EstimatingManager):
+    bid = estimate_manager.estimation(worker1, task_list)
+    assert bid.estimate.time > 5 and bid.estimate.time < 6

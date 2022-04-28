@@ -3,7 +3,6 @@
 from ..world_collector import *
 
 from mission_control.data_model import Task, MissionContext, MissionStatus
-
 from mission_control.coordination import CoalitionFormationProcess
 
 def test_coalition_formation_process(cf_process: CoalitionFormationProcess, ihtn_collect: Task, collection_robots):

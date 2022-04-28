@@ -30,7 +30,6 @@ def test_distribute_single_assigned_task(ihtn_navto_room3):
     distribution = distribute(ihtn_navto_room3, r1)
     assert eq(distribution, ihtn_navto_room3, 'name', 'destination')
 
-
 def test_sync_between_two_agents(ihtn_unload_sample):
     global_plan = ihtn_unload_sample.clone()
     distribution = distribute(global_plan, r1)
@@ -42,6 +41,5 @@ def test_sync_between_two_agents(ihtn_unload_sample):
 
 def test_distribute(ihtn_pickup_sample):
     distribution = distribute(ihtn_pickup_sample, r1)
-    assert count_elementary_tasks(distribution) == 9
-    
+    assert count_elementary_tasks(distribution) == 9    
 

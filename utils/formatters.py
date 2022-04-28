@@ -3,7 +3,7 @@ from typing import List
 
 from utils.logger import LogFormatterManager
 from mission_control.data_model.restrictions import LocalMission, Worker
-from mission_control.coordination.estimating import Bid, Partial
+from mission_control.estimating.estimating import Bid, Partial
 
 from evaluation.experiment_gen_base.to_executor import mc_task_to_exeuctor
 

@@ -1,25 +1,32 @@
-import pytest
-from lagom import Container
+from copy import deepcopy
+from enum import Enum
 from typing import List
 
-from enum import Enum
-from copy import deepcopy
+import pytest
+from lagom import Container
+from mission_control.common_descriptors.generic_constant_cost_sd import \
+    generic_skill_descriptor_constant_cost_factory
+from mission_control.common_descriptors.navigation_sd import (
+    Move, NavigationSkillDescriptor)
+from mission_control.common_descriptors.routes_ed import (
+    Map, Nodes, RoutesEnvironmentDescriptor)
+from mission_control.coordination import (CoalitionFormationProcess,
+                                          MissionHandler,
+                                          MissionRepairPlannerRegister,
+                                          MissionRepairStatus, RepairPlanner)
+from mission_control.data_model import (POI, AbstractTask, Battery,
+                                        BatteryTimeConstantDischarge,
+                                        ElementaryTask, LocalMission, Method,
+                                        MissionContext, Role, Task, TaskState,
+                                        Worker)
+from mission_control.estimating import (EnergyEstimatorConstantDischarge,
+                                        EstimatingManager, Estimator,
+                                        SkillDescriptorRegister, TimeEstimator)
+from mission_control.execution import (SkillImplementation, SkillLibrary,
+                                       TickStatus)
 
 from utils.formatters import CoalitionFormationLogger
 from utils.logger import ContextualLogger, LogFormatterManager
-
-from mission_control.coordination import MissionRepairPlannerRegister, MissionRepairStatus, RepairPlanner, MissionHandler
-from mission_control.execution import SkillLibrary, TickStatus, SkillImplementation
-from mission_control.coordination import SkillDescriptorRegister,\
-     EnergyEstimatorConstantDischarge, EstimatingManager, Estimator, TimeEstimator, \
-     CoalitionFormationProcess
-from mission_control.data_model import Method, ElementaryTask, AbstractTask, Task, TaskState, \
-     Battery, BatteryTimeConstantDischarge, LocalMission, MissionContext, Role, Worker, POI
-from mission_control.common_descriptors.routes_ed import RoutesEnvironmentDescriptor, Map, Nodes
-from mission_control.common_descriptors.navigation_sd import NavigationSkillDescriptor, Move
-from mission_control.common_descriptors.generic_constant_cost_sd import generic_skill_descriptor_constant_cost_factory
-
-from mission_control.common_descriptors.routes_ed import Map
 
 ###
 # Produces:
