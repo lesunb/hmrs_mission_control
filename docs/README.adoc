@@ -1,10 +1,9 @@
 = Mission Control
-
 :toc:
-:toc-placement!:
+// :toc-placement!:
 
 
-toc::[]
+// toc::[]
 
 // xref:requirements[ Requirements ]
 // xref:design_decision[ Design Decisions ]
