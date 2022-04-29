@@ -51,3 +51,7 @@ Skill Implementations
 === Wiring
 a init script, implementing the main method,  is used for instantiation of the system in a given target configuration (i.e., with a specific selection of skills and environment descriptors). These scripts are responsible for wiring together the components and it depends on every other module using the DI framework as a helper.
 
+
+
+=== Dependencies
+image::images/dependencies.svg[]
