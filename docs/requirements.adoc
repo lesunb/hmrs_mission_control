@@ -20,27 +20,27 @@ While evaluating the required capabilities required level of the battery, and ti
 
 -  The system should support an heterogeneous fleet, by taking into account the robot capabilities
 
-- [The system should realize coalition formation / task allocation]
+- The system should realize coalition formation / task allocation
 
-- [The system should take into account the level of battery while allocating tasks]
+- The system should take into account the level of battery while allocating tasks
 
-- [The system should allocate robots according to its capabilities and resources]
+- The system should allocate robots according to its capabilities and resources
 
-- [The system should control the execution of local missions (within a robot, i.e.,sequencing]
+- The system should control the execution of local missions (within a robot, i.e.,sequencing)
 
-- [Adding new robotic behaviors (ie. skills) should be a low impact change, and ]
+- Adding new robotic behaviors (ie. skills) should be a low impact change, and 
 
-- [The system should integrate robot behaviors developed by third-parties]
+- The system should integrate robot behaviors developed by third-parties
 
-- [The system should be easy to integrate in new environments]
+- The system should be easy to integrate in new environments
 
-- [The system should be easy to extend for new skills]
+- The system should be easy to extend for new skills
 
-- [The system should be easy to extend for new missions]
+- The system should be easy to extend for new missions
 
-- [When possible, the design should limit the data exchange in the network]
+- When possible, the design should limit the data exchange in the network
 
-- [When possible, the design should avoid computation on robots]
+- When possible, the design should avoid computation on robots
 
 
 ## Points Likely to Change

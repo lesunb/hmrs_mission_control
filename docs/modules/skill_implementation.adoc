@@ -1,0 +1,39 @@
+A skill implementation has a defined life
+
+
+class SkillImplementation:
+    
+    def __init__(self):
+        self.is_loaded = False
+        self.task = None
+
+    @abstractmethod
+    def on_load(self):
+        """ 
+        On start
+        """
+        pass
+    
+    @abstractmethod
+    def on_complete(self):
+        pass
+
+    @abstractmethod
+    def on_tick(self) -> TickStatus:
+        pass
+    
+    def load(self, task: Task):
+        self.on_load(task)
+        self.is_loaded = True
+
+    def tick(self) -> TickStatus:
+        if not self.is_loaded:
+            return #TODO return state loading
+        return self.on_tick()
+
+    def complete(self):
+        self.on_complete()
+        
+
+image::sequencing_process.png[]
+
