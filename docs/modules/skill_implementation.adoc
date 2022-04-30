@@ -1,39 +1,10 @@
-A skill implementation has a defined life
+A skill implementation has a defined life, which is controlled by the sequencing process through the ActiveSkillCtrl, which is responsible for activating and ticking the skill. The sequencing process is as as follows.
 
+image::../images/sequencing_process.png[]
 
-class SkillImplementation:
-    
-    def __init__(self):
-        self.is_loaded = False
-        self.task = None
+To proper work with MissionControl runtime, an skill implementation must extend the "SkillImplementation" class.
 
-    @abstractmethod
-    def on_load(self):
-        """ 
-        On start
-        """
-        pass
-    
-    @abstractmethod
-    def on_complete(self):
-        pass
-
-    @abstractmethod
-    def on_tick(self) -> TickStatus:
-        pass
-    
-    def load(self, task: Task):
-        self.on_load(task)
-        self.is_loaded = True
-
-    def tick(self) -> TickStatus:
-        if not self.is_loaded:
-            return #TODO return state loading
-        return self.on_tick()
-
-    def complete(self):
-        self.on_complete()
-        
-
-image::sequencing_process.png[]
-
+[source,python]
+----
+include::./mission_control/execution/component_model_interfaces.py[]
+----
