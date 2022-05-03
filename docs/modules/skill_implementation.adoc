@@ -6,5 +6,5 @@ To proper work with MissionControl runtime, an skill implementation must extend 
 
 [source,python]
 ----
-include::../../mission_control/execution/component_model_interfaces.py[]
+include::../../mission_control/mission_control/execution/component_model_interfaces.py[]
 ----

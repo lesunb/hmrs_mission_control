@@ -1,11 +1,12 @@
 ## Skill Descriptors
 A Skill Descriptor should implement the interface SkillDescriptor, implementing the method estimate. 
 
-`def estimate(self, task_context: TaskContext) -> Tuple[Estimate, Any]:`
+
+
+[source,python]
+----
+    def estimate(self, task_context: TaskContext) -> Tuple[Estimate, Any]:
+----
 
 A Skill Descriptor can use a Environment Description Service, in which case it should be declared as an argument in the constructor. For example, the NavigationSkillDescriptor, uses a RoutesEnvironmentDescriptor, and its constructor as as follows: 
 
-
-`def __init__(self, routes_ed: RoutesEnvironmentDescriptor):`
-//       `self.routes_ed: RoutesEnvironmentDescriptor = routes_ed`
-//

@@ -4,16 +4,23 @@
 
 The mission_control runtimes is divided in 6 high-level modules (i.e., Packages in Python):
 
-- ** data_model ** - contains common data structures to represent missions and algorithms to operate on these data structures (xref:modules/data_model.adoc[more]).
-- **coordination** - contains the processes for realizing mission, coordination, i.e., receive mission requests and realize coalition formation.(xref:modules/.adoc[more])
-- **estimating** - is a submodule of coordinator, responsible for  creating estimatives that will support assignment of tasks.(xref:modules/estimating.adoc[more])
-- **execution** - contains the processes abstractions concerned with  the execution of local missions by robots.(xref:modules/execution.adoc[more])
-- **deeco_integration** - creates the runtime organization using the  deeco abstractions. The code in this package instantiates components from the other packages in ensemble based system abstractions, e.g., ensemble components, with knowledge base and processes, and ensemble definitions. (xref:modules/deeco_integration.adoc[more])
-- **utils** - simple common functions such as logging and constants  lookup. (xref:modules/utils.adoc[more])
+- ** data_model ** - contains common data structures to represent missions and algorithms to operate on these data structures
+// (xref:modules/data_model.adoc[more]).
+- **coordination** - contains the processes for realizing mission, coordination, i.e., receive mission requests and realize coalition formation.
+//(xref:modules/.adoc[more])
+- **estimating** - is a submodule of coordinator, responsible for  creating estimatives that will support assignment of tasks.
+//(xref:modules/estimating.adoc[more])
+- **execution** - contains the processes abstractions concerned with  the execution of local missions by robots.
+//(xref:modules/execution.adoc[more])
+- **deeco_integration** - creates the runtime organization using the  deeco abstractions. The code in this package instantiates components from the other packages in ensemble based system abstractions, e.g., ensemble components, with knowledge base and processes, and ensemble definitions. 
+// (xref:modules/deeco_integration.adoc[more])
+- **utils** - simple common functions such as logging and constants  lookup.
+// (xref:modules/utils.adoc[more])
 
 == Component Model
 
-- ** descriptors  ** -  extend the coordination, allowing it to realize estimating for the specific tasks in the specific environment. (xref:modules/descriptors.adoc[more])
+- ** descriptors  ** -  extend the coordination, allowing it to realize estimating for the specific tasks in the specific environment.
+//(xref:modules/descriptors.adoc[more])
 - ** skill_implementation ** -  (xref:modules/skill_implementation.adoc[more])
 
 == Application
@@ -52,6 +59,5 @@ Skill Implementations
 a init script, implementing the main method,  is used for instantiation of the system in a given target configuration (i.e., with a specific selection of skills and environment descriptors). These scripts are responsible for wiring together the components and it depends on every other module using the DI framework as a helper.
 
 
-
-=== Dependencies
-image::images/dependencies.svg[]
+// === Dependencies
+// image::images/dependencies.svg[]
