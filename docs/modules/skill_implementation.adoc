@@ -8,3 +8,10 @@ To proper work with MissionControl runtime, an skill implementation must extend 
 ----
 include::../../mission_control/mission_control/execution/component_model_interfaces.py[]
 ----
+
+The SkillImplementation orchestrates the execution of each skill handling sensors and actuators to achieve its goal.
+The Skills are provided by the System Integrator and they are plugged in our architecture following the figure below:
+
+image::../images/skill_implementation.png[]
+
+The left diagram shows our architecture with the skills plugged in and the left shows the coordination layers proposed by RobMoSys.
