@@ -2,10 +2,10 @@
 Mission Control was designed to coordinate missions of heterogeneous robots in the service robot domain, while providing an architecture that should makes it easy to realize modifications in points for which the system is likely to change.
 
 
-To evaluate the fitness of the architecture, we analyze a set of robot missions in the service robot domain described in the literature \cite{askarpour_robomax_2021}.
+To evaluate the fitness of the architecture, we analyze a set of robot missions in the service robot domain described in the literature cite:[askarpour_robomax_2021].
 From the descriptions, we identified the difference and commonalities between the missions. Then we derived (i) generic mission description, i.e., a description that abstracts away the specifics of different missions, and (ii) identified points that change between different missions, these we considered point likely to change.
 
-Starting from the analysis of a variety of missions in the service robots environment, we defined the points in the architecture that would require change either in case of integration (e.g., for communicating with a external system dispatching task requests) or in case of modification requests (e.g., the system should have a new set of priorities when allocating tasks). In the light of this analysis, we performed an evaluation of the integrability and modifiability of the architecture based on the points that are more likely to change following a questionnaire provided by Bass et. al.~\cite{bass_software_2021}, for either quality attributes.
+Starting from the analysis of a variety of missions in the service robots environment, we defined the points in the architecture that would require change either in case of integration (e.g., for communicating with a external system dispatching task requests) or in case of modification requests (e.g., the system should have a new set of priorities when allocating tasks). In the light of this analysis, we performed an evaluation of the integrability and modifiability of the architecture based on the points that are more likely to change following a questionnaire provided by Bass et. al. cite:[bass_software_2021], for either quality attributes.
 
 
 == Mission Coordination
