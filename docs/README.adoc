@@ -1,5 +1,7 @@
 = Mission Control
-:toc:
+include::authors.adoc[]
+
+:toc: left
 // :toc-placement!:
 
 
@@ -15,3 +17,13 @@ include::requirements.adoc[]
 include::design_decisions.adoc[]
 include::architecture.adoc[]
 include::evaluation.adoc[]
+
+
+This will end with a citation cite:[Aa2017].
+
+= References
+
+:bibliography-database: bibtex.bib
+:bibliography-style: apa
+
+bibliography::[]
