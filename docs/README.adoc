@@ -1,6 +1,5 @@
 = Mission Control
 include::authors.adoc[]
-
 :toc: left
 // :toc-placement!:
 

@@ -1,5 +1,5 @@
+== Overview
 Mission Control was designed to coordinate missions of heterogeneous robots in the service robot domain, while providing an architecture that should makes it easy to realize modifications in points for which the system is likely to change.
-
 
 
 To evaluate the fitness of the architecture, we analyze a set of robot missions in the service robot domain described in the literature \cite{askarpour_robomax_2021}.
