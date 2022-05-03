@@ -1,5 +1,6 @@
 = Mission Control
 include::authors.adoc[]
+:favicon: ./images/favicon.png
 :toc: left
 // :toc-placement!:
 :toc: left
@@ -12,9 +13,6 @@ include::requirements.adoc[]
 include::design_decisions.adoc[]
 include::architecture.adoc[]
 include::evaluation.adoc[]
-
-
-This will end with a citation cite:[ros].
 
 == References
 
