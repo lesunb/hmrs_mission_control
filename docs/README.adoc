@@ -19,9 +19,9 @@ include::architecture.adoc[]
 include::evaluation.adoc[]
 
 
-This will end with a citation cite:[Aa2017].
+This will end with a citation cite:[ros].
 
-= References
+== References
 
 :bibliography-database: bibtex.bib
 :bibliography-style: apa
