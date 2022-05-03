@@ -2,15 +2,11 @@
 include::authors.adoc[]
 :toc: left
 // :toc-placement!:
-
+:toc: left
+:toc-title: Content
+:toclevels: 3
 
 // toc::[]
-
-// xref:requirements[ Requirements ]
-// xref:design_decision[ Design Decisions ]
-// xref:architecture[ Architecture ]
-
-
 
 include::requirements.adoc[]
 include::design_decisions.adoc[]
