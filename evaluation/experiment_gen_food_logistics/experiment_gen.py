@@ -19,7 +19,7 @@ from mission_control.core import POI, Role
 from verification import verify_trials
 #from resources.world_lab_samples import task_type, carry_robot_skills, routes_ed, near_ic_pc_rooms, pickup_ihtn, get_position_of_poi, container
 from resources.world_food_logistics import task_type, carry_robot_skills, routes_ed, near_ic_pc_rooms, pickup_ihtn, get_position_of_poi, container
-from resources.ithn_from_json import ihtn_from_json
+from resources.ihtn_from_json import ihtn_from_json
 
 from evaluation.experiment_gen_lab_samples.baseline_plan import append_baseline_trial
 from collections import namedtuple
