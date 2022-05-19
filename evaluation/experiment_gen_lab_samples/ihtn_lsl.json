@@ -1,0 +1,248 @@
+{
+    "0": {
+        "name": "ROOT",
+        "type": "task",
+        "parent": "-1",
+        "agents": [
+            "r1",
+            "lab_arm",
+            "nurse"
+        ],
+        "children": [
+            "1"
+        ]
+    },
+    "1": {
+        "name": "ROOT_M",
+        "type": "method",
+        "parent": "0",
+        "agents": [
+            "r1",
+            "lab_arm",
+            "nurse"
+        ],
+        "children": [
+            "2",
+            "7",
+            "12",
+            "16"
+        ]
+    },
+    "2": {
+        "name": "ApproachNurse",
+        "type": "task",
+        "parent": "1",
+        "agents": [
+            "r1",
+            "nurse"
+        ],
+        "children": [
+            "3"
+        ]
+    },
+    "3": {
+        "name": "nurse-approach",
+        "type": "method",
+        "parent": "2",
+        "agents": [
+            "r1",
+            "nurse"
+        ],
+        "children": [
+            "4",
+            "5",
+            "6"
+        ]
+    },
+    "4": {
+        "name": "navigation",
+        "type": "action",
+        "parent": "3",
+        "locations": [
+            "PC Room 2"
+        ],
+        "agents": [
+            "r1"
+        ],
+        "children": ""
+    },
+    "5": {
+        "name": "approach_person",
+        "type": "action",
+        "parent": "3",
+        "locations": "",
+        "agents": [
+            "r1"
+        ],
+        "children": ""
+    },
+    "6": {
+        "name": "authenticate_person",
+        "type": "action",
+        "parent": "3",
+        "locations": "",
+        "agents": [
+            "r1"
+        ],
+        "children": ""
+    },
+    "7": {
+        "name": "PickSample",
+        "type": "task",
+        "parent": "1",
+        "agents": [
+            "r1",
+            "nurse"
+        ],
+        "children": [
+            "8"
+        ]
+    },
+    "8": {
+        "name": "sample-pick",
+        "type": "method",
+        "parent": "7",
+        "agents": [
+            "r1",
+            "nurse"
+        ],
+        "children": [
+            "9",
+            "10",
+            "11"
+        ]
+    },
+    "9": {
+        "name": "operate_drawer-open",
+        "type": "action",
+        "parent": "8",
+        "locations": "",
+        "agents": [
+            "r1"
+        ],
+        "children": ""
+    },
+    "10": {
+        "name": "deposit",
+        "type": "action",
+        "parent": "8",
+        "locations": "",
+        "agents": [
+            "nurse"
+        ],
+        "children": ""
+    },
+    "11": {
+        "name": "operate_drawer-close",
+        "type": "action",
+        "parent": "8",
+        "locations": "",
+        "agents": [
+            "r1"
+        ],
+        "children": ""
+    },
+    "12": {
+        "name": "ApproachArm",
+        "type": "task",
+        "parent": "1",
+        "agents": [
+            "r1",
+            "lab_arm"
+        ],
+        "children": [
+            "13"
+        ]
+    },
+    "13": {
+        "name": "arm-approach",
+        "type": "method",
+        "parent": "12",
+        "agents": [
+            "r1",
+            "lab_arm"
+        ],
+        "children": [
+            "14",
+            "15"
+        ]
+    },
+    "14": {
+        "name": "navigation",
+        "type": "action",
+        "parent": "13",
+        "locations": [
+            "Laboratory"
+        ],
+        "agents": [
+            "r1"
+        ],
+        "children": ""
+    },
+    "15": {
+        "name": "approach_robot",
+        "type": "action",
+        "parent": "13",
+        "locations": "",
+        "agents": [
+            "r1"
+        ],
+        "children": ""
+    },
+    "16": {
+        "name": "UnloadSample",
+        "type": "task",
+        "parent": "1",
+        "agents": [
+            "r1",
+            "lab_arm"
+        ],
+        "children": [
+            "17"
+        ]
+    },
+    "17": {
+        "name": "sample-unload",
+        "type": "method",
+        "parent": "16",
+        "agents": [
+            "r1",
+            "lab_arm"
+        ],
+        "children": [
+            "18",
+            "19",
+            "20"
+        ]
+    },
+    "18": {
+        "name": "operate_drawer-open",
+        "type": "action",
+        "parent": "17",
+        "locations": "",
+        "agents": [
+            "r1"
+        ],
+        "children": ""
+    },
+    "19": {
+        "name": "pick_up",
+        "type": "action",
+        "parent": "17",
+        "locations": "",
+        "agents": [
+            "lab_arm"
+        ],
+        "children": ""
+    },
+    "20": {
+        "name": "operate_drawer-close",
+        "type": "action",
+        "parent": "17",
+        "locations": "",
+        "agents": [
+            "r1"
+        ],
+        "children": ""
+    }
+}

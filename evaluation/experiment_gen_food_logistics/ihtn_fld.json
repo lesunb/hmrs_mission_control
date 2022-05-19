@@ -1,0 +1,142 @@
+{
+    "0": {
+        "name": "ROOT",
+        "type": "task",
+        "parent": "-1",
+        "agents": [
+            "r1",
+            "Delivery1",
+            "Patient1"
+        ],
+        "children": [
+            "1"
+        ]
+    },
+    "1": {
+        "name": "ROOT_M",
+        "type": "method",
+        "parent": "0",
+        "agents": [
+            "r1",
+            "Delivery1",
+            "Patient1"
+        ],
+        "children": [
+            "2",
+            "6"
+        ]
+    },
+    "2": {
+        "name": "GetFood",
+        "type": "task",
+        "parent": "1",
+        "agents": [
+            "r1",
+            "Delivery1"
+        ],
+        "children": [
+            "3"
+        ]
+    },
+    "3": {
+        "name": "food-pickup",
+        "type": "method",
+        "parent": "2",
+        "agents": [
+            "r1",
+            "Delivery1"
+        ],
+        "children": [
+            "4",
+            "5"
+        ]
+    },
+    "4": {
+        "name": "navto",
+        "type": "action",
+        "parent": "3",
+        "locations": [
+            "Kitchen"
+        ],
+        "agents": [
+            "r1"
+        ],
+        "children": ""
+    },
+    "5": {
+        "name": "wait-for-food",
+        "type": "action",
+        "parent": "3",
+        "locations": [
+            "Kitchen"
+        ],
+        "agents": [
+            "r1",
+            "Delivery1"
+        ],
+        "children": ""
+    },
+    "6": {
+        "name": "DeliverToTable",
+        "type": "task",
+        "parent": "1",
+        "agents": [
+            "r1",
+            "Patient1"
+        ],
+        "children": [
+            "7"
+        ]
+    },
+    "7": {
+        "name": "table-deliver",
+        "type": "method",
+        "parent": "6",
+        "agents": [
+            "r1",
+            "Patient1"
+        ],
+        "children": [
+            "8",
+            "9",
+            "10"
+        ]
+    },
+    "8": {
+        "name": "navto",
+        "type": "action",
+        "parent": "7",
+        "locations": [
+            "RoomA"
+        ],
+        "agents": [
+            "r1"
+        ],
+        "children": ""
+    },
+    "9": {
+        "name": "approach-patient-table",
+        "type": "action",
+        "parent": "7",
+        "locations": [
+            "RoomA"
+        ],
+        "agents": [
+            "r1",
+            "Patient1"
+        ],
+        "children": ""
+    },
+    "10": {
+        "name": "deliver-to-table",
+        "type": "action",
+        "parent": "7",
+        "locations": [
+            "RoomA"
+        ],
+        "agents": [
+            "r1"
+        ],
+        "children": ""
+    }
+}
