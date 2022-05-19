@@ -158,7 +158,7 @@
         ]
     },
     "12": {
-        "name": "pick-dishes-with-human",
+        "name": "pick-dishes-with-robot-at-location",
         "type": "method",
         "parent": "11",
         "agents": [
@@ -172,26 +172,24 @@
         ]
     },
     "13": {
-        "name": "approach-human",
+        "name": "pick-patient-dishes",
         "type": "action",
         "parent": "12",
-        "locations": [
-            "RoomA"
-        ],
+        "locations": "",
         "agents": [
-            "r1",
+            "r2",
             "Patient1"
         ],
         "children": ""
     },
     "14": {
-        "name": "wait-for-human-to-place-dish",
+        "name": "load-dishes",
         "type": "action",
         "parent": "12",
         "locations": "",
         "agents": [
             "r1",
-            "Patient1"
+            "r2"
         ],
         "children": ""
     },

@@ -4,6 +4,7 @@
         "type": "task",
         "parent": "-1",
         "agents": [
+            "r2",
             "r1",
             "Delivery1",
             "Patient1"
@@ -17,6 +18,7 @@
         "type": "method",
         "parent": "0",
         "agents": [
+            "r2",
             "r1",
             "Delivery1",
             "Patient1"
@@ -77,10 +79,11 @@
         "children": ""
     },
     "6": {
-        "name": "DeliverToTable",
+        "name": "DeliverToFetch",
         "type": "task",
         "parent": "1",
         "agents": [
+            "r2",
             "r1",
             "Patient1"
         ],
@@ -89,17 +92,17 @@
         ]
     },
     "7": {
-        "name": "table-deliver",
+        "name": "fetch-deliver",
         "type": "method",
         "parent": "6",
         "agents": [
+            "r2",
             "r1",
             "Patient1"
         ],
         "children": [
             "8",
-            "9",
-            "10"
+            "9"
         ]
     },
     "8": {
@@ -115,9 +118,36 @@
         "children": ""
     },
     "9": {
-        "name": "approach-patient-table",
-        "type": "action",
+        "name": "FetchMeal",
+        "type": "task",
         "parent": "7",
+        "agents": [
+            "r2",
+            "r1",
+            "Patient1"
+        ],
+        "children": [
+            "10"
+        ]
+    },
+    "10": {
+        "name": "fetch-meal-with-human",
+        "type": "method",
+        "parent": "9",
+        "agents": [
+            "r2",
+            "r1",
+            "Patient1"
+        ],
+        "children": [
+            "11",
+            "12"
+        ]
+    },
+    "11": {
+        "name": "approach-human",
+        "type": "action",
+        "parent": "10",
         "locations": [
             "RoomA"
         ],
@@ -127,15 +157,16 @@
         ],
         "children": ""
     },
-    "10": {
-        "name": "deliver-to-table",
+    "12": {
+        "name": "wait-for-human-to-fetch",
         "type": "action",
-        "parent": "7",
+        "parent": "10",
         "locations": [
             "RoomA"
         ],
         "agents": [
-            "r1"
+            "r1",
+            "Patient1"
         ],
         "children": ""
     }
