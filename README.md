@@ -32,19 +32,22 @@ Used IDE: vscode, plugin python
 macOS aditional dependencies
 brew install libmagic
 
-Install pipenv
+Development
+---
+
+Install poetry
 ------------- 
 
-pipenv easy the process of managing python dependencies
+poetry easy the process of managing python dependencies
 
 PIP
 ```console
-$ pip install pyenv
+$ pip install poetry
 ```
 
 Alternatively, macOS brew
 ```console
-$ brew install pipenv 
+$ brew install poetry 
 ```
 
 Install dependencies
@@ -53,16 +56,13 @@ Install dependencies
 Inside the project folder (after clone)
 
 ```console
-$ pyenv install
-$ pip install pipenv
-$ pipenv install
-$ pipenv shell
-(hmrs_mission_control env) % pipenv install --dev
+$ poetry install
+$ poetry shell
 ```
 
 Run a Controlled Experiment
 ------
-Inside pipenv environment (after pipenv shell)
+Inside poetry environment (after poetry shell)
 
 ```console
  python evaluation/experiment_gen_lab_samples/experiment_gen.py
@@ -75,7 +75,7 @@ Test
 Tests should be put on /tests folder and are executed with the following command.
 
 ```console
- $ pytest -v --cov .
+ $ poetry run pytest -v --cov .
 ```
 
 Linter
@@ -92,7 +92,7 @@ Run
 Select the exec shell
 
 ```console
-$ pipenv shell
+$ poetry shell
 ```
 
 Then, Execute Simulation
@@ -110,16 +110,16 @@ Add New Dependency
 To add new dependencies use the following command.
 
 ```console
-$ pipenv install [name]
+$ poetry install [name]
 ```
 
-This command will add the dependency to the Pipfile and Pipfile.lock assuring that the execution can be reproduced in another environment (after dependencies are updated with `pipenv install` command )
+This command will add the dependency to the Pipfile and poetry.lock assuring that the execution can be reproduced in another environment (after dependencies are updated with `poetry install` command )
 
 Add New Dev Dependency
 ----------------------
 Same as previous dependencies, but for development libraries such as the ones used for test.
 
 ```console
-$ pipenv install [name] --dev
+$ poetry install [name] --dev
 ```
-Note that other systems after pulling updates will need a reexecution of `pipenv install --dev`
+Note that other systems after pulling updates will need a reexecution of `poetry install --dev`

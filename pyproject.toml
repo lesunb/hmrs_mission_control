@@ -1,0 +1,39 @@
+[tool.poetry]
+name = "hmrs_mission_control"
+version = "0.1.0"
+license = "MIT"
+description = "**Heterogeneous Multi-Robots Mission Control** is an architecture for the development of applications, capable of coordinating multi-robot missions subject to uncertainty in properties of the available robots in the Software Engineering Lab (LES) at University of Brasilia."
+authors = ["Gabriel Rodrigues <gabrielsr@gmail.com>"]
+readme = "README.md"
+packages = [
+    { include = "mission_control" },
+    { include = "deeco" },
+]
+
+[tool.poetry.urls]
+"Bug Tracker" = "https://github.com/lesunb/hmrs_mission_control/issues"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+jsonpickle = "^2.2.0"
+matplotlib = "^3.5.2"
+setuptools = "^62.3.2"
+PyQt5 = "^5.15.6"
+lxml = "^4.8.0"
+lagom = "^1.7.0"
+shortuuid = "^1.0.9"
+
+[tool.poetry.dev-dependencies]
+pytest = "^7.1.2"
+flake8 = "^4.0.1"
+pytest-cov = "^3.0.0"
+autopep8 = "^1.6.0"
+codacy-coverage = "^1.3.11"
+pytest-mock = "^3.7.0"
+setuptools = "^62.3.2"
+wheel = "^0.37.1"
+setuptools-scm = "^6.4.2"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
