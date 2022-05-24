@@ -3,7 +3,7 @@ import os
 import pytest
 from lagom import Container
 
-from utils.logger import Logger, LogWriter, ContextualLogger, LogDir
+from mission_control.utils import Logger, LogWriter, ContextualLogger, LogDir
 
 
 @pytest.fixture(autouse=True)

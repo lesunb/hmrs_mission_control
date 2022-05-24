@@ -25,8 +25,8 @@ from mission_control.estimating import (EnergyEstimatorConstantDischarge,
 from mission_control.execution import (SkillImplementation, SkillLibrary,
                                        TickStatus)
 
-from utils.formatters import CoalitionFormationLogger
-from utils.logger import ContextualLogger, LogFormatterManager
+from mission_control.deeco_integration import CoalitionFormationLogger
+from mission_control.utils import ContextualLogger, LogFormatterManager
 
 ###
 # Produces:

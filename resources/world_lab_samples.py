@@ -1,14 +1,14 @@
 from copy import deepcopy
 from mission_control.utils.contants import ConstantsProvider
-from utils.formatters import CoalitionFormationLogger
-from utils.logger import ContextualLogger, LogFormatterManager
+from mission_control.deeco_integration.simulation.formatters import CoalitionFormationLogger
+from mission_control.utils import ContextualLogger, LogFormatterManager
 import pytest
 from enum import Enum
 from typing import List
 
 from lagom.container import Container
 
-from utils.timer import Timer
+from mission_control.utils import Timer
 from mission_control.deeco_integration.deeco_timer import DeecoTimer
 
 from mission_control.estimating import SkillDescriptorRegister, EnergyEstimatorConstantDischarge, EstimatingManager, Estimator, PLAN_MINIMUM_TARGET_BATTERTY_CHARGE_CONST, TimeEstimator

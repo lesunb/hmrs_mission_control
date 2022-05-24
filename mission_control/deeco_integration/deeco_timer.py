@@ -1,4 +1,4 @@
-from utils.timer import Timer
+from mission_control.utils import Timer
 from deeco.sim import SimScheduler
 
 class DeecoTimer(Timer):

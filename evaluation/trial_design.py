@@ -2,7 +2,7 @@ from copy import deepcopy
 from random import Random
 import functools
 from typing import List, Tuple
-from utils.to_string import obj_to_string
+from mission_control.utils.to_string import obj_to_string
 
 class TrialDesign(dict):
     ''''

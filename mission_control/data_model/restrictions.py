@@ -2,7 +2,7 @@ import math
 from enum import Enum
 from typing import List
 
-from utils.to_string import obj_to_string
+from mission_control.utils import obj_to_string
 
 from deeco.core import Identifiable
 from .ihtn import Task, TaskState, TaskStatus, Role

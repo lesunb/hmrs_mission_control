@@ -1,5 +1,5 @@
 from __init__ import *
-from evaluation.experiment_gen_base.sim_exec import SimExec
+from mission_control.deeco_integration.simulation.sim_exec import SimExec
 
 from resources.world_lab_samples import container, get_position_of_poi
 from resources.world_lab_samples_scenario import *

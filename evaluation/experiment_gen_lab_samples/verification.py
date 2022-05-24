@@ -1,6 +1,6 @@
 from functools import reduce
 
-from evaluation.experiment_gen_base import scenario
+from mission_control.deeco_integration.simulation import scenario
 from lagom.container import Container
 
 from mission_control.common_descriptors.routes_ed import RoutesEnvironmentDescriptor

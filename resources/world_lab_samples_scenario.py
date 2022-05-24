@@ -1,4 +1,4 @@
-from evaluation.experiment_gen_base.scenario import Scenario
+from mission_control.deeco_integration.simulation.scenario import Scenario
 from mission_control.data_model.restrictions import Request
 from .world_lab_samples import pickup_ihtn, poi
 

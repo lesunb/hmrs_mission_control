@@ -2,7 +2,6 @@
 
 from lagom import Container
 
-from mission_control.data_model.restrictions import Battery
 from deeco.core import Node
 from deeco.sim import Sim
 from deeco.plugins.identity_replicas import IdentityReplicas
@@ -10,18 +9,19 @@ from deeco.plugins.simplenetwork import SimpleNetwork
 from deeco.plugins.knowledgepublisher import KnowledgePublisher
 from deeco.plugins.ensemblereactor import EnsembleReactor
 
-from utils.logger import ContextualLogger
-from utils.timer import Timer
-from mission_control.deeco_integration.deeco_timer import DeecoTimer
 
+from mission_control.utils.logger import ContextualLogger
 from mission_control.deeco_integration.mission_coordination_ensemble import MissionCoordinationEnsemble
 from mission_control.deeco_integration.robot import Robot
 from mission_control.deeco_integration.coordinator import Coordinator
 from mission_control.deeco_integration.plugins.requests_queue import RequestsQueue
 from mission_control.deeco_integration.mission_coordination_ensemble import MissionCoordinationEnsemble
 
+from mission_control.utils.timer import Timer
+from mission_control.deeco_integration.deeco_timer import DeecoTimer
 
-from mission_control.coordination.coalition_formation import CoalitionFormationProcess
+from mission_control.data_model.restrictions import Battery
+from mission_control.coordination import CoalitionFormationProcess
 
 from resources.world_lab_samples import *
 from .to_executor import prep_plan

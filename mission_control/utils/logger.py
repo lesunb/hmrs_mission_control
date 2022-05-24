@@ -2,9 +2,9 @@ import os
 import atexit
 from enum import Enum
 from collections import namedtuple
-from typing import Any, Callable, List
+from typing import Callable
 from .timer import Timer
-from utils.to_string import obj_to_string
+from .to_string import obj_to_string
 
 class LogLevel(Enum):
     TRACE='[TRACE]'
@@ -103,6 +103,7 @@ class Logger:
                 print('log was lost')
                 print(self.log_queue)
                 raise Exception('not flushed log')
+
 
 class ContextualLogger:
     def __init__(self, timer: Timer, lfm: LogFormatterManager, default_level = LogLevel.DEBUG):

@@ -1,6 +1,6 @@
 
 from copy import deepcopy
-from evaluation.experiment_gen_base.trial_design import draw_without_repetition
+from evaluation.trial_design import draw_without_repetition
 from resources.world_lab_samples import get_position_of_poi, poi
 from typing import List
 

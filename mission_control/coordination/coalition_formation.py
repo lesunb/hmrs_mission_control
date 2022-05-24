@@ -1,7 +1,7 @@
 
 from typing import Dict, Generator, List, Sequence
 
-from utils.logger import ContextualLogger, Logger
+from ..utils.logger import ContextualLogger, Logger
 
 from ..data_model import (Assignment, ElementaryTask, LocalMission,
                           MissionContext, MissionStatus, Role, Task, Worker,

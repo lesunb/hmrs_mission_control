@@ -7,20 +7,18 @@ from __init__ import *
 from random import Random
 from datetime import datetime
 
-from utils.logger import LogDir
-from utils.to_string import obj_to_string
 
 from mission_control.data_model.restrictions import Request
-from evaluation.experiment_gen_base.sim_exec import SimExec
-from evaluation.experiment_gen_base.scenario import Scenario
-from evaluation.experiment_gen_base.trial_design import draw_without_repetition, draw_from_distribution, selection, total_combinations
+from mission_control.deeco_integration.simulation.sim_exec import SimExec
+from mission_control.deeco_integration.simulation.scenario import Scenario
+from mission_control.utils.logger import LogDir
 
 from verification import verify_trials
-from resources.world_lab_samples import task_type, carry_robot_skills, routes_ed, near_ic_pc_rooms, pickup_ihtn, get_position_of_poi, container
+from resources.world_lab_samples import carry_robot_skills, routes_ed, near_ic_pc_rooms, pickup_ihtn, get_position_of_poi, container
+
+from evaluation.trial_design import draw_without_repetition, draw_from_distribution, selection, total_combinations
 
 from evaluation.experiment_gen_lab_samples.baseline_plan import append_baseline_trial
-from collections import namedtuple
-
 
 # def randomly_gen_requests(times, locations, rand):
 #     selected_locations = draw_without_repetition(locations, len(times), rand)
@@ -224,9 +222,7 @@ def repack(objiter, repacking_tupels):
         new[key] = fnc(value) if fnc else value
     return new
 
-def dump_scenarios(scenarios, path):
-    noop = lambda x: x
-    
+def dump_scenarios(scenarios, path):    
     def repack_robots(robot):
         return repack(robot.items(),
             [('location', lambda location: location.label )])

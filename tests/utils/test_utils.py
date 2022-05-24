@@ -1,5 +1,5 @@
 from tests.world_collector import *
-from utils.to_string import obj_to_string
+from mission_control.utils import obj_to_string
 
 
 def test_simple_obj():
