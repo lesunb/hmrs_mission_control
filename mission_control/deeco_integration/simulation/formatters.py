@@ -31,7 +31,7 @@ class CoalitionFormationLogger:
             'worker': bid.worker.name,
             'is_viable': not bid.estimate.is_inviable,
             'time': bid.estimate.time,
-            'remaining_battery': bid.remaining_battery,
+            #'remaining_battery': bid.estimate.remaining_battery,
             'energy': bid.estimate.energy
         }
         return log_entry
