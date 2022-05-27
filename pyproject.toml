@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "hmrs_mission_control"
-version = "1.0.2"
+version = "1.1.1"
 license = "MIT"
 description = "**Heterogeneous Multi-Robots Mission Control** is an architecture for the development of applications, capable of coordinating multi-robot missions subject to uncertainty in properties of the available robots in the Software Engineering Lab (LES) at University of Brasilia."
 authors = ["Gabriel Rodrigues <gabrielsr@gmail.com>"]
@@ -8,6 +8,7 @@ readme = "README.md"
 packages = [
     { include = "mission_control" },
     { include = "deeco" },
+    { include = "hospital_world" },
 ]
 
 [tool.poetry.urls]

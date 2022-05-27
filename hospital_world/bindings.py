@@ -43,6 +43,8 @@ class task_type(Defs):
     APPROACH_ROBOT = 'approach_robot'
     PICK_UP = 'pick_up'
     DEPOSIT = 'deposit'
+    MANIPULATE_DOOR = 'manipulate_door'
+    APPROACH_OBJECT = 'approach_object'
     
 all_skills = task_type().all()
 carry_robot_skills = task_type().all_but(task_type.PICK_UP, task_type.DEPOSIT)
@@ -111,7 +113,8 @@ pick_up_time = 2
 deposit_time = 2
 send_message_time = 2
 wait_message_time = 2
-
+manipulate_door_time = 2
+approach_object_time = 2
 
 cp = ConstantsProvider()
 container[ConstantsProvider] = cp
@@ -125,6 +128,9 @@ operate_drawer_sd = generic_skill_descriptor_constant_cost_factory('operate_draw
 approach_robot_sd = generic_skill_descriptor_constant_cost_factory('approach_robot', approach_robot_time)
 pick_up_sd = generic_skill_descriptor_constant_cost_factory('pick_up', pick_up_time)
 deposit_sd = generic_skill_descriptor_constant_cost_factory('deposit', deposit_time)
+manipulate_door_sd = generic_skill_descriptor_constant_cost_factory('manipulate_door', manipulate_door_time)
+approach_object_sd = generic_skill_descriptor_constant_cost_factory('approach_object', approach_object_time)
+
 
 send_message_sd = generic_skill_descriptor_constant_cost_factory('send_message', send_message_time)
 wait_message_sd = generic_skill_descriptor_constant_cost_factory('wait_message', wait_message_time)
@@ -142,6 +148,8 @@ sd_register = SkillDescriptorRegister(
         (task_type.APPROACH_ROBOT, approach_robot_sd),
         (task_type.PICK_UP, pick_up_sd),
         (task_type.DEPOSIT, deposit_sd),
+        (task_type.MANIPULATE_DOOR, manipulate_door_sd),
+        (task_type.APPROACH_OBJECT, approach_object_sd),
         (sync_type_SEND_MESSAGE, send_message_sd),
         (sync_type_WAIT_MESSAGE, wait_message_sd)
     )
