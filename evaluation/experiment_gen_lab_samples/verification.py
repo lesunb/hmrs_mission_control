@@ -4,9 +4,8 @@ from mission_control.deeco_integration.simulation import scenario
 from lagom.container import Container
 
 from mission_control.common_descriptors.routes_ed import RoutesEnvironmentDescriptor
-#from resources.world_lab_samples import poi, approach_person_time, authenticate_person_time, operate_drawer_time, send_message_time, wait_message_time
 from collections import namedtuple
-from resources.world_lab_samples import *
+from hospital_world.bindings import *
 
 robot_eval = namedtuple("robot_eval", "id has_missing_skills has_enough_battery estimated_time estimated_battery_discharge")
     

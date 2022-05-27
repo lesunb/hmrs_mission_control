@@ -1,8 +1,8 @@
 from __init__ import *
 from mission_control.deeco_integration.simulation.sim_exec import SimExec
 
-from resources.world_lab_samples import container, get_position_of_poi
-from resources.world_lab_samples_scenario import *
+from hospital_world.bindings import container, get_position_of_poi
+from hospital_world.a_lab_samples_scenario import fetch_sample_trial
 
 def test_exec_sim():
     # run in deeco env

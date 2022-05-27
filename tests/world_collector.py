@@ -19,6 +19,7 @@ from mission_control.data_model import (POI, AbstractTask, Battery,
                                         ElementaryTask, LocalMission, Method,
                                         MissionContext, Role, Task, TaskState,
                                         Worker)
+from mission_control.data_model.world_model import WorldModelDomain
 from mission_control.estimating import (EnergyEstimatorConstantDischarge,
                                         EstimatingManager, Estimator,
                                         SkillDescriptorRegister, TimeEstimator)
@@ -164,8 +165,10 @@ def collection_robots_a_b_and_d():
 ########
 
 container = Container()
+
+_map = create_map()
 # env desc
-container[Map] = create_map()
+container[Map] = _map
 routes_ed = container[RoutesEnvironmentDescriptor]
 
 # skill desc
@@ -280,3 +283,18 @@ def collector_mission_repair_register():
     repair_planner_register = MissionRepairPlannerRegister()
     repair_planner_register.register(collection_mission_type, cm_repair)
     return repair_planner_register
+
+
+class CollectorWorldModelDomain(WorldModelDomain):
+    def __init__(self):
+        super().__init__('collector_world')
+        self.register(lambda location: _map.get_node(location), 'location')
+        self.register_enum(task_type, 'task_type')
+
+
+world_model_domain = container[CollectorWorldModelDomain]
+container[WorldModelDomain] = world_model_domain
+
+@pytest.fixture
+def collector_world_model_domain():
+    return world_model_domain

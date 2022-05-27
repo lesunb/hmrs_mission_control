@@ -13,7 +13,7 @@ def mc_task_to_exeuctor(elementary_task):
     label = elementary_task.name
     if getattr(elementary_task, 'action', None) is not None:
         parameters.append(elementary_task.action)
-    if getattr(elementary_task, 'destination', None) is not None:
+    if getattr(elementary_task, 'destination', None):
         parameters.append(elementary_task.destination.label)
     if getattr(elementary_task, 'target', None) is not None:
         parameters.append(elementary_task.target.label)

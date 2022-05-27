@@ -7,7 +7,8 @@ from .ihtn_algorithms import (count_elementary_tasks, eliminate_left_task,
 from .restrictions import (POI, Battery, BatteryTimeConstantDischarge,
                            Capability, Estimate, InviableEstimate,
                            LocalMission, MissionContext, MissionStatus, Task,
-                           Worker, MissionState, is_failed, is_success)
+                           Worker, MissionState, Request, is_failed, is_success)
+from .world_model import WorldModelDomain
 
 __all__ = [
     Task, TaskStatus, ElementaryTask,AbstractTask, TaskState, Method,
@@ -25,7 +26,9 @@ __all__ = [
     Estimate, InviableEstimate,
     eliminate_left_task, count_elementary_tasks, flat_plan, 
     ihtn_aggregate, transverse_ihtn_apply_for_task, transverse_ihtn,
-    MissionState, is_failed, is_success
+    MissionState, is_failed, is_success,
+    Request,
+    WorldModelDomain
     ]
 
 

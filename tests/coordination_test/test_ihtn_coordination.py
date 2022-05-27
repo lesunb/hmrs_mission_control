@@ -1,8 +1,8 @@
 from mission_control.coordination.update_mission import \
     update_estimates_with_progress
 from mission_control.data_model import TaskState, TaskStatus
-from resources.world_lab_samples import *
 
+from hospital_world.lab_samples_mission import pickup_ihtn, poi
 
 def test_mark_elementary_as_concluded():
     pickup_sample, lab_samples_ihtn =  pickup_ihtn(poi.ic_room_3.value)

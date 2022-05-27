@@ -1,0 +1,21 @@
+Title: Verification of Symbols in Requests
+------------------------------------------
+
+Context
+-------
+
+A received request can have unknown symbols like a destination location as a task parameter, or a unkonwn skill.
+At some point this symbols must be validated. Should we validate it close to the point where the request is received
+or close to the point to where the symbol is used?
+
+Forces:
+- Close to where the symbol is used:: this allow for creating a custom logic according to the context of appearance of the symbol.
+- Close to where the request is received:: this allow for a more instant response to the requesting system.
+
+
+Decision
+--------
+
+Validate closer as possible to where the request is received. The interpretation of the meaning of a symbol is protocol dependent, so the component that knowns the protocol is the one that should validate if systems are known. E.g., in mutrose_json parser, an action can have a parameter "locations" with a set of location labels. The code that parses this json should check if a "location" is known.
+
+Implications: the parser needs to be bound to descriptors, or to the data used by descriptors.

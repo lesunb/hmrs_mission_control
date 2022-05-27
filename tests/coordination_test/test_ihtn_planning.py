@@ -1,7 +1,8 @@
 from mission_control.coordination.planning import check_tasks_names, distribute
 from mission_control.data_model import count_elementary_tasks, flat_plan
-from resources.world_lab_samples import *
 
+from hospital_world.lab_samples_mission import r1, lab_arm, nurse
+from hospital_world.lab_samples_mission import *
 
 def eq(obja, objb, *fields):
     if type(obja) == type(objb):

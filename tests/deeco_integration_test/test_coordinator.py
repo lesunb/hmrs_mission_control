@@ -1,5 +1,6 @@
 from mission_control.data_model.restrictions import MissionContext, LocalMission, Worker
 from mission_control.deeco_integration.coordinator import Coordinator
+from tests.mock import ClContextMock
 
 class NodeMock():
     def __init__(self):
@@ -13,7 +14,7 @@ def test_get_free_workers():
     mission1 = MissionContext(request_id=0, global_plan=None)
     mission1.local_missions = [LocalMission(None, None, None, worker=w1)]
     
-    coord = Coordinator(node = NodeMock(), required_skills = None, cf_process = None)
+    coord = Coordinator(node = NodeMock(), required_skills = None, cf_process = None, cl=ClContextMock())
     coord.knowledge.missions = [mission1]
     coord.knowledge.active_workers = dict(map(lambda w: (w.uuid, w), [w1, w2, w3]))
 

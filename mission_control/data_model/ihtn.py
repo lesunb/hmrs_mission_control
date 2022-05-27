@@ -153,5 +153,5 @@ def get_children_assignment(methods: List[ Method ]):
                     assingments.add(task.assign_to)
             elif isinstance(task,AbstractTask):
                 assingments.update(get_children_assignment(task.methods))
-    return assingments
+    return list(assingments)
 
