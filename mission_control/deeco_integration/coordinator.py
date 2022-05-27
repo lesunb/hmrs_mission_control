@@ -1,6 +1,7 @@
 from typing import List, Mapping
 
 from deeco import BaseKnowledge, Component, ComponentRole, Node, UUID, EnsembleMember, process
+from mission_control.utils.logger import ContextualLogger, Logger
 
 
 from ..common_descriptors.navigation_sd import Move
@@ -25,6 +26,7 @@ class Coordinator(Component, MissionHandler):
     # Component initialization
     def __init__(self, node: Node= None, 
             required_skills = None,
+            cl: ContextualLogger = None,
             cf_process: CoalitionFormationProcess = None,
             supervision_proces: SupervisionProcess = None,
             name = None):
@@ -32,6 +34,7 @@ class Coordinator(Component, MissionHandler):
         self.cf_process = cf_process
         self.supervision_process = supervision_proces
         self.name = name
+        self.l: Logger = cl.get_logger('coordinator_component')
 
         # Initialize knowledge
 
@@ -65,7 +68,9 @@ class Coordinator(Component, MissionHandler):
         while self.node.requests_queue:
             request = self.node.requests_queue.pop(0)
             mission_context = MissionContext(request_id = request.id, global_plan=request.task)
-            print(f'coordinator {self.uuid} got has a new mission {mission_context}')
+            self.l.log(f'coordinator {self.uuid} got has a new mission {mission_context}')
+            # TODO check symbols and reject missions with missing symbols
+            
             self.knowledge.missions.append(mission_context)
             yield mission_context
         return

@@ -14,7 +14,8 @@ from mission_control.deeco_integration.simulation.scenario import Scenario
 from mission_control.utils.logger import LogDir
 
 from verification import verify_trials
-from resources.world_lab_samples import carry_robot_skills, routes_ed, near_ic_pc_rooms, pickup_ihtn, get_position_of_poi, container
+from hospital_world.bindings import carry_robot_skills, routes_ed, near_ic_pc_rooms, get_position_of_poi, container
+from hospital_world.lab_samples_mission import pickup_ihtn
 
 from evaluation.trial_design import draw_without_repetition, draw_from_distribution, selection, total_combinations
 
@@ -152,9 +153,10 @@ def main():
         # append approach trial
         ##
         planned_code = f'{code}p'
-        scenario = Scenario(id=scenario_id, code=planned_code, factors=factors,
+        scenario = Scenario(id=scenario_id, 
+            experiment_code="exp_lab_samples", code=planned_code, factors=factors,
             robots=set_of_robot_factors, 
-            nurses= nurses,
+            persons= nurses,
             requests=requests)
 
         scenarios.append(scenario)

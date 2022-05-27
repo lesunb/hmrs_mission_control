@@ -1,10 +1,9 @@
 
 from copy import deepcopy
 from evaluation.trial_design import draw_without_repetition
-from resources.world_lab_samples import get_position_of_poi, poi
 from typing import List
 
-
+from hospital_world.bindings import get_position_of_poi, poi
 
 
 def append_baseline_trial(baseline_trials: List, id, code, factors, robots, nurses_locations, nurses, routes_ed, random):

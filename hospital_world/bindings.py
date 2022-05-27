@@ -16,10 +16,9 @@ from mission_control.common_descriptors.generic_constant_cost_sd import generic_
 from mission_control.common_descriptors.navigation_sd import NavigationSkillDescriptor
 from mission_control.common_descriptors.routes_ed import Map, RoutesEnvironmentDescriptor
 
-from resources.hospital_map import create_hospital_scenario_map
+from hospital_world.hospital_map import create_hospital_scenario_map
 
-from mission_control.data_model.ihtn import Method, ElementaryTask, AbstractTask
-from mission_control.data_model.restrictions import POI, Role
+from mission_control.data_model import POI, WorldModelDomain
 from mission_control.coordination.coalition_formation import CoalitionFormationProcess
 
 from mission_control.data_model.ihtn import SyncTask
@@ -82,69 +81,8 @@ near_ic_pc_rooms = [ poi_.value for poi_ in [
               poi.pc_room_3, poi.pc_room_4, poi.pc_room_5, poi.pc_room_6, 
               poi.pc_room_7, poi.pc_room_8]]
 
-nurse =  Role('nurse', type=Role.Type.NOT_MANAGED)
-lab_arm = Role('lab_arm', type=Role.Type.NOT_MANAGED)
-r1 = Role('r1')
-
 # Defined as Enum so we can reference methods and tasks, and we can have references
 # to names that we later on set on them with set_name()
-
-
-def pickup_ihtn(pickup_location):
-    class lab_samples_ihtn(Enum):
-        # elementary tasks
-        navto_room = ElementaryTask(task_type.NAV_TO, destination=pickup_location, assign_to=[r1])
-        approach_nurse = ElementaryTask(task_type.APPROACH_PERSON, target=nurse, assign_to=[r1])
-        authenticate_nurse = ElementaryTask(task_type.AUTHENTICATE_PERSON, target=nurse, assign_to=[r1])
-        open_drawer_for_nurse = ElementaryTask(task_type.OPERATE_DRAWER, action='open', assign_to=[r1])
-        deposit = ElementaryTask(task_type.DEPOSIT, assign_to = [nurse])
-        close_drawer_nurse = ElementaryTask(task_type.OPERATE_DRAWER, action='close', assign_to=[r1])
-        navto_lab = ElementaryTask(task_type.NAV_TO, destination=poi.laboratory.value, assign_to=[r1])
-        approach_arm = ElementaryTask(task_type.APPROACH_ROBOT, target=lab_arm, assign_to=[r1])
-        open_drawer_lab = ElementaryTask(task_type.OPERATE_DRAWER, action='open', assign_to=[r1])
-        pick_up_sample  = ElementaryTask(task_type.PICK_UP, target=r1, assign_to=[lab_arm])
-        close_drawer_lab = ElementaryTask(task_type.OPERATE_DRAWER, action='close', assign_to=[r1])
-
-        # methods and abstract tasks
-        m_deposit = Method(subtasks = [open_drawer_for_nurse, deposit, close_drawer_nurse])
-        deposit_sample_on_delivery_bot = AbstractTask(methods=[m_deposit])
-        m_retrieve = Method(subtasks = [approach_nurse, authenticate_nurse, deposit_sample_on_delivery_bot])
-        retrive_sample = AbstractTask(methods=[m_retrieve])
-        m_unload = Method(subtasks=[open_drawer_lab, pick_up_sample, close_drawer_lab])
-        unload_sample = AbstractTask(methods=[m_unload])
-        m_mission = Method(subtasks=[navto_room, retrive_sample, navto_lab, approach_arm, unload_sample])
-
-        # root task
-        pickup_sample = AbstractTask(methods=[m_mission])
-        
-    for enum_item in lab_samples_ihtn:
-        setattr(enum_item.value, 'name', enum_item.name)
-
-    return (lab_samples_ihtn.pickup_sample.value.clone(), deepcopy(lab_samples_ihtn))
-
-
-# pickup_sample, lab_samples_ihtn =  pickup_ihtn(poi.ic_room_3.value)
-
-
-@pytest.fixture
-def ihtn_pickup_sample():
-    pickup_sample, _ =  pickup_ihtn(poi.ic_room_3.value)
-    return pickup_sample
-
-@pytest.fixture
-def ihtn_unload_sample():
-    _, lab_samples_ihtn =  pickup_ihtn(poi.ic_room_3.value)
-    return lab_samples_ihtn.unload_sample.value.clone()
-
-@pytest.fixture
-def ihtn_navto_room3():
-    _, lab_samples_ihtn =  pickup_ihtn(poi.ic_room_3.value)
-    return lab_samples_ihtn.navto_room.value
-
-@pytest.fixture
-def ihtn_deposit():
-    _, lab_samples_ihtn =  pickup_ihtn(poi.ic_room_3.value)
-    return lab_samples_ihtn.deposit.value
 
 ##
 # Map
@@ -170,6 +108,7 @@ authenticate_person_time = 2
 operate_drawer_time = 2
 approach_robot_time = 2
 pick_up_time = 2
+deposit_time = 2
 send_message_time = 2
 wait_message_time = 2
 
@@ -185,6 +124,7 @@ authenticate_person_sd = generic_skill_descriptor_constant_cost_factory('authent
 operate_drawer_sd = generic_skill_descriptor_constant_cost_factory('operate_drawer', operate_drawer_time)
 approach_robot_sd = generic_skill_descriptor_constant_cost_factory('approach_robot', approach_robot_time)
 pick_up_sd = generic_skill_descriptor_constant_cost_factory('pick_up', pick_up_time)
+deposit_sd = generic_skill_descriptor_constant_cost_factory('deposit', deposit_time)
 
 send_message_sd = generic_skill_descriptor_constant_cost_factory('send_message', send_message_time)
 wait_message_sd = generic_skill_descriptor_constant_cost_factory('wait_message', wait_message_time)
@@ -201,6 +141,7 @@ sd_register = SkillDescriptorRegister(
         (task_type.OPERATE_DRAWER, operate_drawer_sd),
         (task_type.APPROACH_ROBOT, approach_robot_sd),
         (task_type.PICK_UP, pick_up_sd),
+        (task_type.DEPOSIT, deposit_sd),
         (sync_type_SEND_MESSAGE, send_message_sd),
         (sync_type_WAIT_MESSAGE, wait_message_sd)
     )
@@ -223,3 +164,12 @@ container[List[Estimator]] = [time_estimator, energy_estimator]
 em: EstimatingManager = container[EstimatingManager]
 cf_process: CoalitionFormationProcess = container[CoalitionFormationProcess]
 
+
+class HospitalWorldModelDomain(WorldModelDomain):
+    def __init__(self):
+        super().__init__('hospital_world')
+        self.register(lambda location: hospital_map.get_node(location), 'location')
+        self.register_collection(all_skills, 'task_type')
+
+world_model_domain = container[HospitalWorldModelDomain]
+container[WorldModelDomain] = world_model_domain

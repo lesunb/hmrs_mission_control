@@ -1,37 +1,35 @@
 
 
-from lagom import Container
+from lagom import Container, bind_to_container, injectable
 
 from deeco.core import Node
-from deeco.sim import Sim
-from deeco.plugins.identity_replicas import IdentityReplicas
-from deeco.plugins.simplenetwork import SimpleNetwork
-from deeco.plugins.knowledgepublisher import KnowledgePublisher
 from deeco.plugins.ensemblereactor import EnsembleReactor
+from deeco.plugins.identity_replicas import IdentityReplicas
+from deeco.plugins.knowledgepublisher import KnowledgePublisher
+from deeco.plugins.simplenetwork import SimpleNetwork
+from deeco.sim import Sim
 
-
-from mission_control.utils.logger import ContextualLogger
-from mission_control.deeco_integration.mission_coordination_ensemble import MissionCoordinationEnsemble
-from mission_control.deeco_integration.robot import Robot
-from mission_control.deeco_integration.coordinator import Coordinator
-from mission_control.deeco_integration.plugins.requests_queue import RequestsQueue
-from mission_control.deeco_integration.mission_coordination_ensemble import MissionCoordinationEnsemble
-
-from mission_control.utils.timer import Timer
-from mission_control.deeco_integration.deeco_timer import DeecoTimer
-
-from mission_control.data_model.restrictions import Battery
 from mission_control.coordination import CoalitionFormationProcess
+from mission_control.data_model.restrictions import Battery
+from mission_control.deeco_integration.coordinator import Coordinator
+from mission_control.deeco_integration.deeco_timer import DeecoTimer
+from mission_control.deeco_integration.mission_coordination_ensemble import \
+    MissionCoordinationEnsemble
+from mission_control.deeco_integration.plugins.requests_queue import \
+    RequestsQueue
+from mission_control.deeco_integration.robot import Robot
+from mission_control.utils.logger import ContextualLogger
+from mission_control.utils.timer import Timer
 
-from resources.world_lab_samples import *
-from .to_executor import prep_plan
 from .scenario import Scenario
+from .to_executor import prep_plan
 
 print("Running simulation")
 class SimExec:
     def __init__(self, container: Container):
         self.cf_process: CoalitionFormationProcess = container[CoalitionFormationProcess]
         self.cl = container[ContextualLogger]
+        self.timer:DeecoTimer = container[Timer]
 
     @staticmethod
     def instantiate_robot_component(node, battery_charge, **initial_knowledge):
@@ -59,8 +57,7 @@ class SimExec:
         SimpleNetwork(sim)
         
         # wire sim timer with container timer
-        timer:DeecoTimer = container[Timer]
-        timer.scheduler = sim.scheduler
+        self.timer.scheduler = sim.scheduler
 
         # create coordinator
         coord_node = Node(sim)        
@@ -68,9 +65,9 @@ class SimExec:
         KnowledgePublisher(coord_node)
         RequestsQueue(coord_node, requests)
         EnsembleReactor(coord_node, [ MissionCoordinationEnsemble() ])
-
+    
         # mission coordinator component
-        coord = Coordinator(coord_node, name='mission_coordinator', required_skills=[], cf_process=cf_process)
+        coord = Coordinator(coord_node, name='mission_coordinator', required_skills=[], cf_process=cf_process, cl=self.cl)
         coord_node.add_component(coord)
 
         robots, robots_nodes = [], []

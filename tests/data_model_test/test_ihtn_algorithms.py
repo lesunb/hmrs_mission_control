@@ -1,6 +1,6 @@
-from resources.world_lab_samples import *
 
 from mission_control.data_model import eliminate_left_task, count_elementary_tasks
+from hospital_world.lab_samples_mission import pickup_ihtn, poi
 
 def test_eliminate_left_task_some_tasks():
     global_plan, lab_samples_ihtn =  pickup_ihtn(poi.ic_room_3.value)

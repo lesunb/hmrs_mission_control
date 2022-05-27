@@ -1,6 +1,7 @@
 from mission_control.deeco_integration.simulation.scenario import Scenario
 from mission_control.data_model.restrictions import Request
-from .world_lab_samples import pickup_ihtn, poi
+from .bindings import poi
+from .lab_samples_mission import pickup_ihtn
 
 
 robot_facotrs = [{
@@ -23,8 +24,9 @@ pickup_sample, _ =  pickup_ihtn(poi.pc_room_3.value)
 
 fetch_sample_trial = Scenario(
     id=0,
+    experiment_code='',
     code='',
-    nurses=[],
+    persons=[],
     factors=[],
     robots=robot_facotrs,
     requests= [

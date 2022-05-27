@@ -10,8 +10,6 @@ class Move(Capability):
 
 class NavigationSkillDescriptor(SkillDescriptor):
     # skill required capability
-
-
     name: Final = 'navigate'
     required_capabilities: Final = [Move]
 
