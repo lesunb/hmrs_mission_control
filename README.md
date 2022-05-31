@@ -23,6 +23,23 @@ Maintainers: [Gabriel Rodrigues](mailto:gabrielsr@gmail.com), [Vicente Moraes](m
 
 **Heterogeneous Multi-Robots Mission Control** is research code, expect that it changes often and any fitness for a particular purpose is disclaimed.
 
+
+    @article{rodrigues_architecture_2022,
+      title = {An Architecture for Mission Coordination of Heterogeneous Robots},
+      author = {Rodrigues, Gabriel and Caldas, Ricardo and Araujo, Gabriel and {de Moraes}, Vicente and Rodrigues, Gena{\'i}na and Pelliccione, Patrizio},
+      year = {2022},
+      month = sep,
+      journal = {Journal of Systems and Software},
+      volume = {191},
+      pages = {111363},
+      issn = {01641212},
+      doi = {10.1016/j.jss.2022.111363},
+      langid = {english}
+    }
+
+
+
+
 Environment dependencies
 -------------
 python 3, pip
