@@ -39,6 +39,17 @@ Maintainers: [Gabriel Rodrigues](mailto:gabrielsr@gmail.com), [Vicente Moraes](m
 
 
 
+# Using as a lib
+
+
+In your environment:
+
+```console
+$ pip install hmrs-mission-control
+```
+
+# Setup Development Envrionment
+
 
 Environment dependencies
 -------------
