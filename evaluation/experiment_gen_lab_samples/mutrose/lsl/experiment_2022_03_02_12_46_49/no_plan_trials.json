@@ -1,0 +1,1190 @@
+[
+    {
+        "code": "acaaap",
+        "factors": {
+            "avg_speed": "a",
+            "battery_charge": "c",
+            "battery_discharge_rate": "a",
+            "location": "a",
+            "skills": "a"
+        },
+        "id": 55,
+        "nurses": [
+            {
+                "location": "PC Room 2",
+                "position": [
+                    -18.0,
+                    13.0,
+                    1.57
+                ]
+            }
+        ],
+        "robots": [
+            {
+                "avg_speed": 0.15,
+                "battery_charge": 0.08039941318304296,
+                "battery_discharge_rate": 0.00034,
+                "id": 1,
+                "local_plan": null,
+                "location": "PC Room 5",
+                "name": "r1",
+                "position": [
+                    -21.0,
+                    18.0,
+                    -1.57
+                ],
+                "skills": [
+                    "approach_person",
+                    "approach_robot",
+                    "authenticate_person",
+                    "navigation",
+                    "operate_drawer"
+                ]
+            }
+        ]
+    },
+    {
+        "code": "acaabp",
+        "factors": {
+            "avg_speed": "a",
+            "battery_charge": "c",
+            "battery_discharge_rate": "a",
+            "location": "b",
+            "skills": "a"
+        },
+        "id": 56,
+        "nurses": [
+            {
+                "location": "PC Room 2",
+                "position": [
+                    -18.0,
+                    13.0,
+                    1.57
+                ]
+            }
+        ],
+        "robots": [
+            {
+                "avg_speed": 0.15,
+                "battery_charge": 0.08039941318304296,
+                "battery_discharge_rate": 0.00034,
+                "id": 1,
+                "local_plan": null,
+                "location": "PC Room 3",
+                "name": "r1",
+                "position": [
+                    -28.5,
+                    18.0,
+                    -1.57
+                ],
+                "skills": [
+                    "approach_person",
+                    "approach_robot",
+                    "authenticate_person",
+                    "navigation",
+                    "operate_drawer"
+                ]
+            }
+        ]
+    },
+    {
+        "code": "acaacp",
+        "factors": {
+            "avg_speed": "a",
+            "battery_charge": "c",
+            "battery_discharge_rate": "a",
+            "location": "c",
+            "skills": "a"
+        },
+        "id": 57,
+        "nurses": [
+            {
+                "location": "PC Room 2",
+                "position": [
+                    -18.0,
+                    13.0,
+                    1.57
+                ]
+            }
+        ],
+        "robots": [
+            {
+                "avg_speed": 0.15,
+                "battery_charge": 0.08039941318304296,
+                "battery_discharge_rate": 0.00034,
+                "id": 1,
+                "local_plan": null,
+                "location": "PC Room 1",
+                "name": "r1",
+                "position": [
+                    -27.25,
+                    13.0,
+                    1.57
+                ],
+                "skills": [
+                    "approach_person",
+                    "approach_robot",
+                    "authenticate_person",
+                    "navigation",
+                    "operate_drawer"
+                ]
+            }
+        ]
+    },
+    {
+        "code": "acabap",
+        "factors": {
+            "avg_speed": "a",
+            "battery_charge": "c",
+            "battery_discharge_rate": "a",
+            "location": "a",
+            "skills": "b"
+        },
+        "id": 58,
+        "nurses": [
+            {
+                "location": "PC Room 2",
+                "position": [
+                    -18.0,
+                    13.0,
+                    1.57
+                ]
+            }
+        ],
+        "robots": [
+            {
+                "avg_speed": 0.15,
+                "battery_charge": 0.08039941318304296,
+                "battery_discharge_rate": 0.00034,
+                "id": 1,
+                "local_plan": null,
+                "location": "PC Room 5",
+                "name": "r1",
+                "position": [
+                    -21.0,
+                    18.0,
+                    -1.57
+                ],
+                "skills": [
+                    "approach_person",
+                    "approach_robot",
+                    "authenticate_person",
+                    "navigation",
+                    "operate_drawer"
+                ]
+            }
+        ]
+    },
+    {
+        "code": "acabbp",
+        "factors": {
+            "avg_speed": "a",
+            "battery_charge": "c",
+            "battery_discharge_rate": "a",
+            "location": "b",
+            "skills": "b"
+        },
+        "id": 59,
+        "nurses": [
+            {
+                "location": "PC Room 2",
+                "position": [
+                    -18.0,
+                    13.0,
+                    1.57
+                ]
+            }
+        ],
+        "robots": [
+            {
+                "avg_speed": 0.15,
+                "battery_charge": 0.08039941318304296,
+                "battery_discharge_rate": 0.00034,
+                "id": 1,
+                "local_plan": null,
+                "location": "PC Room 3",
+                "name": "r1",
+                "position": [
+                    -28.5,
+                    18.0,
+                    -1.57
+                ],
+                "skills": [
+                    "approach_person",
+                    "approach_robot",
+                    "authenticate_person",
+                    "navigation",
+                    "operate_drawer"
+                ]
+            }
+        ]
+    },
+    {
+        "code": "acabcp",
+        "factors": {
+            "avg_speed": "a",
+            "battery_charge": "c",
+            "battery_discharge_rate": "a",
+            "location": "c",
+            "skills": "b"
+        },
+        "id": 60,
+        "nurses": [
+            {
+                "location": "PC Room 2",
+                "position": [
+                    -18.0,
+                    13.0,
+                    1.57
+                ]
+            }
+        ],
+        "robots": [
+            {
+                "avg_speed": 0.15,
+                "battery_charge": 0.08039941318304296,
+                "battery_discharge_rate": 0.00034,
+                "id": 1,
+                "local_plan": null,
+                "location": "PC Room 1",
+                "name": "r1",
+                "position": [
+                    -27.25,
+                    13.0,
+                    1.57
+                ],
+                "skills": [
+                    "approach_person",
+                    "approach_robot",
+                    "authenticate_person",
+                    "navigation",
+                    "operate_drawer"
+                ]
+            }
+        ]
+    },
+    {
+        "code": "acacap",
+        "factors": {
+            "avg_speed": "a",
+            "battery_charge": "c",
+            "battery_discharge_rate": "a",
+            "location": "a",
+            "skills": "c"
+        },
+        "id": 61,
+        "nurses": [
+            {
+                "location": "PC Room 2",
+                "position": [
+                    -18.0,
+                    13.0,
+                    1.57
+                ]
+            }
+        ],
+        "robots": [
+            {
+                "avg_speed": 0.15,
+                "battery_charge": 0.08039941318304296,
+                "battery_discharge_rate": 0.00034,
+                "id": 1,
+                "local_plan": null,
+                "location": "PC Room 5",
+                "name": "r1",
+                "position": [
+                    -21.0,
+                    18.0,
+                    -1.57
+                ],
+                "skills": [
+                    "approach_person",
+                    "approach_robot",
+                    "authenticate_person",
+                    "navigation",
+                    "operate_drawer"
+                ]
+            }
+        ]
+    },
+    {
+        "code": "acacbp",
+        "factors": {
+            "avg_speed": "a",
+            "battery_charge": "c",
+            "battery_discharge_rate": "a",
+            "location": "b",
+            "skills": "c"
+        },
+        "id": 62,
+        "nurses": [
+            {
+                "location": "PC Room 2",
+                "position": [
+                    -18.0,
+                    13.0,
+                    1.57
+                ]
+            }
+        ],
+        "robots": [
+            {
+                "avg_speed": 0.15,
+                "battery_charge": 0.08039941318304296,
+                "battery_discharge_rate": 0.00034,
+                "id": 1,
+                "local_plan": null,
+                "location": "PC Room 3",
+                "name": "r1",
+                "position": [
+                    -28.5,
+                    18.0,
+                    -1.57
+                ],
+                "skills": [
+                    "approach_person",
+                    "approach_robot",
+                    "authenticate_person",
+                    "navigation",
+                    "operate_drawer"
+                ]
+            }
+        ]
+    },
+    {
+        "code": "acaccp",
+        "factors": {
+            "avg_speed": "a",
+            "battery_charge": "c",
+            "battery_discharge_rate": "a",
+            "location": "c",
+            "skills": "c"
+        },
+        "id": 63,
+        "nurses": [
+            {
+                "location": "PC Room 2",
+                "position": [
+                    -18.0,
+                    13.0,
+                    1.57
+                ]
+            }
+        ],
+        "robots": [
+            {
+                "avg_speed": 0.15,
+                "battery_charge": 0.08039941318304296,
+                "battery_discharge_rate": 0.00034,
+                "id": 1,
+                "local_plan": null,
+                "location": "PC Room 1",
+                "name": "r1",
+                "position": [
+                    -27.25,
+                    13.0,
+                    1.57
+                ],
+                "skills": [
+                    "approach_person",
+                    "approach_robot",
+                    "authenticate_person",
+                    "navigation",
+                    "operate_drawer"
+                ]
+            }
+        ]
+    },
+    {
+        "code": "acbaap",
+        "factors": {
+            "avg_speed": "a",
+            "battery_charge": "c",
+            "battery_discharge_rate": "b",
+            "location": "a",
+            "skills": "a"
+        },
+        "id": 64,
+        "nurses": [
+            {
+                "location": "PC Room 2",
+                "position": [
+                    -18.0,
+                    13.0,
+                    1.57
+                ]
+            }
+        ],
+        "robots": [
+            {
+                "avg_speed": 0.15,
+                "battery_charge": 0.08039941318304296,
+                "battery_discharge_rate": 0.00048000000000000007,
+                "id": 1,
+                "local_plan": null,
+                "location": "PC Room 5",
+                "name": "r1",
+                "position": [
+                    -21.0,
+                    18.0,
+                    -1.57
+                ],
+                "skills": [
+                    "approach_person",
+                    "approach_robot",
+                    "authenticate_person",
+                    "navigation",
+                    "operate_drawer"
+                ]
+            }
+        ]
+    },
+    {
+        "code": "acbabp",
+        "factors": {
+            "avg_speed": "a",
+            "battery_charge": "c",
+            "battery_discharge_rate": "b",
+            "location": "b",
+            "skills": "a"
+        },
+        "id": 65,
+        "nurses": [
+            {
+                "location": "PC Room 2",
+                "position": [
+                    -18.0,
+                    13.0,
+                    1.57
+                ]
+            }
+        ],
+        "robots": [
+            {
+                "avg_speed": 0.15,
+                "battery_charge": 0.08039941318304296,
+                "battery_discharge_rate": 0.00048000000000000007,
+                "id": 1,
+                "local_plan": null,
+                "location": "PC Room 3",
+                "name": "r1",
+                "position": [
+                    -28.5,
+                    18.0,
+                    -1.57
+                ],
+                "skills": [
+                    "approach_person",
+                    "approach_robot",
+                    "authenticate_person",
+                    "navigation",
+                    "operate_drawer"
+                ]
+            }
+        ]
+    },
+    {
+        "code": "acbacp",
+        "factors": {
+            "avg_speed": "a",
+            "battery_charge": "c",
+            "battery_discharge_rate": "b",
+            "location": "c",
+            "skills": "a"
+        },
+        "id": 66,
+        "nurses": [
+            {
+                "location": "PC Room 2",
+                "position": [
+                    -18.0,
+                    13.0,
+                    1.57
+                ]
+            }
+        ],
+        "robots": [
+            {
+                "avg_speed": 0.15,
+                "battery_charge": 0.08039941318304296,
+                "battery_discharge_rate": 0.00048000000000000007,
+                "id": 1,
+                "local_plan": null,
+                "location": "PC Room 1",
+                "name": "r1",
+                "position": [
+                    -27.25,
+                    13.0,
+                    1.57
+                ],
+                "skills": [
+                    "approach_person",
+                    "approach_robot",
+                    "authenticate_person",
+                    "navigation",
+                    "operate_drawer"
+                ]
+            }
+        ]
+    },
+    {
+        "code": "acbbap",
+        "factors": {
+            "avg_speed": "a",
+            "battery_charge": "c",
+            "battery_discharge_rate": "b",
+            "location": "a",
+            "skills": "b"
+        },
+        "id": 67,
+        "nurses": [
+            {
+                "location": "PC Room 2",
+                "position": [
+                    -18.0,
+                    13.0,
+                    1.57
+                ]
+            }
+        ],
+        "robots": [
+            {
+                "avg_speed": 0.15,
+                "battery_charge": 0.08039941318304296,
+                "battery_discharge_rate": 0.00048000000000000007,
+                "id": 1,
+                "local_plan": null,
+                "location": "PC Room 5",
+                "name": "r1",
+                "position": [
+                    -21.0,
+                    18.0,
+                    -1.57
+                ],
+                "skills": [
+                    "approach_person",
+                    "approach_robot",
+                    "authenticate_person",
+                    "navigation",
+                    "operate_drawer"
+                ]
+            }
+        ]
+    },
+    {
+        "code": "acbbbp",
+        "factors": {
+            "avg_speed": "a",
+            "battery_charge": "c",
+            "battery_discharge_rate": "b",
+            "location": "b",
+            "skills": "b"
+        },
+        "id": 68,
+        "nurses": [
+            {
+                "location": "PC Room 2",
+                "position": [
+                    -18.0,
+                    13.0,
+                    1.57
+                ]
+            }
+        ],
+        "robots": [
+            {
+                "avg_speed": 0.15,
+                "battery_charge": 0.08039941318304296,
+                "battery_discharge_rate": 0.00048000000000000007,
+                "id": 1,
+                "local_plan": null,
+                "location": "PC Room 3",
+                "name": "r1",
+                "position": [
+                    -28.5,
+                    18.0,
+                    -1.57
+                ],
+                "skills": [
+                    "approach_person",
+                    "approach_robot",
+                    "authenticate_person",
+                    "navigation",
+                    "operate_drawer"
+                ]
+            }
+        ]
+    },
+    {
+        "code": "acbbcp",
+        "factors": {
+            "avg_speed": "a",
+            "battery_charge": "c",
+            "battery_discharge_rate": "b",
+            "location": "c",
+            "skills": "b"
+        },
+        "id": 69,
+        "nurses": [
+            {
+                "location": "PC Room 2",
+                "position": [
+                    -18.0,
+                    13.0,
+                    1.57
+                ]
+            }
+        ],
+        "robots": [
+            {
+                "avg_speed": 0.15,
+                "battery_charge": 0.08039941318304296,
+                "battery_discharge_rate": 0.00048000000000000007,
+                "id": 1,
+                "local_plan": null,
+                "location": "PC Room 1",
+                "name": "r1",
+                "position": [
+                    -27.25,
+                    13.0,
+                    1.57
+                ],
+                "skills": [
+                    "approach_person",
+                    "approach_robot",
+                    "authenticate_person",
+                    "navigation",
+                    "operate_drawer"
+                ]
+            }
+        ]
+    },
+    {
+        "code": "acbcap",
+        "factors": {
+            "avg_speed": "a",
+            "battery_charge": "c",
+            "battery_discharge_rate": "b",
+            "location": "a",
+            "skills": "c"
+        },
+        "id": 70,
+        "nurses": [
+            {
+                "location": "PC Room 2",
+                "position": [
+                    -18.0,
+                    13.0,
+                    1.57
+                ]
+            }
+        ],
+        "robots": [
+            {
+                "avg_speed": 0.15,
+                "battery_charge": 0.08039941318304296,
+                "battery_discharge_rate": 0.00048000000000000007,
+                "id": 1,
+                "local_plan": null,
+                "location": "PC Room 5",
+                "name": "r1",
+                "position": [
+                    -21.0,
+                    18.0,
+                    -1.57
+                ],
+                "skills": [
+                    "approach_person",
+                    "approach_robot",
+                    "authenticate_person",
+                    "navigation",
+                    "operate_drawer"
+                ]
+            }
+        ]
+    },
+    {
+        "code": "acbcbp",
+        "factors": {
+            "avg_speed": "a",
+            "battery_charge": "c",
+            "battery_discharge_rate": "b",
+            "location": "b",
+            "skills": "c"
+        },
+        "id": 71,
+        "nurses": [
+            {
+                "location": "PC Room 2",
+                "position": [
+                    -18.0,
+                    13.0,
+                    1.57
+                ]
+            }
+        ],
+        "robots": [
+            {
+                "avg_speed": 0.15,
+                "battery_charge": 0.08039941318304296,
+                "battery_discharge_rate": 0.00048000000000000007,
+                "id": 1,
+                "local_plan": null,
+                "location": "PC Room 3",
+                "name": "r1",
+                "position": [
+                    -28.5,
+                    18.0,
+                    -1.57
+                ],
+                "skills": [
+                    "approach_person",
+                    "approach_robot",
+                    "authenticate_person",
+                    "navigation",
+                    "operate_drawer"
+                ]
+            }
+        ]
+    },
+    {
+        "code": "acbccp",
+        "factors": {
+            "avg_speed": "a",
+            "battery_charge": "c",
+            "battery_discharge_rate": "b",
+            "location": "c",
+            "skills": "c"
+        },
+        "id": 72,
+        "nurses": [
+            {
+                "location": "PC Room 2",
+                "position": [
+                    -18.0,
+                    13.0,
+                    1.57
+                ]
+            }
+        ],
+        "robots": [
+            {
+                "avg_speed": 0.15,
+                "battery_charge": 0.08039941318304296,
+                "battery_discharge_rate": 0.00048000000000000007,
+                "id": 1,
+                "local_plan": null,
+                "location": "PC Room 1",
+                "name": "r1",
+                "position": [
+                    -27.25,
+                    13.0,
+                    1.57
+                ],
+                "skills": [
+                    "approach_person",
+                    "approach_robot",
+                    "authenticate_person",
+                    "navigation",
+                    "operate_drawer"
+                ]
+            }
+        ]
+    },
+    {
+        "code": "accaap",
+        "factors": {
+            "avg_speed": "a",
+            "battery_charge": "c",
+            "battery_discharge_rate": "c",
+            "location": "a",
+            "skills": "a"
+        },
+        "id": 73,
+        "nurses": [
+            {
+                "location": "PC Room 2",
+                "position": [
+                    -18.0,
+                    13.0,
+                    1.57
+                ]
+            }
+        ],
+        "robots": [
+            {
+                "avg_speed": 0.15,
+                "battery_charge": 0.08039941318304296,
+                "battery_discharge_rate": 0.0005600000000000001,
+                "id": 1,
+                "local_plan": null,
+                "location": "PC Room 5",
+                "name": "r1",
+                "position": [
+                    -21.0,
+                    18.0,
+                    -1.57
+                ],
+                "skills": [
+                    "approach_person",
+                    "approach_robot",
+                    "authenticate_person",
+                    "navigation",
+                    "operate_drawer"
+                ]
+            }
+        ]
+    },
+    {
+        "code": "accabp",
+        "factors": {
+            "avg_speed": "a",
+            "battery_charge": "c",
+            "battery_discharge_rate": "c",
+            "location": "b",
+            "skills": "a"
+        },
+        "id": 74,
+        "nurses": [
+            {
+                "location": "PC Room 2",
+                "position": [
+                    -18.0,
+                    13.0,
+                    1.57
+                ]
+            }
+        ],
+        "robots": [
+            {
+                "avg_speed": 0.15,
+                "battery_charge": 0.08039941318304296,
+                "battery_discharge_rate": 0.0005600000000000001,
+                "id": 1,
+                "local_plan": null,
+                "location": "PC Room 3",
+                "name": "r1",
+                "position": [
+                    -28.5,
+                    18.0,
+                    -1.57
+                ],
+                "skills": [
+                    "approach_person",
+                    "approach_robot",
+                    "authenticate_person",
+                    "navigation",
+                    "operate_drawer"
+                ]
+            }
+        ]
+    },
+    {
+        "code": "accacp",
+        "factors": {
+            "avg_speed": "a",
+            "battery_charge": "c",
+            "battery_discharge_rate": "c",
+            "location": "c",
+            "skills": "a"
+        },
+        "id": 75,
+        "nurses": [
+            {
+                "location": "PC Room 2",
+                "position": [
+                    -18.0,
+                    13.0,
+                    1.57
+                ]
+            }
+        ],
+        "robots": [
+            {
+                "avg_speed": 0.15,
+                "battery_charge": 0.08039941318304296,
+                "battery_discharge_rate": 0.0005600000000000001,
+                "id": 1,
+                "local_plan": null,
+                "location": "PC Room 1",
+                "name": "r1",
+                "position": [
+                    -27.25,
+                    13.0,
+                    1.57
+                ],
+                "skills": [
+                    "approach_person",
+                    "approach_robot",
+                    "authenticate_person",
+                    "navigation",
+                    "operate_drawer"
+                ]
+            }
+        ]
+    },
+    {
+        "code": "accbap",
+        "factors": {
+            "avg_speed": "a",
+            "battery_charge": "c",
+            "battery_discharge_rate": "c",
+            "location": "a",
+            "skills": "b"
+        },
+        "id": 76,
+        "nurses": [
+            {
+                "location": "PC Room 2",
+                "position": [
+                    -18.0,
+                    13.0,
+                    1.57
+                ]
+            }
+        ],
+        "robots": [
+            {
+                "avg_speed": 0.15,
+                "battery_charge": 0.08039941318304296,
+                "battery_discharge_rate": 0.0005600000000000001,
+                "id": 1,
+                "local_plan": null,
+                "location": "PC Room 5",
+                "name": "r1",
+                "position": [
+                    -21.0,
+                    18.0,
+                    -1.57
+                ],
+                "skills": [
+                    "approach_person",
+                    "approach_robot",
+                    "authenticate_person",
+                    "navigation",
+                    "operate_drawer"
+                ]
+            }
+        ]
+    },
+    {
+        "code": "accbbp",
+        "factors": {
+            "avg_speed": "a",
+            "battery_charge": "c",
+            "battery_discharge_rate": "c",
+            "location": "b",
+            "skills": "b"
+        },
+        "id": 77,
+        "nurses": [
+            {
+                "location": "PC Room 2",
+                "position": [
+                    -18.0,
+                    13.0,
+                    1.57
+                ]
+            }
+        ],
+        "robots": [
+            {
+                "avg_speed": 0.15,
+                "battery_charge": 0.08039941318304296,
+                "battery_discharge_rate": 0.0005600000000000001,
+                "id": 1,
+                "local_plan": null,
+                "location": "PC Room 3",
+                "name": "r1",
+                "position": [
+                    -28.5,
+                    18.0,
+                    -1.57
+                ],
+                "skills": [
+                    "approach_person",
+                    "approach_robot",
+                    "authenticate_person",
+                    "navigation",
+                    "operate_drawer"
+                ]
+            }
+        ]
+    },
+    {
+        "code": "accbcp",
+        "factors": {
+            "avg_speed": "a",
+            "battery_charge": "c",
+            "battery_discharge_rate": "c",
+            "location": "c",
+            "skills": "b"
+        },
+        "id": 78,
+        "nurses": [
+            {
+                "location": "PC Room 2",
+                "position": [
+                    -18.0,
+                    13.0,
+                    1.57
+                ]
+            }
+        ],
+        "robots": [
+            {
+                "avg_speed": 0.15,
+                "battery_charge": 0.08039941318304296,
+                "battery_discharge_rate": 0.0005600000000000001,
+                "id": 1,
+                "local_plan": null,
+                "location": "PC Room 1",
+                "name": "r1",
+                "position": [
+                    -27.25,
+                    13.0,
+                    1.57
+                ],
+                "skills": [
+                    "approach_person",
+                    "approach_robot",
+                    "authenticate_person",
+                    "navigation",
+                    "operate_drawer"
+                ]
+            }
+        ]
+    },
+    {
+        "code": "acccap",
+        "factors": {
+            "avg_speed": "a",
+            "battery_charge": "c",
+            "battery_discharge_rate": "c",
+            "location": "a",
+            "skills": "c"
+        },
+        "id": 79,
+        "nurses": [
+            {
+                "location": "PC Room 2",
+                "position": [
+                    -18.0,
+                    13.0,
+                    1.57
+                ]
+            }
+        ],
+        "robots": [
+            {
+                "avg_speed": 0.15,
+                "battery_charge": 0.08039941318304296,
+                "battery_discharge_rate": 0.0005600000000000001,
+                "id": 1,
+                "local_plan": null,
+                "location": "PC Room 5",
+                "name": "r1",
+                "position": [
+                    -21.0,
+                    18.0,
+                    -1.57
+                ],
+                "skills": [
+                    "approach_person",
+                    "approach_robot",
+                    "authenticate_person",
+                    "navigation",
+                    "operate_drawer"
+                ]
+            }
+        ]
+    },
+    {
+        "code": "acccbp",
+        "factors": {
+            "avg_speed": "a",
+            "battery_charge": "c",
+            "battery_discharge_rate": "c",
+            "location": "b",
+            "skills": "c"
+        },
+        "id": 80,
+        "nurses": [
+            {
+                "location": "PC Room 2",
+                "position": [
+                    -18.0,
+                    13.0,
+                    1.57
+                ]
+            }
+        ],
+        "robots": [
+            {
+                "avg_speed": 0.15,
+                "battery_charge": 0.08039941318304296,
+                "battery_discharge_rate": 0.0005600000000000001,
+                "id": 1,
+                "local_plan": null,
+                "location": "PC Room 3",
+                "name": "r1",
+                "position": [
+                    -28.5,
+                    18.0,
+                    -1.57
+                ],
+                "skills": [
+                    "approach_person",
+                    "approach_robot",
+                    "authenticate_person",
+                    "navigation",
+                    "operate_drawer"
+                ]
+            }
+        ]
+    },
+    {
+        "code": "accccp",
+        "factors": {
+            "avg_speed": "a",
+            "battery_charge": "c",
+            "battery_discharge_rate": "c",
+            "location": "c",
+            "skills": "c"
+        },
+        "id": 81,
+        "nurses": [
+            {
+                "location": "PC Room 2",
+                "position": [
+                    -18.0,
+                    13.0,
+                    1.57
+                ]
+            }
+        ],
+        "robots": [
+            {
+                "avg_speed": 0.15,
+                "battery_charge": 0.08039941318304296,
+                "battery_discharge_rate": 0.0005600000000000001,
+                "id": 1,
+                "local_plan": null,
+                "location": "PC Room 1",
+                "name": "r1",
+                "position": [
+                    -27.25,
+                    13.0,
+                    1.57
+                ],
+                "skills": [
+                    "approach_person",
+                    "approach_robot",
+                    "authenticate_person",
+                    "navigation",
+                    "operate_drawer"
+                ]
+            }
+        ]
+    }
+]

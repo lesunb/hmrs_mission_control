@@ -1,0 +1,243 @@
+{
+    "0": {
+        "name": "ROOT",
+        "type": "task",
+        "parent": "-1",
+        "agents": [
+            "r1",
+            "r2",
+            "Patient1"
+        ],
+        "children": [
+            "1"
+        ]
+    },
+    "1": {
+        "name": "ROOT_M",
+        "type": "method",
+        "parent": "0",
+        "agents": [
+            "r1",
+            "r2",
+            "Patient1"
+        ],
+        "children": [
+            "2",
+            "15"
+        ]
+    },
+    "2": {
+        "name": "PickupDishes",
+        "type": "task",
+        "parent": "1",
+        "agents": [
+            "r1",
+            "r2",
+            "Patient1"
+        ],
+        "children": [
+            "3"
+        ]
+    },
+    "3": {
+        "name": "pickup-with-door-opening",
+        "type": "method",
+        "parent": "2",
+        "agents": [
+            "r1",
+            "r2",
+            "Patient1"
+        ],
+        "children": [
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9"
+        ]
+    },
+    "4": {
+        "name": "navto",
+        "type": "action",
+        "parent": "3",
+        "locations": [
+            "RoomA"
+        ],
+        "agents": [
+            "r1"
+        ],
+        "children": ""
+    },
+    "5": {
+        "name": "navto",
+        "type": "action",
+        "parent": "3",
+        "locations": [
+            "RoomA"
+        ],
+        "agents": [
+            "r2"
+        ],
+        "children": ""
+    },
+    "6": {
+        "name": "approach-door",
+        "type": "action",
+        "parent": "3",
+        "locations": [
+            "RoomA"
+        ],
+        "agents": [
+            "r1"
+        ],
+        "children": ""
+    },
+    "7": {
+        "name": "approach-door",
+        "type": "action",
+        "parent": "3",
+        "locations": [
+            "RoomA"
+        ],
+        "agents": [
+            "r2"
+        ],
+        "children": ""
+    },
+    "8": {
+        "name": "open-door",
+        "type": "action",
+        "parent": "3",
+        "locations": [
+            "RoomA"
+        ],
+        "agents": [
+            "r1",
+            "r2"
+        ],
+        "children": ""
+    },
+    "9": {
+        "name": "PickDishesTwoRobotsAtLocation",
+        "type": "task",
+        "parent": "3",
+        "agents": [
+            "r1",
+            "r2",
+            "Patient1"
+        ],
+        "children": [
+            "10"
+        ]
+    },
+    "10": {
+        "name": "pick-dishes-two-robots-at-location",
+        "type": "method",
+        "parent": "9",
+        "agents": [
+            "r1",
+            "r2",
+            "Patient1"
+        ],
+        "children": [
+            "11"
+        ]
+    },
+    "11": {
+        "name": "PickDishes",
+        "type": "task",
+        "parent": "10",
+        "agents": [
+            "r1",
+            "r2",
+            "Patient1"
+        ],
+        "children": [
+            "12"
+        ]
+    },
+    "12": {
+        "name": "pick-dishes-with-robot-at-location",
+        "type": "method",
+        "parent": "11",
+        "agents": [
+            "r1",
+            "r2",
+            "Patient1"
+        ],
+        "children": [
+            "13",
+            "14"
+        ]
+    },
+    "13": {
+        "name": "pick-patient-dishes",
+        "type": "action",
+        "parent": "12",
+        "locations": "",
+        "agents": [
+            "r2",
+            "Patient1"
+        ],
+        "children": ""
+    },
+    "14": {
+        "name": "load-dishes",
+        "type": "action",
+        "parent": "12",
+        "locations": "",
+        "agents": [
+            "r1",
+            "r2"
+        ],
+        "children": ""
+    },
+    "15": {
+        "name": "RetrieveDishes",
+        "type": "task",
+        "parent": "1",
+        "agents": [
+            "r1"
+        ],
+        "children": [
+            "16"
+        ]
+    },
+    "16": {
+        "name": "dishes-retrieval",
+        "type": "method",
+        "parent": "15",
+        "agents": [
+            "r1"
+        ],
+        "children": [
+            "17",
+            "18"
+        ]
+    },
+    "17": {
+        "name": "navto",
+        "type": "action",
+        "parent": "16",
+        "locations": [
+            "Kitchen"
+        ],
+        "agents": [
+            "r1"
+        ],
+        "children": ""
+    },
+    "18": {
+        "name": "retrieve-dishes",
+        "type": "action",
+        "parent": "16",
+        "locations": [
+            "Kitchen"
+        ],
+        "agents": [
+            "r1"
+        ],
+        "children": ""
+    }
+}

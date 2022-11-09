@@ -1,0 +1,64 @@
+{
+    "0": {
+        "a": [
+            "0.15"
+        ],
+        "factor": "avg_speed"
+    },
+    "1": {
+        "a": [
+            "0.23995139509475963"
+        ],
+        "b": [
+            "0.634952869577942"
+        ],
+        "c": [
+            "0.08039941318304296"
+        ],
+        "factor": "battery_charge"
+    },
+    "2": {
+        "a": [
+            "0.00034"
+        ],
+        "b": [
+            "0.00048000000000000007"
+        ],
+        "c": [
+            "0.0005600000000000001"
+        ],
+        "factor": "battery_discharge_rate"
+    },
+    "3": {
+        "a": [
+            "[approach_robot, authenticate_person, navigation, approach_person, operate_drawer]"
+        ],
+        "b": [
+            "[approach_robot, authenticate_person, navigation, approach_person, operate_drawer]"
+        ],
+        "c": [
+            "[approach_robot, authenticate_person, navigation, approach_person, operate_drawer]"
+        ],
+        "factor": "skills"
+    },
+    "4": {
+        "a": [
+            "PC Room 5",
+            "PC Room 2"
+        ],
+        "b": [
+            "PC Room 3",
+            "PC Room 2"
+        ],
+        "c": [
+            "PC Room 1",
+            "PC Room 2"
+        ],
+        "factor": "location"
+    },
+    "5": {
+        "b": "baseline",
+        "factor": "treatment",
+        "p": "planned"
+    }
+}

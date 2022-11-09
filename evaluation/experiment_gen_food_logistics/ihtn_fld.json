@@ -1,0 +1,173 @@
+{
+    "0": {
+        "name": "ROOT",
+        "type": "task",
+        "parent": "-1",
+        "agents": [
+            "r2",
+            "r1",
+            "Delivery1",
+            "Patient1"
+        ],
+        "children": [
+            "1"
+        ]
+    },
+    "1": {
+        "name": "ROOT_M",
+        "type": "method",
+        "parent": "0",
+        "agents": [
+            "r2",
+            "r1",
+            "Delivery1",
+            "Patient1"
+        ],
+        "children": [
+            "2",
+            "6"
+        ]
+    },
+    "2": {
+        "name": "GetFood",
+        "type": "task",
+        "parent": "1",
+        "agents": [
+            "r1",
+            "Delivery1"
+        ],
+        "children": [
+            "3"
+        ]
+    },
+    "3": {
+        "name": "food-pickup",
+        "type": "method",
+        "parent": "2",
+        "agents": [
+            "r1",
+            "Delivery1"
+        ],
+        "children": [
+            "4",
+            "5"
+        ]
+    },
+    "4": {
+        "name": "navto",
+        "type": "action",
+        "parent": "3",
+        "locations": [
+            "Kitchen"
+        ],
+        "agents": [
+            "r1"
+        ],
+        "children": ""
+    },
+    "5": {
+        "name": "wait-for-food",
+        "type": "action",
+        "parent": "3",
+        "locations": [
+            "Kitchen"
+        ],
+        "agents": [
+            "r1",
+            "Delivery1"
+        ],
+        "children": ""
+    },
+    "6": {
+        "name": "DeliverToFetch",
+        "type": "task",
+        "parent": "1",
+        "agents": [
+            "r2",
+            "r1",
+            "Patient1"
+        ],
+        "children": [
+            "7"
+        ]
+    },
+    "7": {
+        "name": "fetch-deliver",
+        "type": "method",
+        "parent": "6",
+        "agents": [
+            "r2",
+            "r1",
+            "Patient1"
+        ],
+        "children": [
+            "8",
+            "9"
+        ]
+    },
+    "8": {
+        "name": "navto",
+        "type": "action",
+        "parent": "7",
+        "locations": [
+            "RoomA"
+        ],
+        "agents": [
+            "r1"
+        ],
+        "children": ""
+    },
+    "9": {
+        "name": "FetchMeal",
+        "type": "task",
+        "parent": "7",
+        "agents": [
+            "r2",
+            "r1",
+            "Patient1"
+        ],
+        "children": [
+            "10"
+        ]
+    },
+    "10": {
+        "name": "fetch-meal-with-human",
+        "type": "method",
+        "parent": "9",
+        "agents": [
+            "r2",
+            "r1",
+            "Patient1"
+        ],
+        "children": [
+            "11",
+            "12"
+        ]
+    },
+    "11": {
+        "name": "approach-human",
+        "type": "action",
+        "parent": "10",
+        "locations": [
+            "RoomA"
+        ],
+        "agents": [
+            "r1",
+            "Patient1"
+        ],
+        "children": ""
+    },
+    "12": {
+        "name": "wait-for-human-to-fetch",
+        "type": "action",
+        "parent": "10",
+        "locations": [
+            "RoomA"
+        ],
+        "agents": [
+            "r1",
+            "Patient1"
+        ],
+        "children": ""
+    }
+}
