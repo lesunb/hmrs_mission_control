@@ -24,7 +24,7 @@ cat client/.ssh/config >> ~/.ssh/config
 
 '''
 mkdir ~/.ssh/remotes
-cp labaccessvps.pem ~/.ssh/remotes/labaccessvps_key.pem
+cp labaccessvps.pem ~/.ssh/remotes/azuervps_key.pem
 '''
 
 3. Add the pub key of your machine to the labaccessvps, labvirtual and each workstations
